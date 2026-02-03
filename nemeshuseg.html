@@ -6,12 +6,25 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; background: #fff; color: #222; }
     img { max-width: 100%; height: auto; margin-bottom: 10px; display: block; }
-    h1 { margin-bottom: 15px; }
-    p { margin-bottom: 20px; }
+    h1 {
+  margin-bottom: 20px;
+  font-size: 36px;
+  text-align: center;
+    }
+    p {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 20px auto;
+    }
     a { color: blue; text-decoration: underline; }
+.slider {
+  display: flex;
+  justify-content: center;
+}
 .slider img {
   display: none;
-  max-width: 100%;
+  max-width: 80%;
 }
 .slider img.active {
   display: block;
@@ -53,6 +66,15 @@
     current = (current - 1 + images.length) % images.length;
     showImage(current);
   }
+  .controls {
+  text-align: center;
+  margin-top: 15px;
+  }
+.controls button {
+  font-size: 16px;
+  padding: 8px 14px;
+  margin: 0 5px;
+}
 </script>
   
 </body>
