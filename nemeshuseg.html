@@ -40,39 +40,63 @@
   margin: 0 15px;
   cursor: pointer;
 }
+    #lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#lightbox img {
+  max-width: 95%;
+  max-height: 95%;
+}
   </style>
 </head>
 <body>
 
 <h1>Nemes hűség</h1>
-<div class="slider">
-  <img src="nemeshusegmessze.jpg" class="active">
-  <img src="nemeshusegjobb.jpg">
-  <img src="nemeshusegbal.jpg">
+<div class="image-container">
+  <img src="nemeshusegmessze.jpg" class="main-image">
 </div>
-<div class="controls">
-  <button onclick="prevImage()">◀ Előző</button>
-  <button onclick="nextImage()">Következő ▶</button>
-</div>
+ .image-container {
+  display: flex;
+  justify-content: center;
+}
+.main-image {
+  max-width: 90%;
+  cursor: zoom-in;
+}
 <p> A "Nemes hűség" a kutya nemességét és hűségét jeleníti meg elegáns színekben. </p> 
 <p> Technika:Akril </p>
 <p>  Méret: 20×20cm </p>
 <a href="index.html">Vissza a galériához</a>
 
+  <div id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img">
+  </div>
+  
 <script>
-  let current = 0;
-  const images = document.querySelectorAll('.slider img');
-  function showImage(index) {
-    images.forEach(img => img.classList.remove('active'));
-    images[index].classList.add('active');
+  const images = [
+    "nemeshusegmessze.jpg",
+    "nemeshusegjobb.jpg",
+    "nemeshusegbal.jpg"
+  ];
+
+  function openLightbox(index) {
+    current = index;
+    document.getElementById("lightbox-img").src = images[current];
+    document.getElementById("lightbox").style.display = "flex";
   }
-  function nextImage() {
-    current = (current + 1) % images.length;
-    showImage(current);
-  }
-  function prevImage() {
-    current = (current - 1 + images.length) % images.length;
-    showImage(current);
+
+  function closeLightbox() {
+    document.getElementById("lightbox").style.display = "none";
   }
 </script>
   
