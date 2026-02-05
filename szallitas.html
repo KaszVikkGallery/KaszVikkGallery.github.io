@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Kasz Vikk – Szállítás</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #222;
+    }
+
+    /* ===== FEJLÉC ===== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      border-bottom: 1px solid #eee;
+    }
+
+    header h1 {
+      font-size: 26px;
+      margin: 0;
+    }
+
+    /* ===== MENÜ ===== */
+    .menu-button {
+      font-size: 30px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      right: -260px;
+      width: 260px;
+      height: 100%;
+      background: #fff;
+      border-left: 1px solid #ddd;
+      padding-top: 80px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+    }
+
+    nav a {
+      display: block;
+      padding: 16px 30px;
+      font-size: 20px;
+      color: #222;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      background: #f2f2f2;
+    }
+
+    nav.open {
+      right: 0;
+    }
+
+    /* ===== TARTALOM ===== */
+    .container {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .shipping-text {
+      font-size: 40px; /* nagy szöveg */
+      line-height: 1.7;
+      max-width: 800px;
+      margin: 30px auto;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #0077cc;
+    }
+
+    /* ===== LÁBLÉC ===== */
+    footer {
+      text-align: center;
+      margin: 80px 0 30px;
+      font-size: 16px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Kasz Vikk</h1>
+  <div class="menu-button" onclick="toggleMenu()">☰</div>
+</header>
+
+<nav id="menu">
+  <a href="bemutatkozas.html">Bemutatkozás</a>
+  <a href="index.html">Galéria</a>
+  <a href="kapcsolat.html">Kapcsolat</a>
+  <a href="szallitas.html">Szállítás</a>
+</nav>
+
+<div class="container">
+  <div class="shipping-text">
+    <p>
+      Szállítási lehetőségek:
+    </p>
+    <p>
+      <span class="highlight">Személyes átvétel:</span> Zalaegerszegen, ingyenes.
+    </p>
+    <p>
+      <span class="highlight">FoxPost csomagküldés:</span> 1700 Ft.
+    </p>
+    <p>
+      Ha kérdésed van, írj bátran: 
+      <a href="mailto:karloszdzseszi@gmail.com" class="highlight">karloszdzseszi@gmail.com</a>
+    </p>
+  </div>
+</div>
+
+<footer>
+  © Kasz Vikk
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById("menu").classList.toggle("open");
+  }
+</script>
+
+</body>
+</html>
