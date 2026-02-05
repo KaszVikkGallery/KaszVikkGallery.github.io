@@ -58,10 +58,48 @@
       font-size: 22px;
       font-weight: normal;
     }
+    /* HAMBURGER MENU */
+.menu-button {
+  font-size: 30px;
+  cursor: pointer;
+  padding: 15px;
+}
+
+.menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: white;
+  width: 220px;
+  height: 100%;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+  padding-top: 60px;
+}
+
+.menu a {
+  display: block;
+  padding: 15px;
+  font-size: 22px;
+  color: #222;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  background: #f0f0f0;
+}
   </style>
 </head>
 
 <body>
+  <div class="menu-button" onclick="toggleMenu()">☰</div>
+
+<div id="menu" class="menu">
+  <a href="bemutatkozas.html">Bemutatkozás</a>
+  <a href="index.html">Galéria</a>
+  <a href="kapcsolat.html">Kapcsolat</a>
+  <a href="szallitas.html">Szállítás</a>
+</div>
 
 <header>
   <h1>KaszVikk</h1>
@@ -192,5 +230,12 @@
 
 </section>
 
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+</script>
+  
 </body>
 </html>
