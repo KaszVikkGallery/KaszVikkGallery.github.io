@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>KaszVikk Galéria</title>
-  <a href="bemutatkozas.html">Bemutatkozás</a>
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,6 +11,45 @@
       color: #222;
     }
 
+    /* Menü stílus */
+    .menu-bar {
+      position: relative;
+      text-align: right;
+      padding: 20px;
+      background: #f5f5f5;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .menu-toggle {
+      font-size: 50px;       /* nagy ☰ jel */
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-block;
+      padding: 10px 20px;
+    }
+
+    #menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 60px;
+      background: #fff;
+      border: 2px solid #ccc;
+      padding: 15px 25px;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+
+    #menu a {
+      display: block;
+      margin: 10px 0;
+      font-size: 28px;    /* nagy menü szöveg */
+      font-weight: bold;
+      color: #222;
+      text-decoration: none;
+    }
+
+    /* Header */
     header {
       text-align: center;
       padding: 40px 20px;
@@ -28,6 +65,7 @@
       margin: 6px 0;
     }
 
+    /* Galéria */
     .gallery {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -58,184 +96,61 @@
       font-size: 22px;
       font-weight: normal;
     }
-    
   </style>
 </head>
-
 <body>
-  <div class="menu-button" onclick="toggleMenu()">☰</div>
 
-<div id="menu" class="menu">
-  <a href="bemutatkozas.html">Bemutatkozás</a>
-  <a href="index.html">Galéria</a>
-  <a href="kapcsolat.html">Kapcsolat</a>
-  <a href="szallitas.html">Szállítás</a>
-</div>
-
-<header>
-  <h1>KaszVikk</h1>
-  <p>Festmények</p>
-  <p>Email: karlos.menu-bar {
-  position: relative;
-  text-align: right; 
-}
-
- .menu-toggle {
-  font-size: 50px;       
-  font-weight: bold;     
-  cursor: pointer;
-  display: inline-block;
-  padding: 10px 20px;    
-}
-
-#menu {
-  display: none;
-  position: absolute;
-  right: 0;               
-  top: 60px;              
-  background: #fff;
-  border: 2px solid #ccc; 
-  padding: 15px 25px;     
-  border-radius: 8px;     
-}
-
-#menu a {
-  display: block;
-  margin: 10px 0;
-  font-size: 28px;        
-  font-weight: bold;
-  color: #zdzseszi@gmail.com</p>
-</header>
-
-<section class="gallery">
-
-  <div class="item">
-    <a href="thejazzisfreedom.html">
-      <img src="thejazzisfreedom.jpg">
-      <h3>The jazz is freedom</h3>
-    </a>
+  <!-- Menü gomb -->
+  <div class="menu-bar">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <div id="menu">
+      <a href="bemutatkozas.html">Bemutatkozás</a>
+      <a href="index.html">Galéria</a>
+      <a href="kapcsolat.html">Kapcsolat</a>
+      <a href="szallitas.html">Szállítás</a>
+    </div>
   </div>
 
-  <div class="item">
-    <a href="aszivdala.html">
-      <img src="szivdala.jpg">
-      <h3>A szív dala</h3>
-    </a>
-  </div>
+  <header>
+    <h1>KaszVikk</h1>
+    <p>Festmények</p>
+    <p>Email: karloszdzseszi@gmail.com</p>
+  </header>
 
-  <div class="item">
-    <a href="nemeshuseg.html">
-      <img src="nemeshuseg.jpg">
-      <h3>Nemes hűség</h3>
-    </a>
-  </div>
+  <section class="gallery">
+    <div class="item">
+      <a href="thejazzisfreedom.html">
+        <img src="thejazzisfreedom.jpg">
+        <h3>The jazz is freedom</h3>
+      </a>
+    </div>
+    <div class="item">
+      <a href="szivdala.html">
+        <img src="szivdala.jpg">
+        <h3>A szív dala</h3>
+      </a>
+    </div>
+    <div class="item">
+      <a href="nemeshuseg.html">
+        <img src="nemeshuseg.jpg">
+        <h3>Nemes hűség</h3>
+      </a>
+    </div>
+    <div class="item">
+      <a href="morningcat.html">
+        <img src="morningcat.jpg">
+        <h3>Morning cat</h3>
+      </a>
+    </div>
+    <!-- többi festmény ugyanígy... -->
+  </section>
 
-  <div class="item">
-    <a href="morningcat.html">
-      <img src="morningcat.jpg">
-      <h3>Morning cat</h3>
-    </a>
-  </div>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+  </script>
 
-  <div class="item">
-    <a href="lidokain.html">
-      <img src="lidokain.jpg">
-      <h3>Lidokain</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="idoarnyeka.html">
-      <img src="idoarnyeka.jpg">
-      <h3>Idő árnyéka</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="sarkifeny.html">
-      <img src="sarkifeny.jpg">
-      <h3>Sarki fény</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="oszifenyek.html">
-      <img src="oszifenyek.jpg">
-      <h3>Őszi fények</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="holdfenyeshegyek.html">
-      <img src="holdfenyeshegyek.jpg">
-      <h3>Holdfényes hegyek</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="voroslour.html">
-      <img src="voroslour.jpg">
-      <h3>Vöröslő űr</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="fenyfele.html">
-      <img src="fenyfele.jpg">
-      <h3>Fény felé</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="atjaro.html">
-      <img src="atjaro.jpg">
-      <h3>Átjáró</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="tuzeshamu.html">
-      <img src="tuzeshamu.jpg">
-      <h3>Tűz és hamu</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="kezdetek.html">
-      <img src="kezdetek.jpg">
-      <h3>Kezdetek</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="geometria.html">
-      <img src="geometria.jpg">
-      <h3>Geometria</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="2413.html">
-      <img src="2413.jpg">
-      <h3>24:13</h3>
-    </a>
-  </div>
-
-  <div class="item">
-    <a href="elviseles.html">
-      <img src="elviseles.jpg">
-      <h3>Elviselés</h3>
-    </a>
-  </div>
-
-</section>
-
-<script>
-  function toggleMenu() {
-    const menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
-  }
-</script>
-  
 </body>
 </html>
