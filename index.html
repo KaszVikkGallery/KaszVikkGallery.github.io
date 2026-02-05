@@ -58,36 +58,33 @@
       font-size: 22px;
       font-weight: normal;
     }
-    /* HAMBURGER MENU */
-.menu-button {
-  font-size: 30px;
+    .menu-bar {
+  position: relative;
+  text-align: right; 
+}
+
+.menu-toggle {
+  font-size: 80px;
   cursor: pointer;
-  padding: 15px;
+  display: inline-block;
 }
 
-.menu {
+#menu {
   display: none;
-  position: fixed;
-  top: 0;
-  right: 0;
-  background: white;
-  width: 220px;
-  height: 100%;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
-  padding-top: 60px;
+  position: absolute;
+  right: 0; 
+  top: 60px; 
+  background: #fff;
+  border: 2px solid #ccc;
+  padding: 20px;
 }
 
-.menu a {
+#menu a {
   display: block;
-  padding: 15px;
-  font-size: 22px;
+  margin: 10px 0;
   color: #222;
   text-decoration: none;
-}
-
-.menu a:hover {
-  background: #f0f0f0;
-}
+} 
   </style>
 </head>
 
