@@ -2,39 +2,49 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <title>KaszVikk Galéria</title>
+  <title>Kasz Vikk – Bemutatkozás</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
+      font-family: Arial, sans-serif;
       background: #ffffff;
       color: #222;
     }
 
-    /* ===== MENÜ ===== */
+    /* ===== MENÜ GOMB ===== */
     .menu-button {
-      font-size: 60px;
+      position: fixed;
+      top: 20px;
+      right: 25px;
+      font-size: 70px;
       cursor: pointer;
+      z-index: 2000;
       user-select: none;
     }
 
+    /* ===== OLDALSÓ MENÜ ===== */
     nav {
       position: fixed;
       top: 0;
-      right: -260px;
-      width: 260px;
+      right: -320px;
+      width: 320px;
       height: 100%;
-      background: #fff;
+      background: #ffffff;
       border-left: 1px solid #ddd;
-      padding-top: 80px;
+      padding-top: 120px;
       transition: right 0.3s ease;
-      z-index: 1000;
+      z-index: 1500;
+    }
+
+    nav.open {
+      right: 0;
     }
 
     nav a {
       display: block;
-      padding: 22px 30px;
-      font-size: 35px;
+      padding: 25px 35px;
+      font-size: 38px;
       color: #222;
       text-decoration: none;
     }
@@ -43,228 +53,73 @@
       background: #f2f2f2;
     }
 
-    nav.open {
-      right: 0;
-    }
-
     /* ===== TARTALOM ===== */
     .container {
       max-width: 1000px;
-      margin: 60px auto;
+      margin: 140px auto 60px;
       padding: 0 20px;
       text-align: center;
     }
 
-    .contact-text {
-      font-size: 40px; /* nagy szöveg */
-      line-height: 1.7;
-      max-width: 800px;
-      margin: 30px auto;
-    }
-
-    .email-link {
-      font-size: 50px; /* email kiemelve és nagy */
-      font-weight: bold;
-      color: #222;
-      text-decoration: none;
-    }
-
-    .email-link:hover {
-      color: #0077cc;
-      text-decoration: underline;
-
-    /* Header */
-    header {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    header h1 {
-      margin-bottom: 10px;
-      font-size: 36px;
-    }
-
-    header p {
-      font-size: 18px;
-      margin: 6px 0;
-    }
-
-    /* Galéria */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
-      padding: 30px;
-      justify-items: center;
-    }
-
-    .item {
-      text-align: center;
-    }
-
-    .item a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .item img {
+    .intro-image {
+      max-width: 320px;
       width: 100%;
-      max-width: 420px;
-      height: 280px;
-      object-fit: cover;
-      display: block;
+      border-radius: 10px;
+      margin-bottom: 40px;
     }
 
-    .item h3 {
-      margin-top: 12px;
-      font-size: 32px;
-      font-weight: normal;
+    .intro-text {
+      font-size: 40px;
+      line-height: 1.8;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    /* ===== LÁBLÉC ===== */
+    footer {
+      text-align: center;
+      margin: 80px 0 30px;
+      font-size: 25px;
+      color: #777;
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Menü gomb -->
-  <div class="menu-bar">
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-    <div id="menu">
-      <a href="bemutatkozas.html">Bemutatkozás</a>
-      <a href="index.html">Galéria</a>
-      <a href="kapcsolat.html">Kapcsolat</a>
-      <a href="szallitas.html">Szállítás</a>
+  <!-- MENÜ GOMB -->
+  <div class="menu-button" onclick="toggleMenu()">☰</div>
+
+  <!-- MENÜ -->
+  <nav id="menu">
+    <a href="bemutatkozas.html">Bemutatkozás</a>
+    <a href="index.html">Galéria</a>
+    <a href="kapcsolat.html">Kapcsolat</a>
+    <a href="szallitas.html">Szállítás</a>
+  </nav>
+
+  <!-- TARTALOM -->
+  <div class="container">
+    <img src="en.jpg" alt="Kasz Vikk" class="intro-image">
+
+    <div class="intro-text">
+      <p>
+        Sziasztok, Kasz Vikk vagyok!<br><br>
+        2024 novemberében kezdtem el festeni. Amatőr festő vagyok.<br><br>
+        Képeimben főként érzéseket és hangulatokat igyekszem megjeleníteni.<br><br>
+        A festés számomra örömöt és nyugalmat ad, és egyre komolyabban szeretnék vele foglalkozni.<br><br>
+        Bízom benne, hogy a képeim másoknak is örömet tudnak okozni.
+      </p>
     </div>
   </div>
 
-  <header>
-    <h1>Vásárlás és érdeklődés emailen lehetséges. </h>
-  </header>
-
-  <section class="gallery">
-    <div class="item">
-      <a href="thejazzisfreedom.html">
-        <img src="thejazzisfreedom.jpg">
-        <h3>The jazz is freedom</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="szivdala.html">
-        <img src="szivdala.jpg">
-        <h3>A szív dala</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="nemeshuseg.html">
-        <img src="nemeshuseg.jpg">
-        <h3>Nemes hűség</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="morningcat.html">
-        <img src="morningcat.jpg">
-        <h3>Morning cat</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="lidokain.html">
-        <img src="lidokain.jpg">
-        <h3>Lidokain</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="idoarnyeka.html">
-        <img src="idoarnyeka.jpg">
-        <h3>Idő árnyéka</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="sarkifeny.html">
-        <img src="sarkifeny.jpg">
-        <h3>Sarki fény</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="oszifenyek.html">
-        <img src="oszifenyek.jpg">
-        <h3>Őszi fények</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="holdfenyeshegyek.html">
-        <img src="holdfenyeshegyek.jpg">
-        <h3>Holdfényes hegyek</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="voroslour.html">
-        <img src="voroslour.jpg">
-        <h3>Vöröslő űr</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="fenyfele.html">
-        <img src="fenyfele.jpg">
-        <h3>Fény felé</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="atjaro.html">
-        <img src="atjaro.jpg">
-        <h3>Átjáró</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="tuzeshamu.html">
-        <img src="tuzeshamu.jpg">
-        <h3>Tűz és hamu</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="kezdetek.html">
-        <img src="kezdetek.jpg">
-        <h3>Kezdetek</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="geometria.html">
-        <img src="geometria.jpg">
-        <h3>Geometria</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="2413.html">
-        <img src="2413.jpg">
-        <h3>24:13</h3>
-      </a>
-    </div>
-
-    <div class="item">
-      <a href="elviseles.html">
-        <img src="elviseles.jpg">
-        <h3>Elviselés</h3>
-      </a>
-    </div>
-
-  </section>
+  <footer>
+    © Kasz Vikk
+  </footer>
 
   <script>
     function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+      document.getElementById("menu").classList.toggle("open");
     }
   </script>
 
