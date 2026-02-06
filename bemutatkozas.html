@@ -12,32 +12,34 @@
       color: #222;
     }
 
-    
-    /* ===== HEADER ===== */
-    header {
-      text-align: cent/* ===== MENÜ ===== */
+    /* ===== MENÜ GOMB ===== */
     .menu-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
       font-size: 60px;
       cursor: pointer;
+      z-index: 1100;
       user-select: none;
     }
 
+    /* ===== OLDALSÓ MENÜ ===== */
     nav {
       position: fixed;
       top: 0;
-      right: -260px;
-      width: 260px;
+      right: -300px;
+      width: 300px;
       height: 100%;
-      background: #fff;
+      background: #ffffff;
       border-left: 1px solid #ddd;
-      padding-top: 80px;
+      padding-top: 100px;
       transition: right 0.3s ease;
       z-index: 1000;
     }
 
     nav a {
       display: block;
-      padding: 22px 30px;
+      padding: 25px 30px;
       font-size: 35px;
       color: #222;
       text-decoration: none;
@@ -54,60 +56,22 @@
     /* ===== TARTALOM ===== */
     .container {
       max-width: 1000px;
-      margin: 60px auto;
-      padding: 0 20px;
-      text-align: center;
-    }
-
-    .contact-text {
-      font-size: 40px; /* nagy szöveg */
-      line-height: 1.7;
-      max-width: 800px;
-      margin: 30px auto;
-    }
-
-    .email-link {
-      font-size: 50px; /* email kiemelve és nagy */
-      font-weight: bold;
-      color: #222;
-      text-decoration: none;
-    }
-
-    .email-link:hover {
-      color: #0077cc;
-      text-decoration: underline;er;
-      padding: 40px 20px;
-    }
-
-    header h1 {
-      margin-bottom: 10px;
-      font-size: 36px;
-    }
-
-    header p {
-      font-size: 18px;
-      margin: 6px 0;
-    }
-
-    /* ===== TARTALOM ===== */
-    .container {
-      max-width: 1000px;
-      margin: 40px auto;
+      margin: 120px auto 60px;
       padding: 0 20px;
       text-align: center;
     }
 
     .intro-image {
-      max-width: 300px;
+      max-width: 320px;
       width: 100%;
-      border-radius: 8px;
-      margin-bottom: 30px;
+      border-radius: 10px;
+      margin-bottom: 40px;
     }
 
     .intro-text {
       font-size: 40px;
-      line-height: 1.7;
-      max-width: 800px;
+      line-height: 1.8;
+      max-width: 850px;
       margin: 0 auto;
     }
 
@@ -123,26 +87,27 @@
 
 <body>
 
-  <!-- Menü -->
-  <div class="menu-bar">
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-    <div id="menu">
-      <a href="bemutatkozas.html">Bemutatkozás</a>
-      <a href="index.html">Galéria</a>
-      <a href="kapcsolat.html">Kapcsolat</a>
-      <a href="szallitas.html">Szállítás</a>
-    </div>
-  </div>
+  <!-- Menü gomb -->
+  <div class="menu-button" onclick="toggleMenu()">☰</div>
 
+  <!-- Menü -->
+  <nav id="menu">
+    <a href="bemutatkozas.html">Bemutatkozás</a>
+    <a href="index.html">Galéria</a>
+    <a href="kapcsolat.html">Kapcsolat</a>
+    <a href="szallitas.html">Szállítás</a>
+  </nav>
+
+  <!-- Tartalom -->
   <div class="container">
     <img src="en.jpg" alt="Kasz Vikk" class="intro-image">
 
     <div class="intro-text">
       <p>
-        Sziasztok KaszVikk vagyok!<br>
-        2024 novemberében kezdtem el festeni. Amatőr festő vagyok.<br>
-        Képeimben főként érzéseket és hangulatokat igyekszem megjeleníteni.<br>
-        A festés számomra örömöt és nyugalmat ad, és egyre komolyabban szeretnék vele foglalkozni.<br>
+        Sziasztok, Kasz Vikk vagyok!<br><br>
+        2024 novemberében kezdtem el festeni. Amatőr festő vagyok.<br><br>
+        Képeimben főként érzéseket és hangulatokat igyekszem megjeleníteni.<br><br>
+        A festés számomra örömöt és nyugalmat ad, és egyre komolyabban szeretnék vele foglalkozni.<br><br>
         Bízom benne, hogy a képeim másoknak is örömet tudnak okozni.
       </p>
     </div>
@@ -154,8 +119,7 @@
 
   <script>
     function toggleMenu() {
-      const menu = document.getElementById("menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+      document.getElementById("menu").classList.toggle("open");
     }
   </script>
 
