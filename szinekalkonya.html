@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Színek alkonya – Kasz Vikk</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #fff;
+      color: #222;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 25px;
+    }
+
+    .image-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .main-image {
+      max-width: 90%;
+      cursor: zoom-in;
+    }
+
+    .controls {
+      margin: 25px 0;
+    }
+
+    .controls button {
+      font-size: 26px;
+      padding: 16px 32px;
+      margin: 0 20px;
+      cursor: pointer;
+    }
+
+    p {
+      font-size: 36px;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 20px auto;
+    }
+
+    a {
+      font-size: 22px;
+      display: inline-block;
+      margin-top: 30px;
+    }
+
+    /* LIGHTBOX */
+    #lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    #lightbox img {
+      max-width: 95%;
+      max-height: 95%;
+    }
+    .back-button {
+  font-size: 26px;
+  padding: 16px 32px;
+  margin-top: 30px;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.back-button:hover {
+  background-color: #e0e0e0;
+  border-color: #999;
+}
+  </style>
+</head>
+
+<body>
+
+  <h1>Színek alkonya </h1>
+
+  <div class="image-container">
+    <img id="mainImage" class="main-image" src="szinekalkonyamessze.jpg" onclick="openLightbox()">
+  </div>
+
+  <div class="controls">
+    <button onclick="prevImage()">◀ Előző</button>
+    <button onclick="nextImage()">Következő ▶</button>
+    <button class="back-button" onclick="window.location.href='index.html'">Vissza a galériához</button>
+  </div>
+
+  <p>A táj elcsendesedik, a fények lágyulnak, és csak a nyugodt alkony marad. 
+    A „Színek alkonya” egy pillanatot őriz meg abból a békéből, amikor a nappal átadja helyét az estének.
+  Lakkozott és keretezett festmény. </p>
+  <p>Technika: Akril</p>
+  <p>Vászon típus: Farostlemez</p>
+  <p>Méret: 10 × 25 cm</p>
+  <p>Ára: 3 000 Forint</p>
+
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img">
+  </div>
+
+  <script>
+    const images = [
+      "szinekalkonyamessze.jpg",
+    
+    ];
+
+    let current = 0;
+
+    function showImage() {
+  // Megjelenítjük a jelenlegi képet
+  document.getElementById("mainImage").src = images[current];
+
+  // Előre betöltjük a következő képet, hogy gyorsabban jöjjön
+  const nextImg = new Image();
+  nextImg.src = images[(current + 1) % images.length];
+}
+
+    function nextImage() {
+      current = (current + 1) % images.length;
+      showImage();
+    }
+
+    function prevImage() {
+      current = (current - 1 + images.length) % images.length;
+      showImage();
+    }
+
+    function openLightbox() {
+      document.getElementById("lightbox-img").src = images[current];
+      document.getElementById("lightbox").style.display = "flex";
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
