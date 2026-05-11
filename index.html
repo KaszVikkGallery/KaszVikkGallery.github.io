@@ -11,7 +11,7 @@ body {
   background: #fff;
 }
 
-/* MENÜ */
+/* ===== MENÜ ===== */
 .menu-button {
   position: fixed;
   top: 20px;
@@ -43,7 +43,7 @@ nav a {
   color: #222;
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 header {
   text-align: center;
   padding: 120px 20px 20px;
@@ -53,7 +53,7 @@ header h1 {
   font-size: 40px;
 }
 
-/* GALÉRIA */
+/* ===== GALÉRIA ===== */
 .gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -70,25 +70,62 @@ header h1 {
   max-width: 420px;
   height: 280px;
   object-fit: cover;
+  border-radius: 6px;
 }
 
-/* KOSÁR (LIBRI STÍLUS) */
-#cartBox {
+/* ===== KOSÁR GOMB ===== */
+#openCart {
   position: fixed;
   left: 20px;
-  top: 120px;
-  width: 320px;
+  top: 20px;
+  padding: 10px 15px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 2000;
+}
+
+/* ===== OVERLAY ===== */
+#cartOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: none;
+  z-index: 2500;
+}
+
+#cartOverlay.show {
+  display: block;
+}
+
+/* ===== KOSÁR PANEL ===== */
+#cartDrawer {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 360px;
+  height: 100%;
   background: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 16px;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: 0.35s ease;
+  z-index: 3000;
+  overflow-y: auto;
+}
+
+#cartDrawer.open {
+  right: 0;
 }
 
 .cart-item {
   display: flex;
   justify-content: space-between;
-  margin: 6px 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
 }
 
 .remove {
@@ -96,27 +133,29 @@ header h1 {
   color: red;
 }
 
-button {
-  padding: 10px 14px;
-  cursor: pointer;
-}
-
-select {
-  width: 100%;
-  margin-top: 8px;
+.cart-summary {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
 }
 
 #checkoutBtn {
-  margin-top: 10px;
   width: 100%;
+  margin-top: 10px;
+  padding: 12px;
   background: black;
   color: white;
+  border: none;
+  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
+<!-- MENÜ -->
 <div class="menu-button" onclick="toggleMenu()">☰</div>
 
 <nav id="menu">
@@ -128,23 +167,32 @@ select {
   <h1>Kasz Vikk Webshop</h1>
 </header>
 
+<!-- KOSÁR NYITÓ GOMB -->
+<button id="openCart" onclick="toggleCart()">Kosár</button>
+
+<!-- OVERLAY -->
+<div id="cartOverlay" onclick="toggleCart()"></div>
+
 <!-- KOSÁR -->
-<div id="cartBox">
-  <h3>Kosár</h3>
+<div id="cartDrawer">
+  <h2>Kosár</h2>
+
   <div id="cartItems"></div>
 
-  <p>
-    Szállítás:
-    <select id="shipping" onchange="updateTotal()">
-      <option value="0">Válassz</option>
-      <option value="1699">Foxpost</option>
-      <option value="1490">Packeta</option>
-    </select>
-  </p>
+  <div class="cart-summary">
+    <p>
+      Szállítás:
+      <select id="shipping" onchange="renderCart()">
+        <option value="0">Válassz</option>
+        <option value="1699">Foxpost</option>
+        <option value="1490">Packeta</option>
+      </select>
+    </p>
 
-  <p id="total">Összesen: 0 Ft</p>
+    <p id="total">Összesen: 0 Ft</p>
 
-  <button id="checkoutBtn" onclick="checkout()">Fizetés</button>
+    <button id="checkoutBtn" onclick="checkout()">Fizetés</button>
+  </div>
 </div>
 
 <!-- GALÉRIA -->
@@ -182,6 +230,11 @@ function toggleMenu(){
   document.getElementById("menu").classList.toggle("open");
 }
 
+function toggleCart(){
+  document.getElementById("cartDrawer").classList.toggle("open");
+  document.getElementById("cartOverlay").classList.toggle("show");
+}
+
 function renderGallery(){
   const g = document.getElementById("gallery");
 
@@ -201,7 +254,6 @@ function renderGallery(){
 
 function addToCart(name, price){
 
-  // DUPLIKÁCIÓ TILTÁS
   if(cart.find(i=>i.name===name)){
     alert("Ez már a kosárban van!");
     return;
@@ -226,12 +278,15 @@ function renderCart(){
   cart.forEach(i=>{
     let div = document.createElement("div");
     div.className="cart-item";
+
     div.innerHTML=`
-      <span>${i.name} - ${i.price} Ft</span>
-      <span class="remove" onclick="removeItem('${i.name}')">X</span>
+      <span>${i.name}</span>
+      <span>${i.price} Ft</span>
+      <span class="remove" onclick="removeItem('${i.name}')">✕</span>
     `;
+
     box.appendChild(div);
-    total+=i.price;
+    total += i.price;
   });
 
   updateTotal(total);
@@ -239,14 +294,10 @@ function renderCart(){
 
 function updateTotal(productTotal){
 
-  let ship = parseInt(document.getElementById("shipping").value)||0;
-
-  if(productTotal===undefined){
-    productTotal = cart.reduce((a,b)=>a+b.price,0);
-  }
+  let shipping = parseInt(document.getElementById("shipping").value)||0;
 
   document.getElementById("total").innerText =
-    "Összesen: " + (productTotal + ship) + " Ft";
+    "Összesen: " + (productTotal + shipping) + " Ft";
 }
 
 function checkout(){
@@ -261,12 +312,12 @@ function checkout(){
     return;
   }
 
-  let total = cart.reduce((a,b)=>a+b.price,0);
-  total += parseInt(document.getElementById("shipping").value);
+  let total = cart.reduce((a,b)=>a+b.price,0)
+              + parseInt(document.getElementById("shipping").value);
 
-  alert("Fizetés indítása: " + total + " Ft");
+  alert("Fizetés: " + total + " Ft");
 
-  // IDE JÖN STRIPE CHECKOUT
+  // IDE JÖN STRIPE
 }
 
 renderGallery();
