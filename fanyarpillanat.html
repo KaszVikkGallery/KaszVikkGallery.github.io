@@ -1,117 +1,255 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <title>Fanyar pillanat – Kasz Vikk</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T6KZWC3LLE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<title>Fanyar pillanat– Kasz Vikk</title>
 
-  gtag('config', 'G-T6KZWC3LLE');
-</script>
+<style>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #fff;
-      color: #222;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 36px;
-      margin-bottom: 25px;
-    }
-
-    .image-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .main-image {
-      max-width: 90%;
-      cursor: zoom-in;
-    }
-
-    .controls {
-      margin: 25px 0;
-    }
-
-    .controls button {
-      font-size: 26px;
-      padding: 16px 32px;
-      margin: 0 20px;
-      cursor: pointer;
-    }
-
-    p {
-      font-size: 36px;
-      line-height: 1.7;
-      max-width: 900px;
-      margin: 20px auto;
-    }
-
-    a {
-      font-size: 22px;
-      display: inline-block;
-      margin-top: 30px;
-    }
-
-    /* LIGHTBOX */
-    #lightbox {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    #lightbox img {
-      max-width: 95%;
-      max-height: 95%;
-    }
-    .back-button {
-  font-size: 26px;
-  padding: 16px 32px;
-  margin-top: 30px;
-  cursor: pointer;
-  background-color: #f5f5f5;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  font-weight: bold;
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  background:#fff;
+  color:#222;
 }
 
-.back-button:hover {
-  background-color: #e0e0e0;
-  border-color: #999;
+/* ===== KOSÁR GOMB ===== */
+
+#openCart{
+position:fixed;
+top:14px;
+left:14px;
+background:black;
+color:white;
+padding:12px 16px;
+font-size:18px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+z-index:5000;
 }
-    .buy-button {
-  display: inline-block;
-  padding: 14px 28px;
-  background: black;
-  color: white;
-  text-decoration: none;
-  border-radius: 10px;
-  font-size: 20px;
-  margin-top: 20px;
+
+#cartCount{
+background:red;
+color:white;
+border-radius:50%;
+padding:4px 10px;
+font-size:16px;
+margin-left:8px;
 }
-  </style>
+
+/* ===== KÉP ===== */
+
+h1{
+  font-size:34px;
+  margin-top:90px;
+}
+
+.main-image{
+  max-width:80%;
+  margin-top:20px;
+  cursor:zoom-in;
+}
+
+/* ===== SZÖVEG ===== */
+
+p{
+  font-size:22px;
+  margin:10px auto;
+  max-width:800px;
+}
+
+/* ===== GOMB ===== */
+
+button{
+  font-size:18px;
+  padding:12px 18px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  margin-top:15px;
+}
+
+/* ===== VISSZA ===== */
+
+.back-btn{
+  margin-top:20px;
+  font-size:18px;
+  padding:12px 18px;
+  background:#f2f2f2;
+  color:#222;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* ===== LIGHTBOX ===== */
+
+#lightbox{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:5000;
+}
+
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+}
+
+/* ===== NYILAK ===== */
+
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:40px;
+  color:white;
+  cursor:pointer;
+  user-select:none;
+}
+
+#prev{ left:30px; }
+#next{ right:30px; }
+
+/* ===== KOSÁR ===== */
+
+#cartOverlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  display:none;
+  z-index:5500;
+}
+
+#cartDrawer{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:90%;
+  max-width:380px;
+  height:100%;
+  background:white;
+  z-index:6000;
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  box-shadow:-8px 0 20px rgba(0,0,0,0.12);
+}
+
+#cartDrawer.open{
+  right:0;
+}
+
+#cartOverlay.show{
+  display:block;
+}
+
+.cart-content{
+  flex:1;
+  overflow-y:auto;
+  padding:20px;
+}
+
+#cartDrawer h2{
+  font-size:28px;
+  margin-top:0;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #eee;
+  padding:12px 0;
+}
+
+.cart-name{
+  font-size:18px;
+  font-weight:500;
+}
+
+.cart-price{
+  font-size:16px;
+  color:#666;
+}
+
+.remove{
+  color:red;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.cart-summary{
+  border-top:1px solid #ddd;
+  padding:15px;
+}
+
+select{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+#total{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+</style>
 </head>
 
 <body>
 
-  <h1>Fanyar pillanat</h1>
+<!-- ===== KOSÁR GOMB ===== -->
+<button id="openCart" onclick="toggleCart()">
+🛒 <span id="cartCount">0</span>
+</button>
+
+<!-- ===== KOSÁR ===== -->
+<div id="cartOverlay" onclick="toggleCart()"></div>
+
+<div id="cartDrawer">
+
+  <div class="cart-content">
+    <h2>Kosár</h2>
+    <div id="cartItems"></div>
+  </div>
+
+  <div class="cart-summary">
+
+    <select id="shipping" onchange="renderCart()">
+      <option value="0">Szállítás</option>
+      <option value="1699">Foxpost</option>
+      <option value="1490">Packeta</option>
+    </select>
+
+    <div id="total"></div>
+
+    <button onclick="checkout()">Fizetés</button>
+
+  </div>
+
+</div>
+
+<!-- ===== TERMÉK ===== -->
+
+<h1>Fanyar pillanat</h1>
 
   <div class="image-container">
     <img id="mainImage" class="main-image" src="fanyarpillanat.jpg" onclick="openLightbox()">
@@ -128,13 +266,35 @@
   <p>Vászon típus: Festő papír</p>
   <p>Méret: 10 × 15 cm</p>
   <p>Ára: 3 000 Forint</p>
-  <a href="#" class="buy-button">Megvásárolom</a>
-
   <div id="lightbox" onclick="closeLightbox()">
     <img id="lightbox-img">
   </div>
 
-  <script>
+  <script> 
+  
+<!-- 🔥 JAVÍTOTT KOSÁR LOGIKA -->
+<button onclick="addToCart('Bor', 3500)">
+Kosárba
+</button>
+
+<button class="back-btn" onclick="window.location.href='index.html'">
+← Vissza
+</button>
+
+<!-- ===== LIGHTBOX ===== -->
+<div id="lightbox" onclick="closeLightbox()">
+
+  <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">◀</div>
+
+  <img id="lightboxImg">
+
+  <div id="next" class="arrow" onclick="event.stopPropagation(); next()">▶</div>
+
+</div>
+
+<script>
+
+/* ===== KÉPEK ===== */
     const images = [
       
       "fanyarpillanatkeret.jpg",
@@ -143,36 +303,99 @@
       
     ];
 
-    let current = 0;
+let current = 0;
 
-    function showImage() {
-  // Megjelenítjük a jelenlegi képet
-  document.getElementById("mainImage").src = images[current];
+/* ===== LIGHTBOX ===== */
 
-  // Előre betöltjük a következő képet, hogy gyorsabban jöjjön
-  const nextImg = new Image();
-  nextImg.src = images[(current + 1) % images.length];
+function openLightbox(){
+  document.getElementById("lightbox").style.display="flex";
+  document.getElementById("lightboxImg").src = images[current];
 }
 
-    function nextImage() {
-      current = (current + 1) % images.length;
-      showImage();
-    }
+function closeLightbox(){
+  document.getElementById("lightbox").style.display="none";
+}
 
-    function prevImage() {
-      current = (current - 1 + images.length) % images.length;
-      showImage();
-    }
+function next(){
+  current = (current + 1) % images.length;
+  document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
+}
 
-    function openLightbox() {
-      document.getElementById("lightbox-img").src = images[current];
-      document.getElementById("lightbox").style.display = "flex";
-    }
+function prev(){
+  current = (current - 1 + images.length) % images.length;
+  document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
+}
 
-    function closeLightbox() {
-      document.getElementById("lightbox").style.display = "none";
-    }
-  </script>
+/* ===== KOSÁR FIX (EGY TERMÉK CSAK 1x) ===== */
+
+let cart = [];
+
+function toggleCart(){
+  document.getElementById("cartDrawer").classList.toggle("open");
+  document.getElementById("cartOverlay").classList.toggle("show");
+}
+
+function addToCart(name, price){
+
+  // 🔥 EZ A LÉNYEG: ha már benne van, nem teszi be újra
+  if(cart.some(item => item.name === name)){
+    return;
+  }
+
+  cart.push({name, price});
+  renderCart();
+  updateCartCount();
+}
+
+function renderCart(){
+
+  const box = document.getElementById("cartItems");
+  box.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach(i => {
+
+    const div = document.createElement("div");
+    div.className = "cart-item";
+
+    div.innerHTML = `
+      <div>
+        <div class="cart-name">${i.name}</div>
+        <div class="cart-price">${i.price} Ft</div>
+      </div>
+      <span class="remove" onclick="removeItem('${i.name}')">✕</span>
+    `;
+
+    box.appendChild(div);
+    total += i.price;
+
+  });
+
+  document.getElementById("total").innerText = "Összesen: " + total + " Ft";
+}
+
+function removeItem(name){
+  cart = cart.filter(i => i.name !== name);
+  renderCart();
+  updateCartCount();
+}
+
+function updateCartCount(){
+  document.getElementById("cartCount").innerText = cart.length;
+}
+
+function checkout(){
+  if(cart.length === 0){
+    alert("A kosár üres.");
+    return;
+  }
+  alert("Fizetés indul...");
+}
+
+</script>
 
 </body>
-</html> 
+</html>
