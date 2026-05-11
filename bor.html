@@ -9,49 +9,16 @@
 <style>
 
 body{
-  font-family:Arial,sans-serif;
   margin:0;
-  background:#fff;
-  color:#222;
+  font-family:Arial,sans-serif;
   text-align:center;
-}
-
-/* ===== MENÜ ===== */
-
-.menu-button{
-  position:fixed;
-  top:20px;
-  right:20px;
-  font-size:70px;
-  cursor:pointer;
-  z-index:3000;
-}
-
-nav{
-  position:fixed;
-  top:0;
-  right:-320px;
-  width:300px;
-  height:100%;
   background:#fff;
-  padding-top:100px;
-  transition:0.3s;
-  z-index:2500;
-}
-
-nav.open{ right:0; }
-
-nav a{
-  display:block;
-  padding:22px;
-  font-size:30px;
-  text-decoration:none;
   color:#222;
 }
 
-/* ===== KOSÁR GOMB ===== */
+/* ===== KOSÁR ===== */
 
-#openCart{
+#cartBtn{
   position:fixed;
   top:20px;
   left:20px;
@@ -60,9 +27,9 @@ nav a{
   padding:14px 18px;
   font-size:20px;
   border:none;
-  cursor:pointer;
   border-radius:12px;
-  z-index:3000;
+  cursor:pointer;
+  z-index:2000;
 }
 
 #cartCount{
@@ -74,35 +41,36 @@ nav a{
 
 /* ===== KÉP ===== */
 
+h1{
+  font-size:38px;
+  margin-top:100px;
+}
+
 .main-image{
   max-width:80%;
-  margin-top:120px;
+  margin-top:20px;
   cursor:zoom-in;
 }
 
 /* ===== SZÖVEG ===== */
 
 p{
-  font-size:28px;
+  font-size:26px;
+  margin:10px auto;
   max-width:800px;
-  margin:12px auto;
-}
-
-h1{
-  font-size:38px;
-  margin-top:110px;
 }
 
 /* ===== GOMB ===== */
 
 button{
   font-size:20px;
-  padding:14px 22px;
+  padding:14px 20px;
   background:black;
   color:white;
   border:none;
   border-radius:10px;
   cursor:pointer;
+  margin-top:15px;
 }
 
 /* ===== LIGHTBOX ===== */
@@ -125,8 +93,12 @@ button{
   max-height:95%;
 }
 
+/* ===== NYILAK ===== */
+
 .controls button{
   margin:10px;
+  font-size:22px;
+  padding:12px 18px;
 }
 
 </style>
@@ -134,18 +106,8 @@ button{
 
 <body>
 
-<!-- MENU -->
-<div class="menu-button" onclick="toggleMenu()">☰</div>
-
-<nav id="menu">
-  <a href="index.html">Galéria</a>
-  <a href="bemutatkozas.html">Bemutatkozás</a>
-  <a href="szallitas.html">Szállítás</a>
-  <a href="kapcsolat.html">Kapcsolat</a>
-</nav>
-
 <!-- KOSÁR -->
-<button id="openCart" onclick="toggleCart()">
+<button id="cartBtn" onclick="openCart()">
 🛒 <span id="cartCount">0</span>
 </button>
 
@@ -154,8 +116,8 @@ button{
 <img class="main-image" src="bor.jpg" onclick="openLightbox()">
 
 <div class="controls">
-  <button onclick="prevImage()">◀</button>
-  <button onclick="nextImage()">▶</button>
+  <button onclick="prev()">◀</button>
+  <button onclick="next()">▶</button>
 </div>
 
 <p>Lakkozott csendélet festmény.</p>
@@ -165,8 +127,9 @@ button{
 
 <button onclick="addToCart()">Kosárba</button>
 
+<!-- LIGHTBOX -->
 <div id="lightbox" onclick="closeLightbox()">
-  <img id="lightbox-img">
+  <img id="lightboxImg">
 </div>
 
 <script>
@@ -187,7 +150,7 @@ let current = 0;
 
 function openLightbox(){
   document.getElementById("lightbox").style.display="flex";
-  document.getElementById("lightbox-img").src=images[current];
+  document.getElementById("lightboxImg").src = images[current];
 }
 
 function closeLightbox(){
@@ -196,14 +159,14 @@ function closeLightbox(){
 
 /* ===== LAPOZÁS ===== */
 
-function nextImage(){
-  current=(current+1)%images.length;
-  document.querySelector(".main-image").src=images[current];
+function next(){
+  current = (current + 1) % images.length;
+  document.querySelector(".main-image").src = images[current];
 }
 
-function prevImage(){
-  current=(current-1+images.length)%images.length;
-  document.querySelector(".main-image").src=images[current];
+function prev(){
+  current = (current - 1 + images.length) % images.length;
+  document.querySelector(".main-image").src = images[current];
 }
 
 /* ===== KOSÁR (KÖZÖS) ===== */
@@ -228,13 +191,14 @@ function updateCart(){
   document.getElementById("cartCount").innerText = cart.length;
 }
 
-/* ===== INIT ===== */
+function openCart(){
+  alert(
+    "Kosár:\n\n" +
+    cart.map(i=>i.name + " - " + i.price + " Ft").join("\n")
+  );
+}
 
 updateCart();
-
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("open");
-}
 
 </script>
 
