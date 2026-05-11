@@ -258,7 +258,7 @@ select{
   <button onclick="next()">▶</button>
 </div>
 
-<p>Popart stílusú Johnny Bravo festmény.A karakter a Cartoon Network egyik ikonikus figurája, aki most ezen a képen is magára vonja a figyelmet.</p>
+<p>Popart stílusú Johnny Bravo festmény.</p>
 <p>Technika: Akril</p>
 <p>Vászon típus: Feszített vászon</p>
 <p>Méret: 24 × 30 cm</p>
@@ -329,9 +329,7 @@ function toggleCart(){
 
 function addToCart(name, price){
 
-  if(cart.some(item => item.name === name)){
-    return;
-  }
+  if(cart.some(i => i.name === name)) return;
 
   cart.push({name, price});
   renderCart();
@@ -363,8 +361,10 @@ function renderCart(){
 
   });
 
+  let shipping = parseInt(document.getElementById("shipping").value) || 0;
+
   document.getElementById("total").innerText =
-    "Összesen: " + total + " Ft";
+    "Összesen: " + (total + shipping) + " Ft";
 }
 
 function removeItem(name){
