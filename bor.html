@@ -16,7 +16,7 @@ body{
   color:#222;
 }
 
-/* ===== KOSÁR GOMB ===== */
+/* ===== KOSÁR ===== */
 
 #cartBtn{
   position:fixed;
@@ -37,17 +37,26 @@ body{
   padding:5px 10px;
   border-radius:50%;
   margin-left:8px;
-  font-size:16px;
 }
 
-/* ===== CÍM ===== */
+/* ===== VISSZA GOMB ===== */
 
-h1{
-  font-size:38px;
-  margin-top:100px;
+.back-btn{
+  margin-top:20px;
+  font-size:18px;
+  padding:12px 18px;
+  background:#eee;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
 }
 
 /* ===== KÉP ===== */
+
+h1{
+  font-size:34px;
+  margin-top:90px;
+}
 
 .main-image{
   max-width:80%;
@@ -58,7 +67,7 @@ h1{
 /* ===== SZÖVEG ===== */
 
 p{
-  font-size:24px;
+  font-size:22px;
   margin:10px auto;
   max-width:800px;
 }
@@ -92,16 +101,28 @@ button{
 }
 
 #lightbox img{
-  max-width:95%;
-  max-height:95%;
+  max-width:85%;
+  max-height:85%;
 }
 
 /* ===== NYILAK ===== */
 
-.controls button{
-  margin:10px;
-  font-size:22px;
-  padding:12px 18px;
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:40px;
+  color:white;
+  cursor:pointer;
+  user-select:none;
+}
+
+#prev{
+  left:30px;
+}
+
+#next{
+  right:30px;
 }
 
 </style>
@@ -110,7 +131,7 @@ button{
 <body>
 
 <!-- ===== KOSÁR ===== -->
-<button id="cartBtn" onclick="toggleCart()">
+<button id="cartBtn">
 🛒 <span id="cartCount">0</span>
 </button>
 
@@ -118,7 +139,7 @@ button{
 
 <img class="main-image" src="bor.jpg" onclick="openLightbox()">
 
-<div class="controls">
+<div>
   <button onclick="prev()">◀</button>
   <button onclick="next()">▶</button>
 </div>
@@ -132,9 +153,23 @@ button{
 Kosárba
 </button>
 
+<button class="back-btn" onclick="window.location.href='index.html'">
+← Vissza a galériához
+</button>
+
 <!-- ===== LIGHTBOX ===== -->
 <div id="lightbox" onclick="closeLightbox()">
+
+  <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">
+    ◀
+  </div>
+
   <img id="lightboxImg">
+
+  <div id="next" class="arrow" onclick="event.stopPropagation(); next()">
+    ▶
+  </div>
+
 </div>
 
 <!-- ===== KÖZÖS KOSÁR RENDSZER ===== -->
@@ -170,11 +205,13 @@ function closeLightbox(){
 function next(){
   current = (current + 1) % images.length;
   document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
 }
 
 function prev(){
   current = (current - 1 + images.length) % images.length;
   document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
 }
 
 </script>
