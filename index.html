@@ -11,16 +11,17 @@ body {
   background: #fff;
 }
 
-/* ===== MENÜ ===== */
+/* ===== MENÜ GOMB ===== */
 .menu-button {
   position: fixed;
   top: 20px;
   right: 25px;
-  font-size: 80px;
+  font-size: 90px; /* 🔥 NAGYOBB */
   cursor: pointer;
   z-index: 2000;
 }
 
+/* ===== OLDALSÓ MENÜ ===== */
 nav {
   position: fixed;
   top: 0;
@@ -29,16 +30,17 @@ nav {
   height: 100%;
   background: #fff;
   border-left: 1px solid #ddd;
-  padding-top: 100px;
+  padding-top: 120px;
   transition: 0.3s;
+  z-index: 1500;
 }
 
 nav.open { right: 0; }
 
 nav a {
   display: block;
-  padding: 22px;
-  font-size: 24px;
+  padding: 24px;
+  font-size: 26px;
   text-decoration: none;
   color: #222;
 }
@@ -72,22 +74,17 @@ header h1 {
   height: 300px;
   object-fit: cover;
   border-radius: 10px;
-  transition: 0.2s;
-}
-
-.item img:hover {
-  transform: scale(1.02);
 }
 
 .item h3 {
   font-size: 30px;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 /* ===== GOMBOK ===== */
 button {
-  font-size: 20px;
-  padding: 14px 20px;
+  font-size: 22px; /* 🔥 nagyobb */
+  padding: 16px 22px;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -100,18 +97,19 @@ button {
   background: black;
   color: white;
   border: none;
-  padding: 14px 18px;
+  padding: 18px 22px;  /* 🔥 nagyobb */
+  font-size: 22px;     /* 🔥 nagyobb */
   z-index: 2000;
-  font-size: 18px;
+  border-radius: 12px;
 }
 
 #cartCount {
   background: red;
   color: white;
   border-radius: 50%;
-  padding: 4px 10px;
-  margin-left: 6px;
-  font-size: 16px;
+  padding: 5px 12px;
+  margin-left: 8px;
+  font-size: 18px;
 }
 
 /* ===== OVERLAY ===== */
@@ -150,7 +148,7 @@ button {
 }
 
 #cartDrawer h2 {
-  font-size: 32px;
+  font-size: 34px;
 }
 
 .cart-item {
@@ -164,7 +162,7 @@ button {
 .remove {
   color: red;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .cart-summary {
@@ -182,15 +180,15 @@ button {
 
 select {
   font-size: 16px;
-  padding: 6px;
+  padding: 8px;
   width: 100%;
 }
 
 #checkoutBtn {
   width: 100%;
   margin-top: 12px;
-  padding: 14px;
-  font-size: 18px;
+  padding: 16px;
+  font-size: 20px;
   background: black;
   color: white;
   border: none;
@@ -205,6 +203,8 @@ select {
 
 <nav id="menu">
   <a href="index.html">Galéria</a>
+  <a href="bemutatkozas.html">Bemutatkozás</a>
+  <a href="szallitas.html">Szállítás</a>
   <a href="kapcsolat.html">Kapcsolat</a>
 </nav>
 
@@ -214,7 +214,7 @@ select {
 
 <!-- KOSÁR -->
 <button id="openCart" onclick="toggleCart()">
-  Kosár <span id="cartCount">0</span>
+  🛒 Kosár <span id="cartCount">0</span>
 </button>
 
 <div id="cartOverlay" onclick="toggleCart()"></div>
@@ -301,10 +301,7 @@ function renderGallery(){
 
 function addToCart(name, price){
 
-  if(cart.find(i=>i.name===name)){
-    alert("Ez már a kosárban van!");
-    return;
-  }
+  if(cart.find(i=>i.name===name)) return;
 
   cart.push({name,price});
   renderCart();
@@ -354,23 +351,9 @@ function updateCartCount(){
 }
 
 function checkout(){
-
-  if(cart.length===0){
-    alert("Kosár üres!");
-    return;
-  }
-
-  if(document.getElementById("shipping").value==0){
-    alert("Válassz szállítást!");
-    return;
-  }
-
-  let total = cart.reduce((a,b)=>a+b.price,0)
-              + parseInt(document.getElementById("shipping").value);
-
-  alert("Fizetés: " + total + " Ft");
-
+  alert("Fizetés indul...");
 }
+
 renderGallery();
 
 </script>
