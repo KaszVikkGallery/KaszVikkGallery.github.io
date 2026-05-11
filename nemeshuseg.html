@@ -26,8 +26,8 @@ body{
 /* ===== CÍM ===== */
 
 h1{
-  font-size:34px;
-  margin-top:90px;
+  font-size:36px;
+  margin-bottom:25px;
 }
 
 /* ===== KÉP ===== */
@@ -35,40 +35,52 @@ h1{
 .image-container{
   display:flex;
   justify-content:center;
+  margin-bottom:20px;
 }
 
 .main-image{
-  max-width:80%;
-  margin-top:20px;
+  max-width:90%;
   cursor:zoom-in;
+}
+
+/* ===== GOMBOK ===== */
+
+.controls{
+  margin:25px 0;
+}
+
+.controls button{
+  font-size:26px;
+  padding:16px 32px;
+  margin:0 20px;
+  cursor:pointer;
 }
 
 /* ===== SZÖVEG ===== */
 
 p{
-  font-size:20px;
-  margin:10px auto;
-  max-width:800px;
-  line-height:1.4;
+  font-size:36px;
+  line-height:1.7;
+  max-width:900px;
+  margin:20px auto;
 }
 
-/* ===== GOMBOK ===== */
+/* ===== BACK GOMB ===== */
 
-button{
-  font-size:18px;
-  padding:12px 18px;
-  background:black;
-  color:white;
-  border:none;
-  border-radius:10px;
+.back-button{
+  font-size:26px;
+  padding:16px 32px;
+  margin-top:30px;
   cursor:pointer;
-  margin-top:15px;
+  background-color:#f5f5f5;
+  border:2px solid #ccc;
+  border-radius:8px;
+  font-weight:bold;
 }
 
-.back-btn{
-  margin-top:20px;
-  background:#f2f2f2;
-  color:#222;
+.back-button:hover{
+  background-color:#e0e0e0;
+  border-color:#999;
 }
 
 /* ===== LIGHTBOX ===== */
@@ -83,12 +95,12 @@ button{
   display:none;
   justify-content:center;
   align-items:center;
-  z-index:5000;
+  z-index:999;
 }
 
 #lightbox img{
-  max-width:90%;
-  max-height:90%;
+  max-width:95%;
+  max-height:95%;
 }
 
 </style>
@@ -102,9 +114,10 @@ button{
   <img id="mainImage" class="main-image" src="nemeshusegmessze.jpg" onclick="openLightbox()">
 </div>
 
-<div>
-  <button onclick="prevImage()">◀</button>
-  <button onclick="nextImage()">▶</button>
+<div class="controls">
+  <button onclick="prevImage()">◀ Előző</button>
+  <button onclick="nextImage()">Következő ▶</button>
+  <button class="back-button" onclick="window.location.href='index.html'">Vissza a galériához</button>
 </div>
 
 <p>Elkelt!</p>
@@ -114,10 +127,6 @@ button{
 <p>Vászon típus: Feszített vászon</p>
 <p>Méret: 20 × 20 cm</p>
 <p>Ár: 4 000 Forint</p>
-
-<button class="back-btn" onclick="window.location.href='index.html'">
-← Vissza a galériához
-</button>
 
 <!-- LIGHTBOX -->
 <div id="lightbox" onclick="closeLightbox()">
