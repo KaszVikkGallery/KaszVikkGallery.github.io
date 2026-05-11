@@ -10,7 +10,7 @@
 
 body{
   font-family:Arial,sans-serif;
-  margin:20px;
+  margin:14px;
   background:#fff;
   color:#222;
   text-align:center;
@@ -19,8 +19,8 @@ body{
 /* ===== CÍM ===== */
 
 h1{
-  font-size:42px;
-  margin-bottom:25px;
+  font-size:34px;
+  margin-bottom:18px;
 }
 
 /* ===== KÉP ===== */
@@ -28,48 +28,59 @@ h1{
 .image-container{
   display:flex;
   justify-content:center;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 
 .main-image{
-  max-width:90%;
+  max-width:88%;
   cursor:zoom-in;
   border-radius:10px;
 }
 
-/* ===== KONTROL ===== */
-
-.controls{
-  margin:25px 0;
-}
+/* ===== GOMBOK ===== */
 
 .controls button{
-  font-size:22px;
-  padding:14px 26px;
-  margin:10px;
+  font-size:18px;
+  padding:10px 18px;
+  margin:8px;
   cursor:pointer;
 }
 
 /* ===== SZÖVEG ===== */
 
 p{
-  font-size:28px;
-  line-height:1.7;
-  max-width:900px;
-  margin:14px auto;
+  font-size:22px;
+  line-height:1.6;
+  max-width:800px;
+  margin:10px auto;
 }
 
 /* ===== KOSÁR GOMB ===== */
 
 .buy-button{
   display:inline-block;
-  padding:14px 28px;
+  padding:12px 22px;
   background:black;
   color:white;
   border:none;
   border-radius:10px;
-  font-size:20px;
-  margin-top:20px;
+  font-size:18px;
+  margin-top:16px;
+  cursor:pointer;
+}
+
+/* ===== KOSÁR SZÁMLÁLÓ ===== */
+
+#cartBar{
+  position:fixed;
+  top:14px;
+  left:14px;
+  background:black;
+  color:white;
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:18px;
+  z-index:2000;
   cursor:pointer;
 }
 
@@ -85,37 +96,31 @@ p{
   display:none;
   justify-content:center;
   align-items:center;
-  z-index:999;
   flex-direction:column;
+  z-index:999;
 }
 
 #lightbox img{
-  max-width:95%;
-  max-height:85%;
+  max-width:94%;
+  max-height:80%;
   border-radius:10px;
 }
 
 /* ===== LIGHTBOX GOMBOK ===== */
 
-.lb-controls{
-  margin-top:15px;
-}
-
 .lb-controls button{
-  font-size:28px;
-  padding:10px 18px;
-  margin:0 10px;
-  cursor:pointer;
-  background:white;
-  border:none;
-  border-radius:8px;
+  font-size:22px;
+  padding:8px 14px;
+  margin:6px;
 }
 
-.close-btn{
+/* ===== CLOSE ===== */
+
+.close{
   position:absolute;
-  top:20px;
-  right:25px;
-  font-size:40px;
+  top:16px;
+  right:20px;
+  font-size:34px;
   color:white;
   cursor:pointer;
 }
@@ -125,6 +130,11 @@ p{
 
 <body>
 
+<!-- ===== KOSÁR JELZŐ ===== -->
+<div id="cartBar" onclick="goToCart()">
+🛒 Kosár: <span id="cartCount">0</span>
+</div>
+
 <h1>Bor</h1>
 
 <div class="image-container">
@@ -132,8 +142,8 @@ p{
 </div>
 
 <div class="controls">
-  <button onclick="prevImage()">◀ Előző</button>
-  <button onclick="nextImage()">Következő ▶</button>
+  <button onclick="prevImage()">◀</button>
+  <button onclick="nextImage()">▶</button>
   <button onclick="window.location.href='index.html'">Vissza</button>
 </div>
 
@@ -149,8 +159,7 @@ Kosárba
 
 <!-- LIGHTBOX -->
 <div id="lightbox">
-
-  <div class="close-btn" onclick="closeLightbox()">✕</div>
+  <div class="close" onclick="closeLightbox()">✕</div>
 
   <img id="lightbox-img">
 
@@ -158,12 +167,11 @@ Kosárba
     <button onclick="lbPrev()">◀</button>
     <button onclick="lbNext()">▶</button>
   </div>
-
 </div>
 
 <script>
 
-const images = [
+const images=[
   "bor.jpg",
   "bormessze.jpg",
   "boroldal.jpg",
@@ -171,64 +179,71 @@ const images = [
   "borhat.jpg"
 ];
 
-let current = 0;
+let current=0;
 
-/* ===== FŐ KÉP ===== */
+/* ===== KOSÁR (GLOBAL) ===== */
 
-function showImage(){
-  document.getElementById("mainImage").src = images[current];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function updateCartUI(){
+  document.getElementById("cartCount").innerText = cart.length;
+  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-/* ===== LAPOZÁS ===== */
+function addToCart(name,price){
 
-function nextImage(){
-  current = (current + 1) % images.length;
-  showImage();
-}
+  if(cart.find(i=>i.name===name)) return;
 
-function prevImage(){
-  current = (current - 1 + images.length) % images.length;
-  showImage();
+  cart.push({name,price});
+  updateCartUI();
 }
 
 /* ===== LIGHTBOX ===== */
 
+function show(){
+  document.getElementById("mainImage").src=images[current];
+}
+
+function nextImage(){
+  current=(current+1)%images.length;
+  show();
+}
+
+function prevImage(){
+  current=(current-1+images.length)%images.length;
+  show();
+}
+
 function openLightbox(){
-  document.getElementById("lightbox-img").src = images[current];
-  document.getElementById("lightbox").style.display = "flex";
+  document.getElementById("lightbox-img").src=images[current];
+  document.getElementById("lightbox").style.display="flex";
 }
 
 function closeLightbox(){
-  document.getElementById("lightbox").style.display = "none";
+  document.getElementById("lightbox").style.display="none";
 }
 
-/* ===== LIGHTBOX LAPOZÁS ===== */
-
 function lbNext(){
-  current = (current + 1) % images.length;
-  document.getElementById("lightbox-img").src = images[current];
-  showImage();
+  current=(current+1)%images.length;
+  document.getElementById("lightbox-img").src=images[current];
+  show();
 }
 
 function lbPrev(){
-  current = (current - 1 + images.length) % images.length;
-  document.getElementById("lightbox-img").src = images[current];
-  showImage();
+  current=(current-1+images.length)%images.length;
+  document.getElementById("lightbox-img").src=images[current];
+  show();
 }
 
-/* ===== BILLENTYŰ ===== */
+/* ===== KOSÁR OLDAL (későbbre) ===== */
 
-document.addEventListener("keydown", function(e){
+function goToCart(){
+  alert("Kosár oldal még a fő rendszeren keresztül nyílik meg.");
+}
 
-  if(document.getElementById("lightbox").style.display === "flex"){
+/* ===== START ===== */
 
-    if(e.key === "ArrowRight") lbNext();
-    if(e.key === "ArrowLeft") lbPrev();
-    if(e.key === "Escape") closeLightbox();
-
-  }
-
-});
+updateCartUI();
 
 </script>
 
