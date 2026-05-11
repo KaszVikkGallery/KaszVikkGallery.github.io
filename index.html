@@ -1,12 +1,21 @@
-<!DOCTYPE html>  <html lang="hu">  <head>    <meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Kasz Vikk – Galéria</title>  <style>    body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#fff;
-color:#222;
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kasz Vikk – Galéria</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#fff;
+  color:#222;
 }
 
-/* ===== MENÜ GOMB ===== */
+/* ===== MENÜ ===== */
 
 .menu-button{
 position:fixed;
@@ -17,8 +26,6 @@ cursor:pointer;
 z-index:5000;
 user-select:none;
 }
-
-/* ===== MENÜ ===== */
 
 nav{
 position:fixed;
@@ -34,9 +41,7 @@ z-index:4000;
 box-shadow:-5px 0 20px rgba(0,0,0,0.08);
 }
 
-nav.open{
-right:0;
-}
+nav.open{ right:0; }
 
 nav a{
 display:block;
@@ -46,9 +51,7 @@ text-decoration:none;
 color:#222;
 }
 
-nav a:hover{
-background:#f5f5f5;
-}
+nav a:hover{ background:#f5f5f5; }
 
 /* ===== HEADER ===== */
 
@@ -57,18 +60,11 @@ text-align:center;
 padding:100px 20px 30px;
 }
 
-header h1{
-font-size:30px;
-margin:0;
-}
+header h1{ font-size:30px; margin:0; }
 
-header p{
-font-size:18px;
-color:#666;
-margin-top:10px;
-}
+header p{ font-size:18px; color:#666; margin-top:10px; }
 
-/* ===== KOSÁR GOMB ===== */
+/* ===== KOSÁR ===== */
 
 #openCart{
 position:fixed;
@@ -83,8 +79,6 @@ border-radius:12px;
 cursor:pointer;
 z-index:5000;
 }
-
-/* ===== PIROS SZÁMLÁLÓ ===== */
 
 #cartCount{
 background:red;
@@ -104,44 +98,14 @@ gap:20px;
 padding:20px;
 }
 
-.item{
-text-align:center;
-}
-
-.item a{
-text-decoration:none;
-color:inherit;
-}
-
 .item img{
 width:100%;
-max-width:100%;
 height:180px;
 object-fit:cover;
 border-radius:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
-.item h3{
-font-size:18px;
-margin-top:10px;
-margin-bottom:10px;
-font-weight:500;
-}
-
-/* ===== KOSÁRBA GOMB ===== */
-
-.buy-btn{
-background:black;
-color:white;
-border:none;
-padding:10px 14px;
-font-size:16px;
-border-radius:10px;
-cursor:pointer;
-}
-
-/* ===== OVERLAY ===== */
+/* ===== KOSÁR ===== */
 
 #cartOverlay{
 position:fixed;
@@ -154,11 +118,7 @@ display:none;
 z-index:5500;
 }
 
-#cartOverlay.show{
-display:block;
-}
-
-/* ===== KOSÁR ===== */
+#cartOverlay.show{ display:block; }
 
 #cartDrawer{
 position:fixed;
@@ -172,12 +132,9 @@ z-index:6000;
 transition:0.3s;
 display:flex;
 flex-direction:column;
-box-shadow:-8px 0 20px rgba(0,0,0,0.12);
 }
 
-#cartDrawer.open{
-right:0;
-}
+#cartDrawer.open{ right:0; }
 
 .cart-content{
 flex:1;
@@ -185,157 +142,117 @@ overflow-y:auto;
 padding:20px;
 }
 
-#cartDrawer h2{
-font-size:32px;
-margin-top:0;
-}
-
-/* ===== KOSÁR TÉTEL ===== */
-
 .cart-item{
 display:flex;
 justify-content:space-between;
-align-items:center;
 border-bottom:1px solid #eee;
 padding:16px 0;
 }
 
-.cart-left{
-display:flex;
-flex-direction:column;
-}
-
-.cart-name{
-font-size:22px;
-font-weight:500;
-}
-
-.cart-price{
-font-size:18px;
-color:#666;
-margin-top:4px;
-}
-
-.remove{
-color:red;
-font-size:28px;
-cursor:pointer;
-}
-
-/* ===== ALSÓ RÉSZ ===== */
+.remove{ color:red; cursor:pointer; }
 
 .cart-summary{
 border-top:1px solid #ddd;
 padding:20px;
-background:white;
-}
-
-.shipping-title{
-font-size:18px;
-margin-bottom:8px;
 }
 
 select{
 width:100%;
-padding:12px;
-font-size:16px;
-border-radius:8px;
-margin-bottom:16px;
+padding:10px;
+margin-bottom:10px;
 }
 
 #total{
-font-size:26px;
+font-size:22px;
 font-weight:bold;
-margin-bottom:16px;
+margin-bottom:10px;
 }
 
-#checkoutBtn{
-width:100%;
+button{
 background:black;
 color:white;
+padding:10px 14px;
 border:none;
-padding:16px;
-font-size:20px;
-border-radius:12px;
+border-radius:10px;
 cursor:pointer;
 }
 
-/* ===== MOBIL ===== */
+</style>
+</head>
 
-@media(max-width:700px){
+<body>
 
-.gallery{
-grid-template-columns:repeat(2,1fr);
-gap:16px;
-padding:16px;
-}
+<div class="menu-button" onclick="toggleMenu()">☰</div>
 
-.item img{
-height:150px;
-}
-
-.item h3{
-font-size:16px;
-}
-
-}
-
-</style>  </head>  <body>  <!-- ===== MENÜ ===== -->  <div class="menu-button" onclick="toggleMenu()">☰</div>  <nav id="menu">
+<nav id="menu">
 <a href="index.html">Galéria</a>
 <a href="bemutatkozas.html">Bemutatkozás</a>
 <a href="szallitas.html">Szállítás</a>
 <a href="kapcsolat.html">Kapcsolat</a>
+</nav>
 
-</nav>  <!-- ===== HEADER ===== -->  <header>    
-  <h1>Kasz Vikk Webshop</h1>    
-  <p>Eredeti akril festmények</p>    
-</header>  <!-- ===== KOSÁR GOMB ===== -->  <button id="openCart" onclick="toggleCart()">    
-🛒 Kosár    
-<span id="cartCount">0</span>    
-</button>  <!-- ===== OVERLAY ===== -->  <div id="cartOverlay" onclick="toggleCart()"></div>  <!-- ===== KOSÁR ===== -->  <div id="cartDrawer">    <div class="cart-content">  <h2>Kosár</h2>    <div id="cartItems"></div>    </div>    <div class="cart-summary">  <div class="shipping-title">    
-  Szállítás    
-</div>    <select id="shipping" onchange="renderCart()">    
-  <option value="0">Válassz szállítást</option>    
-  <option value="1699">Foxpost — 1699 Ft</option>    
-  <option value="1490">Packeta — 1490 Ft</option>    
-</select>    <div id="total">    
-  Összesen: 0 Ft    
-</div>    <button id="checkoutBtn" onclick="checkout()">    
-  Fizetés    
-</button>    </div>  </div>  <!-- ===== GALÉRIA ===== -->  <section class="gallery" id="gallery"></section>  <script>    /* ===== TERMÉKEK ===== */
+<header>
+  <h1>Kasz Vikk Webshop</h1>
+  <p>Eredeti akril festmények</p>
+</header>
+
+<!-- KOSÁR -->
+<button id="openCart" onclick="toggleCart()">
+🛒 <span id="cartCount">0</span>
+</button>
+
+<div id="cartOverlay" onclick="toggleCart()"></div>
+
+<div id="cartDrawer">
+
+  <div class="cart-content">
+    <h2>Kosár</h2>
+    <div id="cartItems"></div>
+  </div>
+
+  <div class="cart-summary">
+
+    <select id="shipping" onchange="renderCart()">
+      <option value="0">Szállítás</option>
+      <option value="1699">Foxpost</option>
+      <option value="1490">Packeta</option>
+    </select>
+
+    <div id="total">Összesen: 0 Ft</div>
+
+    <button onclick="checkout()">Fizetés</button>
+
+  </div>
+
+</div>
+
+<!-- GALÉRIA -->
+<section class="gallery" id="gallery"></section>
+
+<script>
 
 const products = [
-
 {name:"Bor",price:3500,img:"bor.jpg",page:"bor.html"},
-{name:"Fanyar pillanat",price:3000,img:"fanyarpillanat.jpg",page:"fanyarpillanat.html"},
-{name:"Johnny Bravo",price:4000,img:"johnny.jpg",page:"johnny.html"},
-{name:"Hangokra várva",price:8000,img:"hangokravarva.jpg",page:"hangokravarva.html"},
-{name:"Rég múlt pillanat",price:5000,img:"regmultpillanat.jpg",page:"regmultpillanat.html"},
-{name:"Színek alkonya",price:2500,img:"szinekalkonya.jpg",page:"szinekalkonya.html"},
-{name:"Esti melódia",price:8000,img:"estimelodia.jpg",page:"estimelodia.html"},
-{name:"The jazz is freedom",price:7000,img:"thejazzisfreedom.jpg",page:"thejazzisfreedom.html"},
-{name:"A szív dala",price:3000,img:"szivdala.jpg",page:"aszivdala.html"},
-{name:"Nemes hűség",price:4000,img:"nemeshuseg.jpg",page:"nemeshuseg.html"},
-{name:"Morning Cat",price:3500,img:"morningcat.jpg",page:"morningcat.html"},
-{name:"Lidokain",price:3000,img:"lidokain.jpg",page:"lidokain.html"},
-{name:"Idő árnyéka",price:2000,img:"idoarnyeka.jpg",page:"idoarnyeka.html"},
-{name:"Sarki fény",price:4000,img:"sarkifeny.jpg",page:"sarkifeny.html"},
-{name:"Őszi fények",price:3000,img:"oszifenyek.jpg",page:"oszifenyek.html"},
-{name:"Holdfényes hegyek",price:3000,img:"holdfenyeshegyek.jpg",page:"holdfenyeshegyek.html"},
-{name:"Vöröslő űr",price:3000,img:"voroslour.jpg",page:"voroslour.html"},
-{name:"Átjáró",price:2000,img:"atjaro.jpg",page:"atjaro.html"},
-{name:"Tűz és hamu",price:2000,img:"tuzeshamu.jpg",page:"tuzeshamu.html"},
-{name:"Kezdetek",price:2000,img:"kezdetek.jpg",page:"kezdetek.html"},
-{name:"Elviselés",price:4000,img:"elviseles.jpg",page:"elviseles.html"}
-
+{name:"Átjáró",price:2000,img:"atjaro.jpg",page:"atjaro.html"}
 ];
 
 let cart = [];
 
-/* ===== MENÜ ===== */
+/* ===== GALÉRIA ===== */
 
-function toggleMenu(){
-document.getElementById("menu").classList.toggle("open");
+function renderGallery(){
+const g = document.getElementById("gallery");
+
+products.forEach(p=>{
+g.innerHTML += `
+<div class="item">
+<a href="${p.page}">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+</a>
+<button onclick="addToCart('${p.name}',${p.price})">Kosárba</button>
+</div>`;
+});
 }
 
 /* ===== KOSÁR ===== */
@@ -345,130 +262,55 @@ document.getElementById("cartDrawer").classList.toggle("open");
 document.getElementById("cartOverlay").classList.toggle("show");
 }
 
-/* ===== GALÉRIA ===== */
-
-function renderGallery(){
-
-const gallery = document.getElementById("gallery");
-
-products.forEach(p=>{
-
-const div = document.createElement("div");    
-
-div.className = "item";    
-
-div.innerHTML = `    
-
-  <a href="${p.page}">    
-    <img src="${p.img}">    
-    <h3>${p.name}</h3>    
-  </a>    
-
-  <button class="buy-btn"    
-  onclick="addToCart('${p.name}', ${p.price})">    
-  Kosárba    
-  </button>    
-
-`;    
-
-gallery.appendChild(div);
-
-});
-
-}
-
-/* ===== KOSÁRBA ===== */
-
 function addToCart(name,price){
 
-if(cart.find(i=>i.name===name)){
-return;
-}
+if(cart.some(i=>i.name===name)) return;
 
 cart.push({name,price});
-
 renderCart();
-updateCartCount();
-
+updateCount();
 }
-
-/* ===== TÖRLÉS ===== */
 
 function removeItem(name){
-
 cart = cart.filter(i=>i.name!==name);
-
 renderCart();
-updateCartCount();
-
+updateCount();
 }
 
-/* ===== KOSÁR ===== */
+/* ===== EZ A FIX LÉNYEG ===== */
 
 function renderCart(){
 
 const box = document.getElementById("cartItems");
-
 box.innerHTML = "";
 
-let total = 0;
+let productTotal = 0;
 
 cart.forEach(i=>{
-
-const div = document.createElement("div");    
-
-div.className = "cart-item";    
-
-div.innerHTML = `    
-
-  <div class="cart-left">    
-
-    <span class="cart-name">    
-      ${i.name}    
-    </span>    
-
-    <span class="cart-price">    
-      ${i.price} Ft    
-    </span>    
-
-  </div>    
-
-  <span class="remove"    
-  onclick="removeItem('${i.name}')">    
-  ✕    
-  </span>    
-
-`;    
-
-box.appendChild(div);    
-
-total += i.price;
-
+box.innerHTML += `
+<div class="cart-item">
+<div>${i.name}<br>${i.price} Ft</div>
+<span class="remove" onclick="removeItem('${i.name}')">✕</span>
+</div>`;
+productTotal += i.price;
 });
 
-updateTotal(total);
+updateTotal(productTotal);
 
 }
 
-/* ===== ÖSSZEG ===== */
-
 function updateTotal(productTotal){
 
-let shipping =
-parseInt(document.getElementById("shipping").value) || 0;
+let shipping = Number(document.getElementById("shipping").value);
 
 document.getElementById("total").innerText =
 "Összesen: " + (productTotal + shipping) + " Ft";
-
 }
 
 /* ===== SZÁMLÁLÓ ===== */
 
-function updateCartCount(){
-
-document.getElementById("cartCount").innerText =
-cart.length;
-
+function updateCount(){
+document.getElementById("cartCount").innerText = cart.length;
 }
 
 /* ===== CHECKOUT ===== */
@@ -476,23 +318,23 @@ cart.length;
 function checkout(){
 
 if(cart.length===0){
-alert("A kosár üres.");
+alert("Üres kosár");
 return;
 }
 
-if(document.getElementById("shipping").value==="0"){
-alert("Válassz szállítási módot.");
+if(document.getElementById("shipping").value=="0"){
+alert("Válassz szállítást");
 return;
 }
 
-alert("Stripe fizetés ide fog kerülni.");
-
+alert("Fizetés indul...");
 }
 
-/* ===== START ===== */
+/* START */
 
 renderGallery();
 
-</script>  </body>
+</script>
 
-</html> 
+</body>
+</html>
