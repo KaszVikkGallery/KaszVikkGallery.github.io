@@ -1,139 +1,265 @@
 <!DOCTYPE html>
 <html lang="hu">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Kasz Vikk – Kapcsolat</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
+<title>Kasz Vikk – Kapcsolat</title>
+
+<!-- Google tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6KZWC3LLE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-T6KZWC3LLE');
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-T6KZWC3LLE');
 </script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #222;
-    }
+<style>
 
-    /* ===== MENÜ GOMB ===== */
-    .menu-button {
-      position: fixed;
-      top: 20px;
-      right: 25px;
-      font-size: 70px;
-      cursor: pointer;
-      z-index: 2000;
-      user-select: none;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#fff;
+  color:#222;
+}
 
-    /* ===== OLDALSÓ MENÜ ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      right: -320px;
-      width: 320px;
-      height: 100%;
-      background: #ffffff;
-      border-left: 1px solid #ddd;
-      padding-top: 120px;
-      transition: right 0.3s ease;
-      z-index: 1500;
-    }
+/* ===== MENÜ GOMB ===== */
 
-    nav.open {
-      right: 0;
-    }
+.menu-button{
+  position:fixed;
+  top:16px;
+  right:20px;
+  font-size:52px;
+  cursor:pointer;
+  z-index:5000;
+  user-select:none;
+}
 
-    nav a {
-      display: block;
-      padding: 25px 35px;
-      font-size: 38px;
-      color: #222;
-      text-decoration: none;
-    }
+/* ===== MENÜ ===== */
 
-    nav a:hover {
-      background: #f2f2f2;
-    }
+nav{
+  position:fixed;
+  top:0;
+  right:-320px;
+  width:300px;
+  height:100%;
+  background:#fff;
+  border-left:1px solid #ddd;
+  padding-top:100px;
+  transition:0.3s;
+  z-index:4000;
+  box-shadow:-5px 0 20px rgba(0,0,0,0.08);
+}
 
-    /* ===== TARTALOM ===== */
-    .container {
-      max-width: 1000px;
-      margin: 160px auto 60px;
-      padding: 0 20px;
-      text-align: center;
-    }
+nav.open{
+  right:0;
+}
 
-    .contact-text {
-      font-size: 40px;
-      line-height: 1.7;
-      max-width: 800px;
-      margin: 30px auto;
-    }
+nav a{
+  display:block;
+  padding:24px;
+  font-size:24px;
+  text-decoration:none;
+  color:#222;
+}
 
-    .email-link {
-      font-size: 50px;
-      font-weight: bold;
-      color: #222;
-      text-decoration: none;
-    }
+nav a:hover{
+  background:#f5f5f5;
+}
 
-    .email-link:hover {
-      color: #0077cc;
-      text-decoration: underline;
-    }
+/* ===== FEJLÉC ===== */
 
-    /* ===== LÁBLÉC ===== */
-    footer {
-      text-align: center;
-      margin: 80px 0 30px;
-      font-size: 25px;
-      color: #777;
-    }
-  </style>
+header{
+  text-align:center;
+  padding:90px 20px 20px;
+}
+
+header h1{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+header p{
+  font-size:18px;
+  color:#666;
+}
+
+/* ===== TARTALOM ===== */
+
+.container{
+  max-width:900px;
+  margin:20px auto 60px;
+  padding:0 20px;
+}
+
+/* ===== KÁRTYA ===== */
+
+.contact-card{
+  background:#fff;
+  border-radius:18px;
+  padding:40px 30px;
+  box-shadow:0 6px 22px rgba(0,0,0,0.08);
+  text-align:center;
+}
+
+/* ===== SZÖVEG ===== */
+
+.contact-text{
+  font-size:22px;
+  line-height:1.9;
+  color:#333;
+  margin-bottom:30px;
+}
+
+/* ===== EMAIL BOX ===== */
+
+.email-box{
+  background:#f8f8f8;
+  border-radius:16px;
+  padding:26px;
+  margin-top:25px;
+  box-shadow:inset 0 0 0 1px #ececec;
+}
+
+/* ===== EMAIL LINK ===== */
+
+.email-link{
+  font-size:28px;
+  font-weight:bold;
+  color:#222;
+  text-decoration:none;
+  word-break:break-word;
+  transition:0.2s;
+}
+
+.email-link:hover{
+  color:#000;
+  opacity:0.75;
+}
+
+/* ===== INFO BOX ===== */
+
+.info-box{
+  margin-top:35px;
+  background:#f8f8f8;
+  border-radius:14px;
+  padding:18px;
+  font-size:18px;
+  color:#444;
+}
+
+/* ===== LÁBLÉC ===== */
+
+footer{
+  text-align:center;
+  margin:70px 0 30px;
+  font-size:18px;
+  color:#777;
+}
+
+/* ===== MOBIL ===== */
+
+@media(max-width:700px){
+
+  header h1{
+    font-size:28px;
+  }
+
+  .contact-card{
+    padding:28px 20px;
+  }
+
+  .contact-text{
+    font-size:18px;
+  }
+
+  .email-link{
+    font-size:21px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <!-- MENÜ GOMB -->
-  <div class="menu-button" onclick="toggleMenu()">☰</div>
+<!-- ===== MENÜ GOMB ===== -->
 
-  <!-- MENÜ -->
-  <nav id="menu">
-    <a href="bemutatkozas.html">Bemutatkozás</a>
-    <a href="index.html">Galéria</a>
-    <a href="kapcsolat.html">Kapcsolat</a>
-    <a href="szallitas.html">Szállítás</a>
-  </nav>
+<div class="menu-button" onclick="toggleMenu()">☰</div>
 
-  <!-- TARTALOM -->
-  <div class="container">
+<!-- ===== MENÜ ===== -->
+
+<nav id="menu">
+  <a href="index.html">Galéria</a>
+  <a href="bemutatkozas.html">Bemutatkozás</a>
+  <a href="szallitas.html">Szállítás</a>
+  <a href="kapcsolat.html">Kapcsolat</a>
+</nav>
+
+<!-- ===== FEJLÉC ===== -->
+
+<header>
+  <h1>Kapcsolat</h1>
+  <p>Vásárlás és érdeklődés emailben lehetséges.</p>
+</header>
+
+<!-- ===== TARTALOM ===== -->
+
+<div class="container">
+
+  <div class="contact-card">
+
     <div class="contact-text">
-      <p>Ha kérdésed van vagy vásárolni szeretnél, írj nekem emailt:</p>
+
       <p>
-        <a href="mailto:kaszvikkfestmeny@gmail.com" class="email-link">
-          kaszvikkfestmeny@gmail.com
-        </a>
+        Ha kérdésed van egy festménnyel kapcsolatban,
+        vagy vásárolni szeretnél,
+        írj bátran emailt.
       </p>
+
+      <p>
+        Igyekszem minél hamarabb válaszolni.
+      </p>
+
     </div>
+
+    <div class="email-box">
+
+      <a href="mailto:kaszvikkfestmeny@gmail.com"
+      class="email-link">
+
+      kaszvikkfestmeny@gmail.com
+
+      </a>
+
+    </div>
+
+    <div class="info-box">
+      Vásárlás és érdeklődés emailben lehetséges.
+    </div>
+
   </div>
 
-  <footer>
-    © Kasz Vikk
-  </footer>
+</div>
 
-  <script>
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("open");
-    }
-  </script>
+<!-- ===== LÁBLÉC ===== -->
+
+<footer>
+  © Kasz Vikk
+</footer>
+
+<script>
+
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
+}
+
+</script>
 
 </body>
 </html>
