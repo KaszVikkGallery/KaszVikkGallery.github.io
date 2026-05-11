@@ -17,7 +17,6 @@ body{
 }
 
 /* ===== KOSÁR GOMB ===== */
-/* ===== KOSÁR GOMB ===== */
 
 #openCart{
 position:fixed;
@@ -33,8 +32,6 @@ cursor:pointer;
 z-index:5000;
 }
 
-/* ===== PIROS SZÁMLÁLÓ ===== */
-
 #cartCount{
 background:red;
 color:white;
@@ -43,6 +40,7 @@ padding:4px 10px;
 font-size:16px;
 margin-left:8px;
 }
+
 /* ===== KÉP ===== */
 
 h1{
@@ -125,86 +123,129 @@ button{
 #prev{ left:30px; }
 #next{ right:30px; }
 
+/* ===== KOSÁR FIX ===== */
+
+#cartOverlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  display:none;
+  z-index:5500;
+}
+
+#cartDrawer{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:90%;
+  max-width:380px;
+  height:100%;
+  background:white;
+  z-index:6000;
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  box-shadow:-8px 0 20px rgba(0,0,0,0.12);
+}
+
+#cartDrawer.open{
+  right:0;
+}
+
+#cartOverlay.show{
+  display:block;
+}
+
+.cart-content{
+  flex:1;
+  overflow-y:auto;
+  padding:20px;
+}
+
+#cartDrawer h2{
+  font-size:28px;
+  margin-top:0;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #eee;
+  padding:12px 0;
+}
+
+.cart-name{
+  font-size:18px;
+  font-weight:500;
+}
+
+.cart-price{
+  font-size:16px;
+  color:#666;
+}
+
+.remove{
+  color:red;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.cart-summary{
+  border-top:1px solid #ddd;
+  padding:15px;
+}
+
+select{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+#total{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
 </style>
 </head>
 
 <body>
 
-/* ===== KOSÁRBA GOMB ===== */
+<!-- ===== KOSÁR GOMB ===== -->
+<button id="openCart" onclick="toggleCart()">
+🛒 <span id="cartCount">0</span>
+</button>
 
-.buy-btn{
-background:black;
-color:white;
-border:none;
-padding:10px 14px;
-font-size:16px;
-border-radius:10px;
-cursor:pointer;
-}
-  
-/* ===== KOSÁR ===== */
+<!-- ===== KOSÁR ===== -->
+<div id="cartOverlay" onclick="toggleCart()"></div>
 
-#cartDrawer{
-position:fixed;
-top:0;
-right:-100%;
-width:90%;
-max-width:380px;
-height:100%;
-background:white;
-z-index:6000;
-transition:0.3s;
-display:flex;
-flex-direction:column;
-box-shadow:-8px 0 20px rgba(0,0,0,0.12);
-}
+<div id="cartDrawer">
 
-#cartDrawer.open{
-right:0;
-}
+  <div class="cart-content">
+    <h2>Kosár</h2>
+    <div id="cartItems"></div>
+  </div>
 
-.cart-content{
-flex:1;
-overflow-y:auto;
-padding:20px;
-}
+  <div class="cart-summary">
 
-#cartDrawer h2{
-font-size:32px;
-margin-top:0;
-}
+    <select id="shipping" onchange="renderCart()">
+      <option value="0">Szállítás</option>
+      <option value="1699">Foxpost</option>
+      <option value="1490">Packeta</option>
+    </select>
 
-/* ===== KOSÁR TÉTEL ===== */
+    <div id="total"></div>
 
-.cart-item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #eee;
-padding:16px 0;
-}
+    <button onclick="checkout()">Fizetés</button>
 
-.cart-left{
-display:flex;
-flex-direction:column;
-}
+  </div>
 
-.cart-name{
-font-size:22px;
-font-weight:500;
-}
-
-.cart-price{
-font-size:18px;
-color:#666;
-margin-top:4px;
-}
-
-.remove{
-color:red;
-font-size:28px;
-cursor:pointer;
-}
+</div>
 
 <!-- ===== TERMÉK ===== -->
 
@@ -278,7 +319,15 @@ function prev(){
   document.getElementById("lightboxImg").src = images[current];
 }
 
+/* ===== KOSÁR HOOK ===== */
+function toggleCart(){
+  document.getElementById("cartDrawer").classList.toggle("open");
+  document.getElementById("cartOverlay").classList.toggle("show");
+}
+
 </script>
+
+<script src="cart.js"></script>
 
 </body>
 </html>
