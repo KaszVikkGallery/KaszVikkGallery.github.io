@@ -123,7 +123,7 @@ button{
 #prev{ left:30px; }
 #next{ right:30px; }
 
-/* ===== KOSÁR FIX ===== */
+/* ===== KOSÁR ===== */
 
 #cartOverlay{
   position:fixed;
@@ -263,6 +263,7 @@ select{
 <p>Méret: 10 × 25 cm</p>
 <p>Ára: 3500 Ft</p>
 
+<!-- 🔥 JAVÍTOTT KOSÁR LOGIKA -->
 <button onclick="addToCart('Bor', 3500)">
 Kosárba
 </button>
@@ -319,15 +320,74 @@ function prev(){
   document.getElementById("lightboxImg").src = images[current];
 }
 
-/* ===== KOSÁR HOOK ===== */
+/* ===== KOSÁR FIX (EGY TERMÉK CSAK 1x) ===== */
+
+let cart = [];
+
 function toggleCart(){
   document.getElementById("cartDrawer").classList.toggle("open");
   document.getElementById("cartOverlay").classList.toggle("show");
 }
 
-</script>
+function addToCart(name, price){
 
-<script src="cart.js"></script>
+  // 🔥 EZ A LÉNYEG: ha már benne van, nem teszi be újra
+  if(cart.some(item => item.name === name)){
+    return;
+  }
+
+  cart.push({name, price});
+  renderCart();
+  updateCartCount();
+}
+
+function renderCart(){
+
+  const box = document.getElementById("cartItems");
+  box.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach(i => {
+
+    const div = document.createElement("div");
+    div.className = "cart-item";
+
+    div.innerHTML = `
+      <div>
+        <div class="cart-name">${i.name}</div>
+        <div class="cart-price">${i.price} Ft</div>
+      </div>
+      <span class="remove" onclick="removeItem('${i.name}')">✕</span>
+    `;
+
+    box.appendChild(div);
+    total += i.price;
+
+  });
+
+  document.getElementById("total").innerText = "Összesen: " + total + " Ft";
+}
+
+function removeItem(name){
+  cart = cart.filter(i => i.name !== name);
+  renderCart();
+  updateCartCount();
+}
+
+function updateCartCount(){
+  document.getElementById("cartCount").innerText = cart.length;
+}
+
+function checkout(){
+  if(cart.length === 0){
+    alert("A kosár üres.");
+    return;
+  }
+  alert("Fizetés indul...");
+}
+
+</script>
 
 </body>
 </html>
