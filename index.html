@@ -16,7 +16,7 @@ body {
   position: fixed;
   top: 20px;
   right: 25px;
-  font-size: 60px;
+  font-size: 80px;
   cursor: pointer;
   z-index: 2000;
 }
@@ -24,8 +24,8 @@ body {
 nav {
   position: fixed;
   top: 0;
-  right: -320px;
-  width: 320px;
+  right: -340px;
+  width: 340px;
   height: 100%;
   background: #fff;
   border-left: 1px solid #ddd;
@@ -37,8 +37,8 @@ nav.open { right: 0; }
 
 nav a {
   display: block;
-  padding: 20px;
-  font-size: 22px;
+  padding: 22px;
+  font-size: 24px;
   text-decoration: none;
   color: #222;
 }
@@ -46,19 +46,20 @@ nav a {
 /* ===== HEADER ===== */
 header {
   text-align: center;
-  padding: 120px 20px 20px;
+  padding: 140px 20px 30px;
 }
 
 header h1 {
-  font-size: 40px;
+  font-size: 64px;
+  font-weight: 600;
 }
 
 /* ===== GALÉRIA ===== */
 .gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 35px;
-  padding: 40px;
+  gap: 45px;
+  padding: 50px;
 }
 
 .item {
@@ -67,10 +68,28 @@ header h1 {
 
 .item img {
   width: 100%;
-  max-width: 420px;
-  height: 280px;
+  max-width: 460px;
+  height: 300px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.item img:hover {
+  transform: scale(1.02);
+}
+
+.item h3 {
+  font-size: 30px;
+  margin-top: 14px;
+}
+
+/* ===== GOMBOK ===== */
+button {
+  font-size: 20px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 /* ===== KOSÁR GOMB ===== */
@@ -78,21 +97,21 @@ header h1 {
   position: fixed;
   left: 20px;
   top: 20px;
-  padding: 10px 15px;
   background: black;
   color: white;
   border: none;
-  cursor: pointer;
+  padding: 14px 18px;
   z-index: 2000;
+  font-size: 18px;
 }
 
 #cartCount {
   background: red;
   color: white;
   border-radius: 50%;
-  padding: 2px 8px;
-  font-size: 14px;
-  margin-left: 5px;
+  padding: 4px 10px;
+  margin-left: 6px;
+  font-size: 16px;
 }
 
 /* ===== OVERLAY ===== */
@@ -102,7 +121,7 @@ header h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.35);
   display: none;
   z-index: 2500;
 }
@@ -115,12 +134,12 @@ header h1 {
 #cartDrawer {
   position: fixed;
   top: 0;
-  right: -420px;
-  width: 360px;
+  right: -460px;
+  width: 420px;
   height: 100%;
   background: #fff;
-  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-  padding: 20px;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.12);
+  padding: 25px;
   transition: 0.35s ease;
   z-index: 3000;
   overflow-y: auto;
@@ -130,34 +149,51 @@ header h1 {
   right: 0;
 }
 
+#cartDrawer h2 {
+  font-size: 32px;
+}
+
 .cart-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
+  padding: 14px 0;
   border-bottom: 1px solid #eee;
+  font-size: 18px;
 }
 
 .remove {
-  cursor: pointer;
   color: red;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 .cart-summary {
   position: sticky;
   bottom: 0;
   background: white;
-  padding-top: 15px;
+  padding-top: 20px;
   border-top: 1px solid #ddd;
+}
+
+#total {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+select {
+  font-size: 16px;
+  padding: 6px;
+  width: 100%;
 }
 
 #checkoutBtn {
   width: 100%;
-  margin-top: 10px;
-  padding: 12px;
+  margin-top: 12px;
+  padding: 14px;
+  font-size: 18px;
   background: black;
   color: white;
   border: none;
-  cursor: pointer;
 }
 </style>
 </head>
@@ -334,9 +370,7 @@ function checkout(){
 
   alert("Fizetés: " + total + " Ft");
 
-  // Stripe checkout ide jön
 }
-
 renderGallery();
 
 </script>
