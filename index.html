@@ -86,6 +86,15 @@ header h1 {
   z-index: 2000;
 }
 
+#cartCount {
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 8px;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
 /* ===== OVERLAY ===== */
 #cartOverlay {
   position: fixed;
@@ -167,13 +176,13 @@ header h1 {
   <h1>Kasz Vikk Webshop</h1>
 </header>
 
-<!-- KOSÁR NYITÓ GOMB -->
-<button id="openCart" onclick="toggleCart()">Kosár</button>
+<!-- KOSÁR -->
+<button id="openCart" onclick="toggleCart()">
+  Kosár <span id="cartCount">0</span>
+</button>
 
-<!-- OVERLAY -->
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
-<!-- KOSÁR -->
 <div id="cartDrawer">
   <h2>Kosár</h2>
 
@@ -201,27 +210,27 @@ header h1 {
 <script>
 
 const products = [
-  {name:"Bor",price:3500,img:"bor.jpg"},
-  {name:"Fanyar pillanat",price:3000,img:"fanyarpillanat.jpg"},
-  {name:"Johnny Bravo",price:4000,img:"johnny.jpg"},
-  {name:"Hangokra várva",price:8000,img:"hangokravarva.jpg"},
-  {name:"Rég múlt pillanat",price:5000,img:"regmultpillanat.jpg"},
-  {name:"Színek alkonya",price:2500,img:"szinekalkonya.jpg"},
-  {name:"Esti melódia",price:8000,img:"estimelodia.jpg"},
-  {name:"The jazz is freedom",price:7000,img:"thejazzisfreedom.jpg"},
-  {name:"A szív dala",price:3000,img:"szivdala.jpg"},
-  {name:"Nemes hűség",price:4000,img:"nemeshuseg.jpg"},
-  {name:"Morning Cat",price:3500,img:"morningcat.jpg"},
-  {name:"Lidokain",price:3000,img:"lidokain.jpg"},
-  {name:"Idő árnyéka",price:2000,img:"idoarnyeka.jpg"},
-  {name:"Sarki fény",price:4000,img:"sarkifeny.jpg"},
-  {name:"Őszi fények",price:3000,img:"oszifenyek.jpg"},
-  {name:"Holdfényes hegyek",price:3000,img:"holdfenyeshegyek.jpg"},
-  {name:"Vöröslő űr",price:3000,img:"voroslour.jpg"},
-  {name:"Átjáró",price:2000,img:"atjaro.jpg"},
-  {name:"Tűz és hamu",price:2000,img:"tuzeshamu.jpg"},
-  {name:"Kezdetek",price:2000,img:"kezdetek.jpg"},
-  {name:"Elviselés",price:4000,img:"elviseles.jpg"}
+  {name:"Bor",price:3500,img:"bor.jpg",page:"bor.html"},
+  {name:"Fanyar pillanat",price:3000,img:"fanyarpillanat.jpg",page:"fanyarpillanat.html"},
+  {name:"Johnny Bravo",price:4000,img:"johnny.jpg",page:"johnny.html"},
+  {name:"Hangokra várva",price:8000,img:"hangokravarva.jpg",page:"hangokravarva.html"},
+  {name:"Rég múlt pillanat",price:5000,img:"regmultpillanat.jpg",page:"regmultpillanat.html"},
+  {name:"Színek alkonya",price:2500,img:"szinekalkonya.jpg",page:"szinekalkonya.html"},
+  {name:"Esti melódia",price:8000,img:"estimelodia.jpg",page:"estimelodia.html"},
+  {name:"The jazz is freedom",price:7000,img:"thejazzisfreedom.jpg",page:"thejazzisfreedom.html"},
+  {name:"A szív dala",price:3000,img:"szivdala.jpg",page:"szivdala.html"},
+  {name:"Nemes hűség",price:4000,img:"nemeshuseg.jpg",page:"nemeshuseg.html"},
+  {name:"Morning Cat",price:3500,img:"morningcat.jpg",page:"morningcat.html"},
+  {name:"Lidokain",price:3000,img:"lidokain.jpg",page:"lidokain.html"},
+  {name:"Idő árnyéka",price:2000,img:"idoarnyeka.jpg",page:"idoarnyeka.html"},
+  {name:"Sarki fény",price:4000,img:"sarkifeny.jpg",page:"sarkifeny.html"},
+  {name:"Őszi fények",price:3000,img:"oszifenyek.jpg",page:"oszifenyek.html"},
+  {name:"Holdfényes hegyek",price:3000,img:"holdfenyeshegyek.jpg",page:"holdfenyeshegyek.html"},
+  {name:"Vöröslő űr",price:3000,img:"voroslour.jpg",page:"voroslour.html"},
+  {name:"Átjáró",price:2000,img:"atjaro.jpg",page:"atjaro.html"},
+  {name:"Tűz és hamu",price:2000,img:"tuzeshamu.jpg",page:"tuzeshamu.html"},
+  {name:"Kezdetek",price:2000,img:"kezdetek.jpg",page:"kezdetek.html"},
+  {name:"Elviselés",price:4000,img:"elviseles.jpg",page:"elviseles.html"}
 ];
 
 let cart = [];
@@ -243,8 +252,10 @@ function renderGallery(){
     div.className="item";
 
     div.innerHTML=`
-      <img src="${p.img}">
-      <h3>${p.name}</h3>
+      <a href="${p.page}">
+        <img src="${p.img}">
+        <h3>${p.name}</h3>
+      </a>
       <button onclick="addToCart('${p.name}',${p.price})">Kosárba</button>
     `;
 
@@ -261,11 +272,13 @@ function addToCart(name, price){
 
   cart.push({name,price});
   renderCart();
+  updateCartCount();
 }
 
 function removeItem(name){
   cart = cart.filter(i=>i.name!==name);
   renderCart();
+  updateCartCount();
 }
 
 function renderCart(){
@@ -300,6 +313,10 @@ function updateTotal(productTotal){
     "Összesen: " + (productTotal + shipping) + " Ft";
 }
 
+function updateCartCount(){
+  document.getElementById("cartCount").innerText = cart.length;
+}
+
 function checkout(){
 
   if(cart.length===0){
@@ -317,7 +334,7 @@ function checkout(){
 
   alert("Fizetés: " + total + " Ft");
 
-  // IDE JÖN STRIPE
+  // Stripe checkout ide jön
 }
 
 renderGallery();
