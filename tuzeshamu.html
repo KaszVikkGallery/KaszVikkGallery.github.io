@@ -72,17 +72,6 @@
       border-color: #999;
     }
 
-    .buy-button {
-      display: inline-block;
-      padding: 14px 28px;
-      background: black;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-size: 20px;
-      margin-top: 20px;
-    }
-
     /* LIGHTBOX */
     #lightbox {
       position: fixed;
@@ -128,8 +117,7 @@
   <p>Méret: 20 × 20 cm</p>
   <p>Ára: 2 000 Forint</p>
 
-  <a href="#" class="buy-button">Megvásárolom</a>
-
+  <!-- LIGHTBOX -->
   <div id="lightbox" onclick="closeLightbox()">
     <img id="lightbox-img">
   </div>
@@ -145,9 +133,6 @@
 
     function showImage() {
       document.getElementById("mainImage").src = images[current];
-
-      const nextImg = new Image();
-      nextImg.src = images[(current + 1) % images.length];
     }
 
     function nextImage() {
