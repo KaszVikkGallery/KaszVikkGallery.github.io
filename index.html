@@ -16,7 +16,7 @@ body {
   position: fixed;
   top: 20px;
   right: 25px;
-  font-size: 90px; /* 🔥 NAGYOBB */
+  font-size: 90px;
   cursor: pointer;
   z-index: 2000;
 }
@@ -39,8 +39,8 @@ nav.open { right: 0; }
 
 nav a {
   display: block;
-  padding: 24px;
-  font-size: 26px;
+  padding: 26px;
+  font-size: 32px;   /* 🔥 nagyobb (festmény cím méret) */
   text-decoration: none;
   color: #222;
 }
@@ -83,13 +83,13 @@ header h1 {
 
 /* ===== GOMBOK ===== */
 button {
-  font-size: 22px; /* 🔥 nagyobb */
+  font-size: 22px;
   padding: 16px 22px;
   border-radius: 10px;
   cursor: pointer;
 }
 
-/* ===== KOSÁR GOMB ===== */
+/* ===== 🛒 KOSÁR GOMB (NAGYÍTOTT) ===== */
 #openCart {
   position: fixed;
   left: 20px;
@@ -97,19 +97,20 @@ button {
   background: black;
   color: white;
   border: none;
-  padding: 18px 22px;  /* 🔥 nagyobb */
-  font-size: 22px;     /* 🔥 nagyobb */
+  padding: 26px 32px;   /* 🔥 nagyobb */
+  font-size: 32px;      /* 🔥 nagyobb */
   z-index: 2000;
   border-radius: 12px;
 }
 
+/* ===== KOSÁR SZÁMLÁLÓ ===== */
 #cartCount {
   background: red;
   color: white;
   border-radius: 50%;
-  padding: 5px 12px;
-  margin-left: 8px;
-  font-size: 18px;
+  padding: 6px 14px;   /* 🔥 nagyobb */
+  font-size: 24px;     /* 🔥 nagyobb */
+  margin-left: 10px;
 }
 
 /* ===== OVERLAY ===== */
@@ -300,9 +301,7 @@ function renderGallery(){
 }
 
 function addToCart(name, price){
-
   if(cart.find(i=>i.name===name)) return;
-
   cart.push({name,price});
   renderCart();
   updateCartCount();
@@ -315,7 +314,6 @@ function removeItem(name){
 }
 
 function renderCart(){
-
   let box = document.getElementById("cartItems");
   box.innerHTML="";
 
@@ -339,9 +337,7 @@ function renderCart(){
 }
 
 function updateTotal(productTotal){
-
   let shipping = parseInt(document.getElementById("shipping").value)||0;
-
   document.getElementById("total").innerText =
     "Összesen: " + (productTotal + shipping) + " Ft";
 }
