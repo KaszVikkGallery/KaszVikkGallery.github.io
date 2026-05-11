@@ -125,13 +125,12 @@ button{
 </head>
 
 <body>
-
-<!-- ===== KOSÁR (KÖZÖS) ===== -->
+<!-- ===== KOSÁR GOMB ===== -->
 <button id="cartBtn" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </button>
 
-<!-- ===== KOSÁR PANEL (HA A FŐOLDALON VAN, AKKOR OTT KEZELI A cart.js) ===== -->
+<!-- ===== KOSÁR ===== -->
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
 <div id="cartDrawer">
@@ -140,7 +139,7 @@ button{
 
   <div id="cartItems"></div>
 
-  <select id="shipping" onchange="renderCart()">
+  <select id="shipping" onchange="updateCart()">
     <option value="0">Szállítás</option>
     <option value="1699">Foxpost</option>
     <option value="1490">Packeta</option>
@@ -152,9 +151,9 @@ button{
 
 </div>
 
+<!-- ===== KÖZÖS KOSÁR ===== -->
 <script src="cart.js"></script>
 
-<!-- ===== TERMÉK ===== -->
 
 <h1>Bor</h1>
 
