@@ -39,18 +39,6 @@ body{
   margin-left:8px;
 }
 
-/* ===== VISSZA ===== */
-
-.back-btn{
-  margin-top:20px;
-  font-size:18px;
-  padding:12px 18px;
-  background:#f2f2f2;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-}
-
 /* ===== KÉP ===== */
 
 h1{
@@ -83,6 +71,19 @@ button{
   border-radius:10px;
   cursor:pointer;
   margin-top:15px;
+}
+
+/* ===== VISSZA GOMB ===== */
+
+.back-btn{
+  margin-top:20px;
+  font-size:18px;
+  padding:12px 18px;
+  background:#f2f2f2;
+  color:#222;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
 }
 
 /* ===== LIGHTBOX ===== */
@@ -125,11 +126,12 @@ button{
 
 <body>
 
-<!-- ===== KOSÁR (KÖZÖS SYSTEM) ===== -->
+<!-- ===== KOSÁR (KÖZÖS) ===== -->
 <button id="cartBtn" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </button>
 
+<!-- ===== KOSÁR PANEL (HA A FŐOLDALON VAN, AKKOR OTT KEZELI A cart.js) ===== -->
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
 <div id="cartDrawer">
@@ -150,7 +152,6 @@ button{
 
 </div>
 
-<!-- FONTOS: csak egyszer -->
 <script src="cart.js"></script>
 
 <!-- ===== TERMÉK ===== -->
@@ -219,8 +220,6 @@ function openLightbox(){
 function closeLightbox(){
   document.getElementById("lightbox").style.display="none";
 }
-
-/* ===== LAPOZÁS ===== */
 
 function next(){
   current = (current + 1) % images.length;
