@@ -10,7 +10,7 @@
 
 body{
   font-family:Arial,sans-serif;
-  margin:16px;
+  margin:14px;
   background:#fff;
   color:#222;
   text-align:center;
@@ -19,8 +19,8 @@ body{
 /* ===== CÍM ===== */
 
 h1{
-  font-size:36px;
-  margin-bottom:20px;
+  font-size:34px;
+  margin-bottom:18px;
 }
 
 /* ===== KÉP ===== */
@@ -37,38 +37,23 @@ h1{
   cursor:zoom-in;
 }
 
-/* ===== GOMBOK (főoldalhoz közel) ===== */
-
-.controls button{
-  font-size:20px;
-  padding:12px 20px;
-  margin:8px;
-  cursor:pointer;
-}
-
 /* ===== SZÖVEG ===== */
 
 p{
-  font-size:24px;
+  font-size:22px;
   line-height:1.6;
   max-width:800px;
   margin:10px auto;
 }
 
-/* ===== KOSÁR GOMB ===== */
+/* ===== GOMB ===== */
 
-.buy-button{
-  background:black;
-  color:white;
+button{
   border:none;
-  padding:14px 24px;
-  font-size:20px;
-  border-radius:10px;
-  margin-top:16px;
   cursor:pointer;
 }
 
-/* ===== KOSÁR BADGE (Ugyanaz mint főoldal) ===== */
+/* ===== KOSÁR BADGE ===== */
 
 #cartBar{
   position:fixed;
@@ -90,6 +75,17 @@ p{
   padding:6px 12px;
   margin-left:8px;
   font-size:16px;
+}
+
+/* ===== BUY ===== */
+
+.buy-button{
+  background:black;
+  color:white;
+  padding:12px 22px;
+  font-size:18px;
+  border-radius:10px;
+  margin-top:16px;
 }
 
 /* ===== LIGHTBOX ===== */
@@ -114,26 +110,28 @@ p{
   border-radius:10px;
 }
 
-/* ===== LIGHTBOX GOMBOK ===== */
-
 .lb-controls button{
-  font-size:24px;
+  font-size:22px;
   padding:8px 14px;
   margin:6px;
 }
 
-/* ===== CLOSE ===== */
+/* ===== KOSÁR DRAWER ===== */
 
-.close{
-  position:absolute;
-  top:18px;
-  right:22px;
-  font-size:36px;
-  color:white;
-  cursor:pointer;
+#overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.3);
+  display:none;
+  z-index:2500;
 }
 
-/* ===== KOSÁR DRAWER ===== */
+#overlay.show{
+  display:block;
+}
 
 #cartDrawer{
   position:fixed;
@@ -146,6 +144,7 @@ p{
   transition:0.3s;
   z-index:3000;
   padding:20px;
+  overflow-y:auto;
 }
 
 #cartDrawer.open{
@@ -165,19 +164,9 @@ p{
   cursor:pointer;
 }
 
-#overlay{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.3);
-  display:none;
-  z-index:2500;
-}
-
-#overlay.show{
-  display:block;
+#total{
+  font-weight:bold;
+  margin-top:10px;
 }
 
 </style>
@@ -185,7 +174,7 @@ p{
 
 <body>
 
-<!-- ===== KOSÁR BADGE ===== -->
+<!-- ===== KOSÁR ===== -->
 <div id="cartBar" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </div>
@@ -193,13 +182,7 @@ p{
 <h1>Bor</h1>
 
 <div class="image-container">
-  <img id="mainImage" class="main-image" src="bor.jpg" onclick="openLightbox()">
-</div>
-
-<div class="controls">
-  <button onclick="prevImage()">◀</button>
-  <button onclick="nextImage()">▶</button>
-  <button onclick="window.location.href='index.html'">Vissza</button>
+  <img id="mainImage" src="bor.jpg" onclick="openLightbox()">
 </div>
 
 <p>Lakkozott és keretezett csendélet bor.</p>
@@ -221,7 +204,6 @@ Kosárba
 
 <!-- ===== LIGHTBOX ===== -->
 <div id="lightbox">
-  <div class="close" onclick="closeLightbox()">✕</div>
   <img id="lightbox-img">
 
   <div class="lb-controls">
@@ -242,21 +224,31 @@ const images=[
 
 let current=0;
 
-/* ===== KOSÁR ===== */
+/* ===== KÖZÖS KOSÁR (GLOBAL) ===== */
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-function updateCart(){
-  document.getElementById("cartCount").innerText = cart.length;
+function saveCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
 }
 
 function addToCart(name,price){
+
   if(cart.find(i=>i.name===name)) return;
+
   cart.push({name,price});
-  updateCart();
+  saveCart();
+  updateCartUI();
 }
+
+function updateCartUI(){
+
+  document.getElementById("cartCount").innerText = cart.length;
+
+  renderCart();
+}
+
+/* ===== KOSÁR MEGJELENÍTÉS ===== */
 
 function toggleCart(){
   document.getElementById("cartDrawer").classList.toggle("open");
@@ -264,10 +256,12 @@ function toggleCart(){
 }
 
 function renderCart(){
-  let box = document.getElementById("cartItems");
+
+  let box=document.getElementById("cartItems");
   box.innerHTML="";
 
   cart.forEach(i=>{
+
     let div=document.createElement("div");
     div.className="cart-item";
 
@@ -277,47 +271,29 @@ function renderCart(){
     `;
 
     box.appendChild(div);
+
   });
+
 }
 
 /* ===== LIGHTBOX ===== */
-
-function show(){
-  document.getElementById("mainImage").src=images[current];
-}
-
-function nextImage(){
-  current=(current+1)%images.length;
-  show();
-}
-
-function prevImage(){
-  current=(current-1+images.length)%images.length;
-  show();
-}
 
 function openLightbox(){
   document.getElementById("lightbox-img").src=images[current];
   document.getElementById("lightbox").style.display="flex";
 }
 
-function closeLightbox(){
-  document.getElementById("lightbox").style.display="none";
-}
-
 function lbNext(){
   current=(current+1)%images.length;
   document.getElementById("lightbox-img").src=images[current];
-  show();
 }
 
 function lbPrev(){
   current=(current-1+images.length)%images.length;
   document.getElementById("lightbox-img").src=images[current];
-  show();
 }
 
-updateCart();
+updateCartUI();
 
 </script>
 
