@@ -16,6 +16,30 @@ body{
   color:#222;
 }
 
+/* ===== KOSÁR GOMB ===== */
+
+#cartBtn{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:black;
+  color:white;
+  padding:14px 18px;
+  font-size:20px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  z-index:9999;
+}
+
+#cartCount{
+  background:red;
+  padding:4px 9px;
+  border-radius:50%;
+  margin-left:6px;
+  font-size:14px;
+}
+
 /* ===== KÉP ===== */
 
 h1{
@@ -50,7 +74,7 @@ button{
   margin-top:15px;
 }
 
-/* ===== VISSZA GOMB ===== */
+/* ===== VISSZA ===== */
 
 .back-btn{
   margin-top:20px;
@@ -102,35 +126,42 @@ button{
 </head>
 
 <body>
-<!-- ===== KOSÁR GOMB ===== -->
+
+<!-- ===== KOSÁR GOMB (CSAK EZ A FONTOS) ===== -->
 <button id="cartBtn" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </button>
 
-<!-- ===== KOSÁR ===== -->
+<!-- ===== KOSÁR RÉSZ (A cart.js KEZELI) ===== -->
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
 <div id="cartDrawer">
 
-  <h2>Kosár</h2>
+  <div class="cart-content">
+    <h2>Kosár</h2>
+    <div id="cartItems"></div>
+  </div>
 
-  <div id="cartItems"></div>
+  <div class="cart-summary">
 
-  <select id="shipping" onchange="updateCart()">
-    <option value="0">Szállítás</option>
-    <option value="1699">Foxpost</option>
-    <option value="1490">Packeta</option>
-  </select>
+    <select id="shipping" onchange="renderCart()">
+      <option value="0">Szállítás</option>
+      <option value="1699">Foxpost</option>
+      <option value="1490">Packeta</option>
+    </select>
 
-  <div id="total"></div>
+    <div id="total">Összesen: 0 Ft</div>
 
-  <button onclick="checkout()">Fizetés</button>
+    <button onclick="checkout()">Fizetés</button>
+
+  </div>
 
 </div>
 
-<!-- ===== KÖZÖS KOSÁR ===== -->
+<!-- ⚠️ EZ A KULCS -->
 <script src="cart.js"></script>
 
+<!-- ===== TERMÉK ===== -->
 
 <h1>Bor</h1>
 
@@ -151,7 +182,7 @@ Kosárba
 </button>
 
 <button class="back-btn" onclick="window.location.href='index.html'">
-← Vissza a galériához
+← Vissza
 </button>
 
 <!-- ===== LIGHTBOX ===== -->
@@ -166,13 +197,6 @@ Kosárba
 </div>
 
 <script>
-
-/* ===== KOSÁR SZINKRON ===== */
-window.addEventListener("load", ()=>{
-  if(typeof updateCartCount === "function"){
-    updateCartCount();
-  }
-});
 
 /* ===== KÉPEK ===== */
 
