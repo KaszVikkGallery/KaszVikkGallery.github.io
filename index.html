@@ -327,8 +327,10 @@ font-size:16px;
 
 ];
 
-let cart = [];
-
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+function saveCart(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
 /* ===== MENÜ ===== */
 
 function toggleMenu(){
@@ -376,26 +378,24 @@ gallery.appendChild(div);
 
 function addToCart(name,price){
 
-if(cart.find(i=>i.name===name)){
-return;
+  if(cart.find(i=>i.name===name)){
+    return;
+  }
+
+  cart.push({name,price});
+
+  saveCart();          // 🔥 EZ KELL
+  renderCart();
+  updateCartCount();
 }
-
-cart.push({name,price});
-
-renderCart();
-updateCartCount();
-
-}
-
 /* ===== TÖRLÉS ===== */
 
 function removeItem(name){
+  cart = cart.filter(i=>i.name!==name);
 
-cart = cart.filter(i=>i.name!==name);
-
-renderCart();
-updateCartCount();
-
+  saveCart();          // 🔥 EZ IS KELL
+  renderCart();
+  updateCartCount();
 }
 
 /* ===== KOSÁR ===== */
@@ -483,7 +483,8 @@ alert("Stripe fizetés ide fog kerülni.");
 /* ===== START ===== */
 
 renderGallery();
-
+renderCart();
+updateCartCount();
 </script>  </body>
 
 </html>  
