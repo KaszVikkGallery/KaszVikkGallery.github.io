@@ -10,82 +10,99 @@
 
 body{
   font-family:Arial,sans-serif;
-  margin:14px;
+  margin:0;
   background:#fff;
   color:#222;
   text-align:center;
 }
 
-/* ===== CÍM ===== */
+/* ===== MENÜ ===== */
 
-h1{
-  font-size:34px;
-  margin-bottom:18px;
+.menu-button{
+  position:fixed;
+  top:20px;
+  right:20px;
+  font-size:70px;
+  cursor:pointer;
+  z-index:3000;
+}
+
+nav{
+  position:fixed;
+  top:0;
+  right:-320px;
+  width:300px;
+  height:100%;
+  background:#fff;
+  padding-top:100px;
+  transition:0.3s;
+  z-index:2500;
+}
+
+nav.open{ right:0; }
+
+nav a{
+  display:block;
+  padding:22px;
+  font-size:30px;
+  text-decoration:none;
+  color:#222;
+}
+
+/* ===== KOSÁR GOMB ===== */
+
+#openCart{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:black;
+  color:white;
+  padding:14px 18px;
+  font-size:20px;
+  border:none;
+  cursor:pointer;
+  border-radius:12px;
+  z-index:3000;
+}
+
+#cartCount{
+  background:red;
+  padding:5px 10px;
+  border-radius:50%;
+  margin-left:8px;
 }
 
 /* ===== KÉP ===== */
 
-.image-container{
-  display:flex;
-  justify-content:center;
-  margin-bottom:16px;
-}
-
 .main-image{
-  max-width:88%;
-  border-radius:10px;
+  max-width:80%;
+  margin-top:120px;
   cursor:zoom-in;
 }
 
 /* ===== SZÖVEG ===== */
 
 p{
-  font-size:22px;
-  line-height:1.6;
+  font-size:28px;
   max-width:800px;
-  margin:10px auto;
+  margin:12px auto;
+}
+
+h1{
+  font-size:38px;
+  margin-top:110px;
 }
 
 /* ===== GOMB ===== */
 
 button{
+  font-size:20px;
+  padding:14px 22px;
+  background:black;
+  color:white;
   border:none;
-  cursor:pointer;
-}
-
-/* ===== KOSÁR BADGE ===== */
-
-#cartBar{
-  position:fixed;
-  top:14px;
-  left:14px;
-  background:black;
-  color:white;
-  padding:10px 14px;
-  border-radius:14px;
-  font-size:18px;
-  cursor:pointer;
-  z-index:2000;
-}
-
-#cartCount{
-  background:red;
-  color:white;
-  border-radius:50%;
-  padding:6px 12px;
-  margin-left:8px;
-  font-size:16px;
-}
-
-/* ===== BUY ===== */
-
-.buy-button{
-  background:black;
-  color:white;
-  padding:12px 22px;
-  font-size:18px;
   border-radius:10px;
-  margin-top:16px;
+  cursor:pointer;
 }
 
 /* ===== LIGHTBOX ===== */
@@ -96,77 +113,20 @@ button{
   left:0;
   width:100%;
   height:100%;
-  background:rgba(0,0,0,0.92);
+  background:rgba(0,0,0,0.9);
   display:none;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
-  z-index:999;
+  z-index:5000;
 }
 
 #lightbox img{
-  max-width:94%;
-  max-height:80%;
-  border-radius:10px;
+  max-width:95%;
+  max-height:95%;
 }
 
-.lb-controls button{
-  font-size:22px;
-  padding:8px 14px;
-  margin:6px;
-}
-
-/* ===== KOSÁR DRAWER ===== */
-
-#overlay{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.3);
-  display:none;
-  z-index:2500;
-}
-
-#overlay.show{
-  display:block;
-}
-
-#cartDrawer{
-  position:fixed;
-  top:0;
-  right:-420px;
-  width:360px;
-  height:100%;
-  background:#fff;
-  box-shadow:-10px 0 30px rgba(0,0,0,0.15);
-  transition:0.3s;
-  z-index:3000;
-  padding:20px;
-  overflow-y:auto;
-}
-
-#cartDrawer.open{
-  right:0;
-}
-
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  padding:12px 0;
-  border-bottom:1px solid #eee;
-  font-size:18px;
-}
-
-.remove{
-  color:red;
-  cursor:pointer;
-}
-
-#total{
-  font-weight:bold;
-  margin-top:10px;
+.controls button{
+  margin:10px;
 }
 
 </style>
@@ -174,47 +134,46 @@ button{
 
 <body>
 
-<!-- ===== KOSÁR ===== -->
-<div id="cartBar" onclick="toggleCart()">
+<!-- MENU -->
+<div class="menu-button" onclick="toggleMenu()">☰</div>
+
+<nav id="menu">
+  <a href="index.html">Galéria</a>
+  <a href="bemutatkozas.html">Bemutatkozás</a>
+  <a href="szallitas.html">Szállítás</a>
+  <a href="kapcsolat.html">Kapcsolat</a>
+</nav>
+
+<!-- KOSÁR -->
+<button id="openCart" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
-</div>
+</button>
 
 <h1>Bor</h1>
 
-<div class="image-container">
-  <img id="mainImage" src="bor.jpg" onclick="openLightbox()">
+<img class="main-image" src="bor.jpg" onclick="openLightbox()">
+
+<div class="controls">
+  <button onclick="prevImage()">◀</button>
+  <button onclick="nextImage()">▶</button>
 </div>
 
-<p>Lakkozott és keretezett csendélet bor.</p>
+<p>Lakkozott csendélet festmény.</p>
 <p>Technika: Akril</p>
 <p>Méret: 10 × 25 cm</p>
-<p>Ára: 3 500 Ft</p>
+<p>Ára: 3500 Ft</p>
 
-<button class="buy-button" onclick="addToCart('Bor',3500)">
-Kosárba
-</button>
+<button onclick="addToCart()">Kosárba</button>
 
-<!-- ===== KOSÁR ===== -->
-<div id="overlay" onclick="toggleCart()"></div>
-
-<div id="cartDrawer">
-  <h2>Kosár</h2>
-  <div id="cartItems"></div>
-</div>
-
-<!-- ===== LIGHTBOX ===== -->
-<div id="lightbox">
+<div id="lightbox" onclick="closeLightbox()">
   <img id="lightbox-img">
-
-  <div class="lb-controls">
-    <button onclick="lbPrev()">◀</button>
-    <button onclick="lbNext()">▶</button>
-  </div>
 </div>
 
 <script>
 
-const images=[
+/* ===== KÉPEK ===== */
+
+const images = [
   "bor.jpg",
   "bormessze.jpg",
   "boroldal.jpg",
@@ -222,78 +181,60 @@ const images=[
   "borhat.jpg"
 ];
 
-let current=0;
+let current = 0;
 
-/* ===== KÖZÖS KOSÁR (GLOBAL) ===== */
+/* ===== LIGHTBOX ===== */
+
+function openLightbox(){
+  document.getElementById("lightbox").style.display="flex";
+  document.getElementById("lightbox-img").src=images[current];
+}
+
+function closeLightbox(){
+  document.getElementById("lightbox").style.display="none";
+}
+
+/* ===== LAPOZÁS ===== */
+
+function nextImage(){
+  current=(current+1)%images.length;
+  document.querySelector(".main-image").src=images[current];
+}
+
+function prevImage(){
+  current=(current-1+images.length)%images.length;
+  document.querySelector(".main-image").src=images[current];
+}
+
+/* ===== KOSÁR (KÖZÖS) ===== */
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function saveCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
+  updateCart();
 }
 
-function addToCart(name,price){
+function addToCart(){
 
-  if(cart.find(i=>i.name===name)) return;
+  if(!cart.find(i=>i.name==="Bor")){
+    cart.push({name:"Bor",price:3500});
+    saveCart();
+  }
 
-  cart.push({name,price});
-  saveCart();
-  updateCartUI();
 }
 
-function updateCartUI(){
-
+function updateCart(){
   document.getElementById("cartCount").innerText = cart.length;
-
-  renderCart();
 }
 
-/* ===== KOSÁR MEGJELENÍTÉS ===== */
+/* ===== INIT ===== */
 
-function toggleCart(){
-  document.getElementById("cartDrawer").classList.toggle("open");
-  document.getElementById("overlay").classList.toggle("show");
+updateCart();
+
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
 }
-
-function renderCart(){
-
-  let box=document.getElementById("cartItems");
-  box.innerHTML="";
-
-  cart.forEach(i=>{
-
-    let div=document.createElement("div");
-    div.className="cart-item";
-
-    div.innerHTML=`
-      <span>${i.name}</span>
-      <span>${i.price} Ft</span>
-    `;
-
-    box.appendChild(div);
-
-  });
-
-}
-
-/* ===== LIGHTBOX ===== */
-
-function openLightbox(){
-  document.getElementById("lightbox-img").src=images[current];
-  document.getElementById("lightbox").style.display="flex";
-}
-
-function lbNext(){
-  current=(current+1)%images.length;
-  document.getElementById("lightbox-img").src=images[current];
-}
-
-function lbPrev(){
-  current=(current-1+images.length)%images.length;
-  document.getElementById("lightbox-img").src=images[current];
-}
-
-updateCartUI();
 
 </script>
 
