@@ -1,138 +1,271 @@
+Igen, szerintem is nagyon jó ötlet egyelőre meghagyni az emailes vásárlást és érdeklődést.
+Sokkal személyesebb egy művészeti oldalnál, és amíg a Stripe teljesen kész nincs, addig biztonságosabb is 😊
+
+És akkor itt a profi, a főoldal stílusához passzoló Bemutatkozás oldal.
+Modernizáltam:
+
+szebb tipográfia
+
+jobb térközök
+
+modernebb menü
+
+mobilbarát kinézet
+
+elegáns “kártyás” bemutatkozás
+
+egységes webshop dizájn
+
+megmaradt a személyes hangulata
+
+
 <!DOCTYPE html>
 <html lang="hu">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Kasz Vikk – Bemutatkozás</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
+<title>Kasz Vikk – Bemutatkozás</title>
+
+<!-- Google tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6KZWC3LLE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-T6KZWC3LLE');
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-T6KZWC3LLE');
 </script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #222;
-    }
+<style>
 
-    /* ===== MENÜ GOMB ===== */
-    .menu-button {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 60px;
-      cursor: pointer;
-      z-index: 1100;
-      user-select: none;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#fff;
+  color:#222;
+}
 
-    /* ===== OLDALSÓ MENÜ ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      right: -300px;
-      width: 300px;
-      height: 100%;
-      background: #ffffff;
-      border-left: 1px solid #ddd;
-      padding-top: 100px;
-      transition: right 0.3s ease;
-      z-index: 1000;
-    }
+/* ===== MENÜ GOMB ===== */
 
-    nav a {
-      display: block;
-      padding: 25px 30px;
-      font-size: 35px;
-      color: #222;
-      text-decoration: none;
-    }
+.menu-button{
+  position:fixed;
+  top:16px;
+  right:20px;
+  font-size:52px;
+  cursor:pointer;
+  z-index:5000;
+  user-select:none;
+}
 
-    nav a:hover {
-      background: #f2f2f2;
-    }
+/* ===== MENÜ ===== */
 
-    nav.open {
-      right: 0;
-    }
+nav{
+  position:fixed;
+  top:0;
+  right:-320px;
+  width:300px;
+  height:100%;
+  background:#fff;
+  border-left:1px solid #ddd;
+  padding-top:100px;
+  transition:0.3s;
+  z-index:4000;
+  box-shadow:-5px 0 20px rgba(0,0,0,0.08);
+}
 
-    /* ===== TARTALOM ===== */
-    .container {
-      max-width: 1000px;
-      margin: 120px auto 60px;
-      padding: 0 20px;
-      text-align: center;
-    }
+nav.open{
+  right:0;
+}
 
-    .intro-image {
-      max-width: 320px;
-      width: 100%;
-      border-radius: 10px;
-      margin-bottom: 40px;
-    }
+nav a{
+  display:block;
+  padding:24px;
+  font-size:24px;
+  text-decoration:none;
+  color:#222;
+}
 
-    .intro-text {
-      font-size: 40px;
-      line-height: 1.8;
-      max-width: 850px;
-      margin: 0 auto;
-    }
+nav a:hover{
+  background:#f5f5f5;
+}
 
-    /* ===== LÁBLÉC ===== */
-    footer {
-      text-align: center;
-      margin: 80px 0 30px;
-      font-size: 25px;
-      color: #777;
-    }
-  </style>
+/* ===== FEJLÉC ===== */
+
+header{
+  text-align:center;
+  padding:90px 20px 20px;
+}
+
+header h1{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+header p{
+  font-size:18px;
+  color:#666;
+}
+
+/* ===== TARTALOM ===== */
+
+.container{
+  max-width:900px;
+  margin:20px auto 60px;
+  padding:0 20px;
+}
+
+/* ===== KÁRTYA ===== */
+
+.about-card{
+  background:#fff;
+  border-radius:18px;
+  padding:30px;
+  box-shadow:0 6px 22px rgba(0,0,0,0.08);
+  text-align:center;
+}
+
+/* ===== KÉP ===== */
+
+.intro-image{
+  width:100%;
+  max-width:260px;
+  border-radius:18px;
+  margin-bottom:30px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* ===== SZÖVEG ===== */
+
+.intro-text{
+  font-size:21px;
+  line-height:1.9;
+  color:#333;
+}
+
+/* ===== EMAIL INFO ===== */
+
+.info-box{
+  margin-top:35px;
+  background:#f8f8f8;
+  border-radius:14px;
+  padding:18px;
+  font-size:18px;
+  color:#444;
+}
+
+/* ===== LÁBLÉC ===== */
+
+footer{
+  text-align:center;
+  margin:70px 0 30px;
+  font-size:18px;
+  color:#777;
+}
+
+/* ===== MOBIL ===== */
+
+@media(max-width:700px){
+
+  header h1{
+    font-size:28px;
+  }
+
+  .intro-text{
+    font-size:18px;
+    line-height:1.8;
+  }
+
+  .about-card{
+    padding:22px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <!-- Menü gomb -->
-  <div class="menu-button" onclick="toggleMenu()">☰</div>
+<!-- ===== MENÜ GOMB ===== -->
 
-  <!-- Menü -->
-  <nav id="menu">
-    <a href="bemutatkozas.html">Bemutatkozás</a>
-    <a href="index.html">Galéria</a>
-    <a href="kapcsolat.html">Kapcsolat</a>
-    <a href="szallitas.html">Szállítás</a>
-  </nav>
+<div class="menu-button" onclick="toggleMenu()">☰</div>
 
-  <!-- Tartalom -->
-  <div class="container">
+<!-- ===== MENÜ ===== -->
+
+<nav id="menu">
+  <a href="index.html">Galéria</a>
+  <a href="bemutatkozas.html">Bemutatkozás</a>
+  <a href="szallitas.html">Szállítás</a>
+  <a href="kapcsolat.html">Kapcsolat</a>
+</nav>
+
+<!-- ===== FEJLÉC ===== -->
+
+<header>
+  <h1>Bemutatkozás</h1>
+  <p>Vásárlás és érdeklődés emailben lehetséges.</p>
+</header>
+
+<!-- ===== TARTALOM ===== -->
+
+<div class="container">
+
+  <div class="about-card">
+
     <img src="en.jpg" alt="Kasz Vikk" class="intro-image">
 
     <div class="intro-text">
+
       <p>
-        Sziasztok, Kasz Vikk vagyok!<br><br>
-        2024 novemberében kezdtem el festeni. Amatőr festő vagyok.<br><br>
-        Képeimben főként érzéseket és hangulatokat igyekszem megjeleníteni.<br><br>
-        A festés számomra örömöt és nyugalmat ad, és egyre komolyabban szeretnék vele foglalkozni.<br><br>
-        Bízom benne, hogy a képeim másoknak is örömet tudnak okozni.<br><br>
-        Minden festményhez tanúsítvány is készült. 
+        Sziasztok, Kasz Vikk vagyok.
       </p>
+
+      <p>
+        2024 novemberében kezdtem el festeni, jelenleg amatőr festőként alkotok.
+      </p>
+
+      <p>
+        Képeimben főként érzéseket, hangulatokat és belső világokat igyekszem megjeleníteni.
+      </p>
+
+      <p>
+        A festés számomra nyugalmat, örömöt és önkifejezést jelent, és egyre komolyabban szeretnék vele foglalkozni.
+      </p>
+
+      <p>
+        Bízom benne, hogy a képeim mások számára is tudnak valami különleges érzést adni.
+      </p>
+
+      <p>
+        Minden festményhez tanúsítvány is készült.
+      </p>
+
     </div>
+
+    <div class="info-box">
+      Vásárlás és érdeklődés emailben lehetséges.
+    </div>
+
   </div>
 
-  <footer>
-    © Kasz Vikk
-  </footer>
+</div>
 
-  <script>
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("open");
-    }
-  </script>
+<!-- ===== LÁBLÉC ===== -->
+
+<footer>
+  © Kasz Vikk
+</footer>
+
+<script>
+
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
+}
+
+</script>
 
 </body>
-</html> 
+</html>
