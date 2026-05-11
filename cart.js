@@ -3,18 +3,18 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 /* ===== MENTÉS ===== */
 function saveCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartUI();
+  updateCart();
 }
 
 /* ===== HOZZÁADÁS ===== */
 function addToCart(name, price){
 
-  const existing = cart.find(i => i.name === name);
+  const item = cart.find(i => i.name === name);
 
-  if(existing){
-    existing.qty += 1;
+  if(item){
+    item.qty += 1;
   } else {
-    cart.push({name, price, qty:1});
+    cart.push({ name, price, qty: 1 });
   }
 
   saveCart();
@@ -26,78 +26,78 @@ function removeItem(name){
   saveCart();
 }
 
-/* ===== MENNYISÉG ===== */
-function changeQty(name, amount){
-  const item = cart.find(i => i.name === name);
-  if(!item) return;
-
-  item.qty += amount;
-
-  if(item.qty <= 0){
-    removeItem(name);
-  }
-
-  saveCart();
+/* ===== ÖSSZESÍTÉS ===== */
+function getTotal(){
+  return cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
 }
 
-/* ===== KOSÁR SZÁMLÁLÓ ===== */
-function getCount(){
-  return cart.reduce((sum,i)=>sum+i.qty,0);
-}
-
-/* ===== UI FRISSÍTÉS ===== */
-function updateCartUI(){
-
+/* ===== SZÁMLÁLÓ ===== */
+function updateCartCount(){
   const el = document.getElementById("cartCount");
-  if(el) el.innerText = getCount();
-
-  renderCartDrawer();
-}
-
-/* ===== KOSÁR MEGJELENÍTÉS ===== */
-function renderCartDrawer(){
-
-  const box = document.getElementById("cartItems");
-  if(!box) return;
-
-  box.innerHTML = "";
-
-  let total = 0;
-
-  cart.forEach(i => {
-
-    total += i.price * i.qty;
-
-    const div = document.createElement("div");
-    div.className = "cart-item";
-
-    div.innerHTML = `
-      <div>
-        <div style="font-size:20px">${i.name}</div>
-        <div style="font-size:18px;color:#666">
-          ${i.price} Ft × ${i.qty}
-        </div>
-      </div>
-
-      <div>
-        <button onclick="changeQty('${i.name}', -1)">-</button>
-        <button onclick="changeQty('${i.name}', 1)">+</button>
-        <span onclick="removeItem('${i.name}')"
-        style="color:red;cursor:pointer;font-size:22px;margin-left:10px">✕</span>
-      </div>
-    `;
-
-    box.appendChild(div);
-
-  });
-
-  const shipping = parseInt(document.getElementById("shipping")?.value || 0);
-
-  const totalEl = document.getElementById("total");
-  if(totalEl){
-    totalEl.innerText = "Összesen: " + (total + shipping) + " Ft";
+  if(el){
+    el.innerText = cart.reduce((sum, i) => sum + i.qty, 0);
   }
 }
 
-/* ===== INIT ===== */
-document.addEventListener("DOMContentLoaded", updateCartUI); 
+/* ===== KOSÁR UI ===== */
+function updateCart(){
+
+  updateCartCount();
+
+  const list = document.getElementById("cartItems");
+  const totalEl = document.getElementById("total");
+  const shippingEl = document.getElementById("shipping");
+
+  if(list){
+    list.innerHTML = "";
+
+    cart.forEach(i => {
+      const div = document.createElement("div");
+
+      div.className = "cart-item";
+
+      div.innerHTML = `
+        <div>
+          <div>${i.name} x${i.qty}</div>
+          <div>${i.price * i.qty} Ft</div>
+        </div>
+        <button onclick="removeItem('${i.name}')">✕</button>
+      `;
+
+      list.appendChild(div);
+    });
+  }
+
+  if(totalEl){
+    const shipping = shippingEl ? parseInt(shippingEl.value) || 0 : 0;
+    totalEl.innerText = "Összesen: " + (getTotal() + shipping) + " Ft";
+  }
+}
+
+/* ===== KOSÁR NYITÁS ===== */
+function toggleCart(){
+  document.getElementById("cartDrawer")?.classList.toggle("open");
+  document.getElementById("cartOverlay")?.classList.toggle("show");
+  updateCart();
+}
+
+/* ===== CHECKOUT ===== */
+function checkout(){
+
+  if(cart.length === 0){
+    alert("A kosár üres");
+    return;
+  }
+
+  const shipping = document.getElementById("shipping")?.value || "0";
+
+  if(shipping === "0"){
+    alert("Válassz szállítást");
+    return;
+  }
+
+  alert("Stripe ide fog menni");
+}
+
+/* ===== START ===== */
+document.addEventListener("DOMContentLoaded", updateCart);
