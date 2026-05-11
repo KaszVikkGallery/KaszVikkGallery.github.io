@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fanyar pillanat – Kasz Vikk</title>
+<title>Fanyar pillanat– Kasz Vikk</title>
 
 <style>
 
@@ -251,11 +251,14 @@ select{
 
 <h1>Fanyar pillanat</h1>
 
-<img class="main-image" src="fanyarpillanat.jpg" onclick="openLightbox()">
+<div class="image-container">
+  <img id="mainImage" class="main-image" src="fanyarpillanat.jpg" onclick="openLightbox()">
+</div>
 
-<div>
+<div class="controls">
   <button onclick="prev()">◀</button>
   <button onclick="next()">▶</button>
+  <button class="back-btn" onclick="window.location.href='index.html'">Vissza</button>
 </div>
 
 <p>Egy spontán, éjszaka készült portré fiktív személyről, üvegezett kerettel.</p>
@@ -264,33 +267,21 @@ select{
 <p>Méret: 10 × 15 cm</p>
 <p>Ára: 3000 Ft</p>
 
-<!-- ===== KOSÁR GOMB ===== -->
 <button onclick="addToCart('Fanyar pillanat', 3000)">
 Kosárba
 </button>
 
-<button class="back-btn" onclick="window.location.href='index.html'">
-← Vissza
-</button>
-
 <!-- ===== LIGHTBOX ===== -->
 <div id="lightbox" onclick="closeLightbox()">
-
-  <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">◀</div>
-
-  <img id="lightboxImg">
-
-  <div id="next" class="arrow" onclick="event.stopPropagation(); next()">▶</div>
-
+  <img id="lightbox-img">
 </div>
 
 <script>
 
-/* ===== KÉPEK ===== */
 const images = [
   "fanyarpillanatkeret.jpg",
   "fanyarpillanatoldal.jpg",
-  "fanyarpillanat.jpg"
+  "fanyarpillanatkeret2.jpg"
 ];
 
 let current = 0;
@@ -299,7 +290,7 @@ let current = 0;
 
 function openLightbox(){
   document.getElementById("lightbox").style.display="flex";
-  document.getElementById("lightboxImg").src = images[current];
+  document.getElementById("lightbox-img").src = images[current];
 }
 
 function closeLightbox(){
@@ -308,17 +299,17 @@ function closeLightbox(){
 
 function next(){
   current = (current + 1) % images.length;
-  document.querySelector(".main-image").src = images[current];
-  document.getElementById("lightboxImg").src = images[current];
+  document.getElementById("mainImage").src = images[current];
+  document.getElementById("lightbox-img").src = images[current];
 }
 
 function prev(){
   current = (current - 1 + images.length) % images.length;
-  document.querySelector(".main-image").src = images[current];
-  document.getElementById("lightboxImg").src = images[current];
+  document.getElementById("mainImage").src = images[current];
+  document.getElementById("lightbox-img").src = images[current];
 }
 
-/* ===== KOSÁR (UGYANAZ MINT BOR) ===== */
+/* ===== KOSÁR ===== */
 
 let cart = [];
 
@@ -329,9 +320,7 @@ function toggleCart(){
 
 function addToCart(name, price){
 
-  if(cart.some(item => item.name === name)){
-    return;
-  }
+  if(cart.some(i => i.name === name)) return;
 
   cart.push({name, price});
   renderCart();
@@ -363,8 +352,11 @@ function renderCart(){
 
   });
 
+  // 🔥 JAVÍTÁS: SZÁLLÍTÁS HOZZÁADÁSA
+  let shipping = parseInt(document.getElementById("shipping").value) || 0;
+
   document.getElementById("total").innerText =
-  "Összesen: " + total + " Ft";
+    "Összesen: " + (total + shipping) + " Ft";
 }
 
 function removeItem(name){
