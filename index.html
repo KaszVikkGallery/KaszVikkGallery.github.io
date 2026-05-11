@@ -312,8 +312,8 @@ font-size:16px;
 {name:"Esti melódia",price:8000,img:"estimelodia.jpg",page:"estimelodia.html"},
 {name:"The jazz is freedom",price:7000,img:"thejazzisfreedom.jpg",page:"thejazzisfreedom.html"},
 {name:"A szív dala",price:3000,img:"szivdala.jpg",page:"aszivdala.html"},
-{name:"Nemes hűség",img:"nemeshuseg.jpg",page:"nemeshuseg.html"},
-{name:"Morning Cat",img:"morningcat.jpg",page:"morningcat.html"},
+{name:"Morning Cat",price:3500,img:"morningcat.jpg",page:"morningcat.html",sold:true},
+{name:"Nemes hűség",price:4000,img:"nemeshuseg.jpg",page:"nemeshuseg.html",sold:true},
 {name:"Lidokain",price:3000,img:"lidokain.jpg",page:"lidokain.html"},
 {name:"Idő árnyéka",price:2000,img:"idoarnyeka.jpg",page:"idoarnyeka.html"},
 {name:"Sarki fény",price:4000,img:"sarkifeny.jpg",page:"sarkifeny.html"},
@@ -361,11 +361,14 @@ div.innerHTML = `
   <a href="${p.page}">      
     <img src="${p.img}">      
     <h3>${p.name}</h3>      
-  </a>      <button class="buy-btn"      
-onclick="addToCart('${p.name}', ${p.price})">
-Kosárba
-</button>
-
+  </a>      ${p.sold ? 
+  `<div style="margin-top:10px;font-size:18px;font-weight:bold;color:red;">ELKELT!</div>` 
+  : 
+  `<button class="buy-btn"
+    onclick="addToCart('${p.name}', ${p.price})">
+    Kosárba
+  </button>`
+            }
 `;
 
 gallery.appendChild(div);
