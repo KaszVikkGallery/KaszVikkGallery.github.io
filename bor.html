@@ -16,7 +16,7 @@ body{
   color:#222;
 }
 
-/* ===== KOSÁR ===== */
+/* ===== KOSÁR GOMB ===== */
 
 #cartBtn{
   position:fixed;
@@ -37,14 +37,17 @@ body{
   padding:5px 10px;
   border-radius:50%;
   margin-left:8px;
+  font-size:16px;
 }
 
-/* ===== KÉP ===== */
+/* ===== CÍM ===== */
 
 h1{
   font-size:38px;
   margin-top:100px;
 }
+
+/* ===== KÉP ===== */
 
 .main-image{
   max-width:80%;
@@ -55,7 +58,7 @@ h1{
 /* ===== SZÖVEG ===== */
 
 p{
-  font-size:26px;
+  font-size:24px;
   margin:10px auto;
   max-width:800px;
 }
@@ -106,8 +109,8 @@ button{
 
 <body>
 
-<!-- KOSÁR -->
-<button id="cartBtn" onclick="openCart()">
+<!-- ===== KOSÁR ===== -->
+<button id="cartBtn" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </button>
 
@@ -125,12 +128,17 @@ button{
 <p>Méret: 10 × 25 cm</p>
 <p>Ára: 3500 Ft</p>
 
-<button onclick="addToCart()">Kosárba</button>
+<button onclick="addToCart('Bor', 3500)">
+Kosárba
+</button>
 
-<!-- LIGHTBOX -->
+<!-- ===== LIGHTBOX ===== -->
 <div id="lightbox" onclick="closeLightbox()">
   <img id="lightboxImg">
 </div>
+
+<!-- ===== KÖZÖS KOSÁR RENDSZER ===== -->
+<script src="cart.js"></script>
 
 <script>
 
@@ -168,37 +176,6 @@ function prev(){
   current = (current - 1 + images.length) % images.length;
   document.querySelector(".main-image").src = images[current];
 }
-
-/* ===== KOSÁR (KÖZÖS) ===== */
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-function saveCart(){
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
-}
-
-function addToCart(){
-
-  if(!cart.find(i=>i.name==="Bor")){
-    cart.push({name:"Bor",price:3500});
-    saveCart();
-  }
-
-}
-
-function updateCart(){
-  document.getElementById("cartCount").innerText = cart.length;
-}
-
-function openCart(){
-  alert(
-    "Kosár:\n\n" +
-    cart.map(i=>i.name + " - " + i.price + " Ft").join("\n")
-  );
-}
-
-updateCart();
 
 </script>
 
