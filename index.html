@@ -2,204 +2,336 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kasz Vikk – Galéria</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #fff;
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#fff;
+  color:#222;
 }
 
 /* ===== MENÜ GOMB ===== */
-.menu-button {
-  position: fixed;
-  top: 20px;
-  right: 25px;
-  font-size: 90px;
-  cursor: pointer;
-  z-index: 2000;
+
+.menu-button{
+  position:fixed;
+  top:20px;
+  right:25px;
+  font-size:90px;
+  cursor:pointer;
+  z-index:5000;
+  user-select:none;
 }
 
 /* ===== OLDALSÓ MENÜ ===== */
-nav {
-  position: fixed;
-  top: 0;
-  right: -340px;
-  width: 340px;
-  height: 100%;
-  background: #fff;
-  border-left: 1px solid #ddd;
-  padding-top: 120px;
-  transition: 0.3s;
-  z-index: 1500;
+
+nav{
+  position:fixed;
+  top:0;
+  right:-360px;
+  width:340px;
+  height:100%;
+  background:#fff;
+  border-left:1px solid #ddd;
+  padding-top:120px;
+  transition:0.35s;
+  z-index:4000;
+  box-shadow:-5px 0 20px rgba(0,0,0,0.08);
 }
 
-nav.open { right: 0; }
+nav.open{
+  right:0;
+}
 
-nav a {
-  display: block;
-  padding: 26px;
-  font-size: 32px;   /* 🔥 nagyobb (festmény cím méret) */
-  text-decoration: none;
-  color: #222;
+nav a{
+  display:block;
+  padding:28px;
+  font-size:32px;
+  text-decoration:none;
+  color:#222;
+  transition:0.2s;
+}
+
+nav a:hover{
+  background:#f5f5f5;
 }
 
 /* ===== HEADER ===== */
-header {
-  text-align: center;
-  padding: 140px 20px 30px;
+
+header{
+  text-align:center;
+  padding:150px 20px 40px;
 }
 
-header h1 {
-  font-size: 64px;
-  font-weight: 600;
+header h1{
+  font-size:64px;
+  margin:0;
+  font-weight:600;
+}
+
+header p{
+  font-size:26px;
+  color:#666;
+  margin-top:15px;
 }
 
 /* ===== GALÉRIA ===== */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 45px;
-  padding: 50px;
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:50px;
+  padding:50px;
 }
 
-.item {
-  text-align: center;
+.item{
+  text-align:center;
+  transition:0.25s;
 }
 
-.item img {
-  width: 100%;
-  max-width: 460px;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 10px;
+.item:hover{
+  transform:translateY(-4px);
 }
 
-.item h3 {
-  font-size: 30px;
-  margin-top: 12px;
+.item a{
+  text-decoration:none;
+  color:inherit;
+}
+
+.item img{
+  width:100%;
+  max-width:460px;
+  height:310px;
+  object-fit:cover;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  transition:0.25s;
+}
+
+.item img:hover{
+  transform:scale(1.02);
+}
+
+.item h3{
+  font-size:32px;
+  margin-top:16px;
+  margin-bottom:14px;
+  font-weight:500;
 }
 
 /* ===== GOMBOK ===== */
-button {
-  font-size: 22px;
-  padding: 16px 22px;
-  border-radius: 10px;
-  cursor: pointer;
+
+button{
+  border:none;
+  cursor:pointer;
+  border-radius:12px;
+  transition:0.2s;
 }
 
-/* ===== 🛒 KOSÁR GOMB (NAGYÍTOTT) ===== */
-#openCart {
-  position: fixed;
-  left: 20px;
-  top: 20px;
-  background: black;
-  color: white;
-  border: none;
-  padding: 26px 32px;   /* 🔥 nagyobb */
-  font-size: 32px;      /* 🔥 nagyobb */
-  z-index: 2000;
-  border-radius: 12px;
+button:hover{
+  opacity:0.92;
 }
 
-/* ===== KOSÁR SZÁMLÁLÓ ===== */
-#cartCount {
-  background: red;
-  color: white;
-  border-radius: 50%;
-  padding: 6px 14px;   /* 🔥 nagyobb */
-  font-size: 24px;     /* 🔥 nagyobb */
-  margin-left: 10px;
+/* ===== KOSÁR GOMB ===== */
+
+#openCart{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:black;
+  color:white;
+  padding:26px 34px;
+  font-size:34px;
+  z-index:5000;
+  border-radius:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.18);
+}
+
+/* ===== PIROS SZÁMLÁLÓ ===== */
+
+#cartCount{
+  background:red;
+  color:white;
+  border-radius:50%;
+  padding:7px 15px;
+  font-size:24px;
+  margin-left:10px;
+}
+
+/* ===== TERMÉK GOMB ===== */
+
+.buy-btn{
+  background:black;
+  color:white;
+  padding:16px 22px;
+  font-size:22px;
 }
 
 /* ===== OVERLAY ===== */
-#cartOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.35);
-  display: none;
-  z-index: 2500;
+
+#cartOverlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.35);
+  display:none;
+  z-index:5500;
 }
 
-#cartOverlay.show {
-  display: block;
+#cartOverlay.show{
+  display:block;
 }
 
-/* ===== KOSÁR PANEL ===== */
-#cartDrawer {
-  position: fixed;
-  top: 0;
-  right: -460px;
-  width: 420px;
-  height: 100%;
-  background: #fff;
-  box-shadow: -10px 0 30px rgba(0,0,0,0.12);
-  padding: 25px;
-  transition: 0.35s ease;
-  z-index: 3000;
-  overflow-y: auto;
+/* ===== KOSÁR ===== */
+
+#cartDrawer{
+  position:fixed;
+  top:0;
+  right:-480px;
+  width:440px;
+  height:100%;
+  background:white;
+  z-index:6000;
+  transition:0.35s ease;
+  box-shadow:-10px 0 35px rgba(0,0,0,0.12);
+  display:flex;
+  flex-direction:column;
 }
 
-#cartDrawer.open {
-  right: 0;
+#cartDrawer.open{
+  right:0;
 }
 
-#cartDrawer h2 {
-  font-size: 34px;
+.cart-content{
+  padding:28px;
+  overflow-y:auto;
+  flex:1;
 }
 
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 18px;
+/* ===== KOSÁR CÍM ===== */
+
+#cartDrawer h2{
+  font-size:42px;
+  margin-top:0;
+  margin-bottom:25px;
 }
 
-.remove {
-  color: red;
-  cursor: pointer;
-  font-size: 22px;
+/* ===== KOSÁR TÉTELEK ===== */
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:20px 0;
+  border-bottom:1px solid #eee;
 }
 
-.cart-summary {
-  position: sticky;
-  bottom: 0;
-  background: white;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
+/* ===== BAL OLDAL ===== */
+
+.cart-left{
+  display:flex;
+  flex-direction:column;
 }
 
-#total {
-  font-size: 22px;
-  font-weight: bold;
+.cart-name{
+  font-size:28px;
+  font-weight:500;
 }
 
-select {
-  font-size: 16px;
-  padding: 8px;
-  width: 100%;
+.cart-price{
+  font-size:24px;
+  color:#666;
+  margin-top:4px;
 }
 
-#checkoutBtn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 16px;
-  font-size: 20px;
-  background: black;
-  color: white;
-  border: none;
+/* ===== TÖRLÉS ===== */
+
+.remove{
+  color:red;
+  font-size:34px;
+  cursor:pointer;
 }
+
+/* ===== ALSÓ RÉSZ ===== */
+
+.cart-summary{
+  border-top:1px solid #ddd;
+  padding:24px;
+  background:white;
+}
+
+/* ===== SZÁLLÍTÁS ===== */
+
+.shipping-title{
+  font-size:24px;
+  margin-bottom:10px;
+}
+
+select{
+  width:100%;
+  padding:14px;
+  font-size:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+
+/* ===== ÖSSZESEN ===== */
+
+#total{
+  font-size:32px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+/* ===== FIZETÉS GOMB ===== */
+
+#checkoutBtn{
+  width:100%;
+  background:black;
+  color:white;
+  padding:20px;
+  font-size:24px;
+  border-radius:14px;
+}
+
+/* ===== MOBIL ===== */
+
+@media(max-width:900px){
+
+  .gallery{
+    grid-template-columns:1fr;
+    padding:25px;
+    gap:40px;
+  }
+
+  header h1{
+    font-size:48px;
+  }
+
+  .item img{
+    height:260px;
+  }
+
+  #cartDrawer{
+    width:100%;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- MENÜ -->
+<!-- ===== MENÜ ===== -->
+
 <div class="menu-button" onclick="toggleMenu()">☰</div>
 
 <nav id="menu">
@@ -209,44 +341,66 @@ select {
   <a href="kapcsolat.html">Kapcsolat</a>
 </nav>
 
+<!-- ===== FEJLÉC ===== -->
+
 <header>
   <h1>Kasz Vikk Webshop</h1>
+  <p>Eredeti akril festmények</p>
 </header>
 
-<!-- KOSÁR -->
+<!-- ===== KOSÁR GOMB ===== -->
+
 <button id="openCart" onclick="toggleCart()">
-  🛒 Kosár <span id="cartCount">0</span>
+🛒 Kosár
+<span id="cartCount">0</span>
 </button>
+
+<!-- ===== OVERLAY ===== -->
 
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
-<div id="cartDrawer">
-  <h2>Kosár</h2>
+<!-- ===== KOSÁR ===== -->
 
-  <div id="cartItems"></div>
+<div id="cartDrawer">
+
+  <div class="cart-content">
+
+    <h2>Kosár</h2>
+
+    <div id="cartItems"></div>
+
+  </div>
 
   <div class="cart-summary">
-    <p>
-      Szállítás:
-      <select id="shipping" onchange="renderCart()">
-        <option value="0">Válassz</option>
-        <option value="1699">Foxpost</option>
-        <option value="1490">Packeta</option>
-      </select>
-    </p>
 
-    <p id="total">Összesen: 0 Ft</p>
+    <div class="shipping-title">Szállítás</div>
 
-    <button id="checkoutBtn" onclick="checkout()">Fizetés</button>
+    <select id="shipping" onchange="renderCart()">
+      <option value="0">Válassz szállítást</option>
+      <option value="1699">Foxpost — 1699 Ft</option>
+      <option value="1490">Packeta — 1490 Ft</option>
+    </select>
+
+    <div id="total">Összesen: 0 Ft</div>
+
+    <button id="checkoutBtn" onclick="checkout()">
+      Fizetés
+    </button>
+
   </div>
+
 </div>
 
-<!-- GALÉRIA -->
+<!-- ===== GALÉRIA ===== -->
+
 <section class="gallery" id="gallery"></section>
 
 <script>
 
+/* ===== TERMÉKEK ===== */
+
 const products = [
+
   {name:"Bor",price:3500,img:"bor.jpg",page:"bor.html"},
   {name:"Fanyar pillanat",price:3000,img:"fanyarpillanat.jpg",page:"fanyarpillanat.html"},
   {name:"Johnny Bravo",price:4000,img:"johnny.jpg",page:"johnny.html"},
@@ -268,87 +422,159 @@ const products = [
   {name:"Tűz és hamu",price:2000,img:"tuzeshamu.jpg",page:"tuzeshamu.html"},
   {name:"Kezdetek",price:2000,img:"kezdetek.jpg",page:"kezdetek.html"},
   {name:"Elviselés",price:4000,img:"elviseles.jpg",page:"elviseles.html"}
+
 ];
 
 let cart = [];
 
+/* ===== MENÜ ===== */
+
 function toggleMenu(){
   document.getElementById("menu").classList.toggle("open");
 }
+
+/* ===== KOSÁR ===== */
 
 function toggleCart(){
   document.getElementById("cartDrawer").classList.toggle("open");
   document.getElementById("cartOverlay").classList.toggle("show");
 }
 
+/* ===== GALÉRIA ===== */
+
 function renderGallery(){
-  const g = document.getElementById("gallery");
+
+  const gallery = document.getElementById("gallery");
 
   products.forEach(p=>{
-    const div = document.createElement("div");
-    div.className="item";
 
-    div.innerHTML=`
+    const div = document.createElement("div");
+    div.className = "item";
+
+    div.innerHTML = `
       <a href="${p.page}">
         <img src="${p.img}">
         <h3>${p.name}</h3>
       </a>
-      <button onclick="addToCart('${p.name}',${p.price})">Kosárba</button>
+
+      <button class="buy-btn"
+      onclick="addToCart('${p.name}', ${p.price})">
+      Kosárba
+      </button>
     `;
 
-    g.appendChild(div);
+    gallery.appendChild(div);
+
   });
+
 }
 
-function addToCart(name, price){
-  if(cart.find(i=>i.name===name)) return;
+/* ===== KOSÁRBA ===== */
+
+function addToCart(name,price){
+
+  if(cart.find(i=>i.name===name)){
+    return;
+  }
+
   cart.push({name,price});
+
   renderCart();
   updateCartCount();
+
 }
+
+/* ===== TÖRLÉS ===== */
 
 function removeItem(name){
+
   cart = cart.filter(i=>i.name!==name);
+
   renderCart();
   updateCartCount();
+
 }
 
+/* ===== KOSÁR RENDER ===== */
+
 function renderCart(){
-  let box = document.getElementById("cartItems");
-  box.innerHTML="";
+
+  const box = document.getElementById("cartItems");
+
+  box.innerHTML = "";
 
   let total = 0;
 
   cart.forEach(i=>{
-    let div = document.createElement("div");
-    div.className="cart-item";
 
-    div.innerHTML=`
-      <span>${i.name}</span>
-      <span>${i.price} Ft</span>
-      <span class="remove" onclick="removeItem('${i.name}')">✕</span>
+    const div = document.createElement("div");
+
+    div.className = "cart-item";
+
+    div.innerHTML = `
+
+      <div class="cart-left">
+        <span class="cart-name">${i.name}</span>
+        <span class="cart-price">${i.price} Ft</span>
+      </div>
+
+      <span class="remove"
+      onclick="removeItem('${i.name}')">
+      ✕
+      </span>
+
     `;
 
     box.appendChild(div);
+
     total += i.price;
+
   });
 
   updateTotal(total);
+
 }
+
+/* ===== ÖSSZEG ===== */
 
 function updateTotal(productTotal){
-  let shipping = parseInt(document.getElementById("shipping").value)||0;
+
+  let shipping =
+  parseInt(document.getElementById("shipping").value) || 0;
+
   document.getElementById("total").innerText =
-    "Összesen: " + (productTotal + shipping) + " Ft";
+  "Összesen: " + (productTotal + shipping) + " Ft";
+
 }
+
+/* ===== SZÁMLÁLÓ ===== */
 
 function updateCartCount(){
-  document.getElementById("cartCount").innerText = cart.length;
+
+  document.getElementById("cartCount").innerText =
+  cart.length;
+
 }
 
+/* ===== CHECKOUT ===== */
+
 function checkout(){
-  alert("Fizetés indul...");
+
+  if(cart.length===0){
+    alert("A kosár üres.");
+    return;
+  }
+
+  if(document.getElementById("shipping").value==="0"){
+    alert("Válassz szállítási módot.");
+    return;
+  }
+
+  alert("A Stripe fizetés következő lépése ide kerül.");
+
 }
+
+/* ===== START ===== */
 
 renderGallery();
 
