@@ -16,7 +16,7 @@ body{
   color:#222;
 }
 
-/* ===== KOSÁR GOMB ===== */
+/* ===== KOSÁR ===== */
 
 #cartBtn{
   position:fixed;
@@ -125,7 +125,7 @@ button{
 
 <body>
 
-<!-- ===== KOSÁR ===== -->
+<!-- ===== KOSÁR GOMB (KÖZÖS RENDSZER) ===== -->
 <button id="cartBtn" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </button>
@@ -163,10 +163,17 @@ Kosárba
 
 </div>
 
-<!-- ===== KÖZÖS KOSÁR (EZ A LÉNYEG) ===== -->
+<!-- ===== KÖZÖS KOSÁR RENDSZER ===== -->
 <script src="cart.js"></script>
 
 <script>
+
+/* ===== FONTOS: SZÁMLÁLÓ INICIALIZÁLÁS ===== */
+window.addEventListener("load", ()=>{
+  if(window.updateCartCount){
+    updateCartCount();
+  }
+});
 
 /* ===== KÉPEK ===== */
 
