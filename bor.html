@@ -16,7 +16,7 @@ body{
   color:#222;
 }
 
-/* ===== KOSÁR ===== */
+/* ===== KOSÁR GOMB ===== */
 
 #cartBtn{
   position:fixed;
@@ -39,14 +39,13 @@ body{
   margin-left:8px;
 }
 
-/* ===== VISSZA GOMB ===== */
+/* ===== VISSZA ===== */
 
 .back-btn{
   margin-top:20px;
   font-size:18px;
   padding:12px 18px;
   background:#f2f2f2;
-  color:#222;
   border:none;
   border-radius:10px;
   cursor:pointer;
@@ -76,8 +75,8 @@ p{
 /* ===== GOMB ===== */
 
 button{
-  font-size:20px;
-  padding:14px 20px;
+  font-size:18px;
+  padding:12px 18px;
   background:black;
   color:white;
   border:none;
@@ -118,13 +117,8 @@ button{
   user-select:none;
 }
 
-#prev{
-  left:30px;
-}
-
-#next{
-  right:30px;
-}
+#prev{ left:30px; }
+#next{ right:30px; }
 
 </style>
 </head>
@@ -132,7 +126,7 @@ button{
 <body>
 
 <!-- ===== KOSÁR ===== -->
-<button id="cartBtn">
+<button id="cartBtn" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </button>
 
@@ -155,25 +149,21 @@ Kosárba
 </button>
 
 <button class="back-btn" onclick="window.location.href='index.html'">
-← Vissza a galériához
+← Vissza
 </button>
 
 <!-- ===== LIGHTBOX ===== -->
 <div id="lightbox" onclick="closeLightbox()">
 
-  <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">
-    ◀
-  </div>
+  <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">◀</div>
 
   <img id="lightboxImg">
 
-  <div id="next" class="arrow" onclick="event.stopPropagation(); next()">
-    ▶
-  </div>
+  <div id="next" class="arrow" onclick="event.stopPropagation(); next()">▶</div>
 
 </div>
 
-<!-- ===== KÖZÖS KOSÁR RENDSZER ===== -->
+<!-- ===== KÖZÖS KOSÁR (EZ A LÉNYEG) ===== -->
 <script src="cart.js"></script>
 
 <script>
