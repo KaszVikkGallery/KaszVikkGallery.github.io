@@ -1,158 +1,163 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <title>Morning cat – Kasz Vikk</title>
+<meta charset="UTF-8">
+<title>Morning cat – Kasz Vikk</title>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6KZWC3LLE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-T6KZWC3LLE');
-  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T6KZWC3LLE"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T6KZWC3LLE');
+</script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #fff;
-      color: #222;
-      text-align: center;
-    }
+<style>
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 25px;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  background:#fff;
+  color:#222;
+}
 
-    .image-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
+/* ===== CÍM ===== */
 
-    .main-image {
-      max-width: 90%;
-      cursor: zoom-in;
-    }
+h1{
+  font-size:34px;
+  margin-top:90px;
+}
 
-    .controls {
-      margin: 25px 0;
-    }
+/* ===== KÉP ===== */
 
-    .controls button {
-      font-size: 26px;
-      padding: 16px 32px;
-      margin: 0 20px;
-      cursor: pointer;
-    }
+.image-container{
+  display:flex;
+  justify-content:center;
+}
 
-    p {
-      font-size: 36px;
-      line-height: 1.7;
-      max-width: 900px;
-      margin: 20px auto;
-    }
+.main-image{
+  max-width:80%;
+  margin-top:20px;
+  cursor:zoom-in;
+}
 
-    .back-button {
-      font-size: 26px;
-      padding: 16px 32px;
-      margin-top: 30px;
-      cursor: pointer;
-      background-color: #f5f5f5;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+/* ===== SZÖVEG ===== */
 
-    .back-button:hover {
-      background-color: #e0e0e0;
-      border-color: #999;
-    }
+p{
+  font-size:20px;
+  margin:10px auto;
+  max-width:800px;
+  line-height:1.4;
+}
 
-    /* LIGHTBOX */
-    #lightbox {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
+/* ===== GOMBOK ===== */
 
-    #lightbox img {
-      max-width: 95%;
-      max-height: 95%;
-    }
-  </style>
+button{
+  font-size:18px;
+  padding:12px 18px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  margin-top:15px;
+}
+
+.back-btn{
+  margin-top:20px;
+  background:#f2f2f2;
+  color:#222;
+}
+
+/* ===== LIGHTBOX ===== */
+
+#lightbox{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:5000;
+}
+
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+}
+
+</style>
 </head>
 
 <body>
 
-  <h1>Morning cat</h1>
+<h1>Morning cat</h1>
 
-  <div class="image-container">
-    <img id="mainImage" class="main-image" src="morningcatmessze.jpg" onclick="openLightbox()">
-  </div>
+<div class="image-container">
+  <img id="mainImage" class="main-image" src="morningcatmessze.jpg" onclick="openLightbox()">
+</div>
 
-  <div class="controls">
-    <button onclick="prevImage()">◀ Előző</button>
-    <button onclick="nextImage()">Következő ▶</button>
-    <button class="back-button" onclick="window.location.href='index.html'">Vissza a galériához</button>
-  </div>
+<div>
+  <button onclick="prevImage()">◀</button>
+  <button onclick="nextImage()">▶</button>
+</div>
 
-  <p>Elkelt!</p>
-  <p>A kávéját szorongató, álmos cicus a reggelek hangulatát tökéletesen visszaadja.</p>
-  <p>Technika: Akril</p>
-  <p>Vászon típus: Feszített vászon</p>
-  <p>Méret: 20 × 20 cm</p>
-  <p>Ár: 3 000 Forint</p>
+<p>Elkelt!</p>
+<p>A kávéját szorongató, álmos cicus a reggelek hangulatát tökéletesen visszaadja.</p>
 
-  <div id="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img">
-  </div>
+<p>Technika: Akril</p>
+<p>Vászon típus: Feszített vászon</p>
+<p>Méret: 20 × 20 cm</p>
+<p>Ár: 3 000 Forint</p>
 
-  <script>
-    const images = [
-      "morningcatmessze.jpg",
-      "morningcatjobb.jpg",
-      "morningcatbal.jpg"
-    ];
+<button class="back-btn" onclick="window.location.href='index.html'">
+← Vissza a galériához
+</button>
 
-    let current = 0;
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img">
+</div>
 
-    function showImage() {
-      document.getElementById("mainImage").src = images[current];
+<script>
 
-      const nextImg = new Image();
-      nextImg.src = images[(current + 1) % images.length];
-    }
+const images = [
+  "morningcatmessze.jpg",
+  "morningcatjobb.jpg",
+  "morningcatbal.jpg"
+];
 
-    function nextImage() {
-      current = (current + 1) % images.length;
-      showImage();
-    }
+let current = 0;
 
-    function prevImage() {
-      current = (current - 1 + images.length) % images.length;
-      showImage();
-    }
+function showImage(){
+  document.getElementById("mainImage").src = images[current];
+}
 
-    function openLightbox() {
-      document.getElementById("lightbox-img").src = images[current];
-      document.getElementById("lightbox").style.display = "flex";
-    }
+function nextImage(){
+  current = (current + 1) % images.length;
+  showImage();
+}
 
-    function closeLightbox() {
-      document.getElementById("lightbox").style.display = "none";
-    }
-  </script>
+function prevImage(){
+  current = (current - 1 + images.length) % images.length;
+  showImage();
+}
+
+function openLightbox(){
+  document.getElementById("lightbox-img").src = images[current];
+  document.getElementById("lightbox").style.display = "flex";
+}
+
+function closeLightbox(){
+  document.getElementById("lightbox").style.display = "none";
+}
+
+</script>
 
 </body>
 </html>
