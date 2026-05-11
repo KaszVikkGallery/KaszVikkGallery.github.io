@@ -19,26 +19,26 @@ body{
 /* ===== KOSÁR GOMB ===== */
 
 #openCart{
-position:fixed;
-top:14px;
-left:14px;
-background:black;
-color:white;
-padding:12px 16px;
-font-size:18px;
-border:none;
-border-radius:12px;
-cursor:pointer;
-z-index:5000;
+  position:fixed;
+  top:14px;
+  left:14px;
+  background:black;
+  color:white;
+  padding:12px 16px;
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  z-index:5000;
 }
 
 #cartCount{
-background:red;
-color:white;
-border-radius:50%;
-padding:4px 10px;
-font-size:16px;
-margin-left:8px;
+  background:red;
+  color:white;
+  border-radius:50%;
+  padding:4px 10px;
+  font-size:16px;
+  margin-left:8px;
 }
 
 /* ===== KÉP ===== */
@@ -120,8 +120,13 @@ button{
   user-select:none;
 }
 
-#prev{ left:30px; }
-#next{ right:30px; }
+#prev{
+  left:30px;
+}
+
+#next{
+  right:30px;
+}
 
 /* ===== KOSÁR ===== */
 
@@ -217,11 +222,13 @@ select{
 <body>
 
 <!-- ===== KOSÁR GOMB ===== -->
+
 <button id="openCart" onclick="toggleCart()">
 🛒 <span id="cartCount">0</span>
 </button>
 
 <!-- ===== KOSÁR ===== -->
+
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
 <div id="cartDrawer">
@@ -258,25 +265,39 @@ select{
   <button onclick="next()">▶</button>
 </div>
 
-<p>Az élet rövidségét mutatja be az idő hatlmáva együtt. Az emberi lét mindig csak az idő árnyeka maradhat.</p>
+<p>
+Az élet rövidségét mutatja be az idő hatalmával együtt.
+Az emberi lét végül mindig csak az idő árnyéka maradhat.
+</p>
 
 <p>Technika: Akril</p>
 <p>Vászon típus: Feszített vászon</p>
 <p>Méret: 20 × 20 cm</p>
-<p>Ár: 2 000 Forint</p>
+<p>Ára: 2 000 Ft</p>
 
-<button onclick="addToCart('Idő árnyéka', 2000)">Kosárba</button>
+<button onclick="addToCart('Idő árnyéka', 2000)">
+Kosárba
+</button>
 
-<button class="back-btn" onclick="window.location.href='index.html'">← Vissza</button>
+<button class="back-btn" onclick="window.location.href='index.html'">
+← Vissza
+</button>
 
 <!-- ===== LIGHTBOX ===== -->
+
 <div id="lightbox" onclick="closeLightbox()">
+
   <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">◀</div>
+
   <img id="lightboxImg">
+
   <div id="next" class="arrow" onclick="event.stopPropagation(); next()">▶</div>
+
 </div>
 
 <script>
+
+/* ===== KÉPEK ===== */
 
 const images = [
   "idoarnyekamessze.jpg",
@@ -289,22 +310,24 @@ let current = 0;
 /* ===== LIGHTBOX ===== */
 
 function openLightbox(){
-  document.getElementById("lightbox").style.display="flex";
+  document.getElementById("lightbox").style.display = "flex";
   document.getElementById("lightboxImg").src = images[current];
 }
 
 function closeLightbox(){
-  document.getElementById("lightbox").style.display="none";
+  document.getElementById("lightbox").style.display = "none";
 }
 
 function next(){
   current = (current + 1) % images.length;
+
   document.querySelector(".main-image").src = images[current];
   document.getElementById("lightboxImg").src = images[current];
 }
 
 function prev(){
   current = (current - 1 + images.length) % images.length;
+
   document.querySelector(".main-image").src = images[current];
   document.getElementById("lightboxImg").src = images[current];
 }
@@ -325,6 +348,7 @@ function addToCart(name, price){
   }
 
   cart.push({name, price});
+
   renderCart();
   updateCartCount();
 }
@@ -332,15 +356,15 @@ function addToCart(name, price){
 function renderCart(){
 
   const box = document.getElementById("cartItems");
+
   box.innerHTML = "";
 
   let total = 0;
 
-  const shipping = parseInt(document.getElementById("shipping").value);
-
   cart.forEach(i => {
 
     const div = document.createElement("div");
+
     div.className = "cart-item";
 
     div.innerHTML = `
@@ -348,34 +372,48 @@ function renderCart(){
         <div class="cart-name">${i.name}</div>
         <div class="cart-price">${i.price} Ft</div>
       </div>
+
       <span class="remove" onclick="removeItem('${i.name}')">✕</span>
     `;
 
     box.appendChild(div);
+
     total += i.price;
 
   });
 
+  const shipping =
+    parseInt(document.getElementById("shipping").value);
+
   total += shipping;
 
-  document.getElementById("total").innerText = "Összesen: " + total + " Ft";
+  document.getElementById("total").innerText =
+    "Összesen: " + total + " Ft";
 }
 
 function removeItem(name){
+
   cart = cart.filter(i => i.name !== name);
+
   renderCart();
   updateCartCount();
 }
 
 function updateCartCount(){
-  document.getElementById("cartCount").innerText = cart.length;
+
+  document.getElementById("cartCount").innerText =
+    cart.length;
 }
 
 function checkout(){
+
   if(cart.length === 0){
+
     alert("A kosár üres.");
+
     return;
   }
+
   alert("Fizetés indul...");
 }
 
