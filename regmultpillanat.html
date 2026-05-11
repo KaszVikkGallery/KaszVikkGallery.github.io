@@ -16,12 +16,14 @@ body{
   color:#222;
 }
 
-/* ===== KÉP ===== */
+/* ===== CÍM ===== */
 
 h1{
   font-size:34px;
   margin-top:90px;
 }
+
+/* ===== KÉP ===== */
 
 .main-image{
   max-width:80%;
@@ -90,9 +92,7 @@ button{
 
 <h1>Rég múlt pillanat</h1>
 
-<div class="image-container">
-  <img id="mainImage" class="main-image" src="regmultpillanatmessze.jpg" onclick="openLightbox()">
-</div>
+<img id="mainImage" class="main-image" src="regmultpillanatmessze.jpg" onclick="openLightbox()">
 
 <div>
   <button onclick="prev()">◀</button>
@@ -109,10 +109,6 @@ A meleg fény és a zöld fal együtt egy nosztalgikus, otthonos hangulatot tere
 <p>Vászon típus: Feszített vászon</p>
 <p>Méret: 30 × 40 cm</p>
 <p>Ára: 5 000 Forint</p>
-
-<button onclick="addToCart('Rég múlt pillanat', 5000)">
-Kosárba
-</button>
 
 <button class="back-button" onclick="window.location.href='index.html'">
 ← Vissza a galériához
@@ -162,17 +158,6 @@ function prev(){
   current = (current - 1 + images.length) % images.length;
   show();
   document.getElementById("lightboxImg").src = images[current];
-}
-
-/* ===== KOSÁR (ÁTJÁRÓ RENDSZER) ===== */
-
-let cart = [];
-
-function addToCart(name, price){
-
-  if(cart.some(i => i.name === name)) return;
-
-  cart.push({name, price});
 }
 
 </script>
