@@ -1,159 +1,179 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <title>Tűz és hamu – Kasz Vikk</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6KZWC3LLE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-T6KZWC3LLE');
-  </script>
+<title>Tűz és hamu – Kasz Vikk</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #fff;
-      color: #222;
-      text-align: center;
-    }
+<style>
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 25px;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  background:#fff;
+  color:#222;
+}
 
-    .image-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
+/* ===== KÉP ===== */
 
-    .main-image {
-      max-width: 90%;
-      cursor: zoom-in;
-    }
+h1{
+  font-size:34px;
+  margin-top:90px;
+}
 
-    .controls {
-      margin: 25px 0;
-    }
+.main-image{
+  max-width:80%;
+  margin-top:20px;
+  cursor:zoom-in;
+}
 
-    .controls button {
-      font-size: 26px;
-      padding: 16px 32px;
-      margin: 0 20px;
-      cursor: pointer;
-    }
+/* ===== SZÖVEG ===== */
 
-    p {
-      font-size: 36px;
-      line-height: 1.7;
-      max-width: 900px;
-      margin: 20px auto;
-    }
+p{
+  font-size:22px;
+  margin:10px auto;
+  max-width:800px;
+}
 
-    .back-button {
-      font-size: 26px;
-      padding: 16px 32px;
-      margin-top: 30px;
-      cursor: pointer;
-      background-color: #f5f5f5;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+/* ===== GOMB ===== */
 
-    .back-button:hover {
-      background-color: #e0e0e0;
-      border-color: #999;
-    }
+button{
+  font-size:18px;
+  padding:12px 18px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  margin-top:15px;
+}
 
-    /* LIGHTBOX */
-    #lightbox {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
+/* ===== VISSZA ===== */
 
-    #lightbox img {
-      max-width: 95%;
-      max-height: 95%;
-    }
-  </style>
+.back-btn{
+  margin-top:20px;
+  font-size:18px;
+  padding:12px 18px;
+  background:#f2f2f2;
+  color:#222;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* ===== LIGHTBOX ===== */
+
+#lightbox{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:5000;
+}
+
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+}
+
+/* ===== NYILAK ===== */
+
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:40px;
+  color:white;
+  cursor:pointer;
+  user-select:none;
+}
+
+#prev{ left:30px; }
+#next{ right:30px; }
+
+</style>
 </head>
 
 <body>
 
-  <h1>Tűz és hamu</h1>
+<!-- ===== TERMÉK ===== -->
 
-  <div class="image-container">
-    <img id="mainImage" class="main-image" src="tuzeshamumessze.jpg" onclick="openLightbox()">
-  </div>
+<h1>Tűz és hamu </h1>
 
-  <div class="controls">
-    <button onclick="prevImage()">◀ Előző</button>
-    <button onclick="nextImage()">Következő ▶</button>
-    <button class="back-button" onclick="window.location.href='index.html'">Vissza a galériához</button>
-  </div>
+<img class="main-image" src="tuzeshamumessze.jpg" onclick="openLightbox()">
+
+<div>
+  <button onclick="prev()">◀</button>
+  <button onclick="next()">▶</button>
+</div>
 
   <p>
     A vörös és a szürke kavargása, a szenvedély és az elmúlás találkozását ábrázolja.  
     Ahol a tűz kihuny, ott megszületik a hamu szépsége.
   </p>
-
   <p>Technika: Akril</p>
   <p>Vászon típus: Feszített vászon</p>
   <p>Méret: 20 × 20 cm</p>
   <p>Ára: 2 000 Forint</p>
+<button class="back-btn" onclick="window.location.href='index.html'">
+← Vissza
+</button>
 
-  <!-- LIGHTBOX -->
-  <div id="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img">
-  </div>
+<!-- ===== LIGHTBOX ===== -->
 
-  <script>
-    const images = [
-      "tuzeshamumessze.jpg",
+<div id="lightbox" onclick="closeLightbox()">
+
+  <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">◀</div>
+
+  <img id="lightboxImg">
+
+  <div id="next" class="arrow" onclick="event.stopPropagation(); next()">▶</div>
+
+</div>
+
+<script>
+
+/* ===== KÉPEK ===== */
+
+const images = [
+"tuzeshamumessze.jpg",
       "tuzeshamujobb.jpg",
       "tuzeshamubal.jpg"
-    ];
+];
 
-    let current = 0;
+let current = 0;
 
-    function showImage() {
-      document.getElementById("mainImage").src = images[current];
-    }
+/* ===== LIGHTBOX ===== */
 
-    function nextImage() {
-      current = (current + 1) % images.length;
-      showImage();
-    }
+function openLightbox(){
+  document.getElementById("lightbox").style.display="flex";
+  document.getElementById("lightboxImg").src = images[current];
+}
 
-    function prevImage() {
-      current = (current - 1 + images.length) % images.length;
-      showImage();
-    }
+function closeLightbox(){
+  document.getElementById("lightbox").style.display="none";
+}
 
-    function openLightbox() {
-      document.getElementById("lightbox-img").src = images[current];
-      document.getElementById("lightbox").style.display = "flex";
-    }
+function next(){
+  current = (current + 1) % images.length;
+  document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
+}
 
-    function closeLightbox() {
-      document.getElementById("lightbox").style.display = "none";
-    }
-  </script>
+function prev(){
+  current = (current - 1 + images.length) % images.length;
+  document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
+}
+
+</script>
 
 </body>
 </html>
