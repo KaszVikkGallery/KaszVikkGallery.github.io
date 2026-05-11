@@ -200,6 +200,12 @@
   <script>
     function toggleMenu() {
       document.getElementById("menu").classList.toggle("open");
+      let cart = [];
+
+function addToCart(name, price) {
+  cart.push({name, price});
+  alert(name + " hozzáadva a kosárhoz");
+  console.log(cart);
     }
   </script>
 
