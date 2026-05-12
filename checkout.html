@@ -33,17 +33,21 @@ cursor:pointer;
 }
 
 #map{
-height:300px;
+height:320px;
 width:90%;
 max-width:420px;
 margin:10px auto;
-display:none;
 border-radius:10px;
+display:none;
 }
 
 #summary{
 font-weight:bold;
 margin-top:15px;
+}
+
+#pickup{
+background:#f7f7f7;
 }
 </style>
 </head>
@@ -56,7 +60,7 @@ margin-top:15px;
 <input id="email" placeholder="Email">
 <input id="phone" placeholder="Telefonszám">
 
-<select id="shipping" onchange="shippingChanged()">
+<select id="shipping" onchange="changeShipping()">
 <option value="">Szállítás</option>
 <option value="fox">Foxpost</option>
 <option value="packeta">Packeta</option>
@@ -66,70 +70,89 @@ margin-top:15px;
 
 <input id="pickup" placeholder="Átvételi pont" readonly>
 
-<button onclick="checkout()">Fizetés</button>
+<button onclick="openSelector()">Átvételi pont kiválasztása</button>
 
 <div id="summary"></div>
 
+<button onclick="pay()">Fizetés</button>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://widget.packeta.com/www/js/library.js"></script>
 
 <script>
 
-/* ===== ÖSSZEG ===== */
 let total = localStorage.getItem("cartTotal") || 0;
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-/* ===== FOXPOST + PACKETA MAP ===== */
-
 let map;
-let marker;
+let markers = [];
 
-function shippingChanged(){
+/* FOXPOST PONTOK (reális HU lefedés minta) */
+const foxPoints = [
+{name:"Budapest Deák",lat:47.4979,lng:19.0402},
+{name:"Budapest Westend",lat:47.5062,lng:19.0633},
+{name:"Miskolc Centrum",lat:48.1031,lng:20.7784},
+{name:"Debrecen Fórum",lat:47.5316,lng:21.6273},
+{name:"Szeged Árkád",lat:46.2530,lng:20.1414},
+{name:"Pécs Árkád",lat:46.0727,lng:18.2323},
+{name:"Győr Belváros",lat:47.6875,lng:17.6504},
+{name:"Eger Centrum",lat:47.9025,lng:20.3772}
+];
+
+/* SZÁLLÍTÁS VÁLTÁS */
+function changeShipping(){
+document.getElementById("pickup").value = "";
+document.getElementById("map").style.display = "none";
+}
+
+/* SELECTOR */
+function openSelector(){
 
 const type = document.getElementById("shipping").value;
 
-document.getElementById("pickup").value = "";
-document.getElementById("map").style.display = "none";
+if(!type){
+alert("Válassz szállítást");
+return;
+}
 
-if(type === "fox" || type === "packeta"){
-initMap(type);
+/* PACKETA */
+if(type === "packeta"){
+Packeta.Widget.pick(
+"test",
+function(point){
+if(!point) return;
+
+document.getElementById("pickup").value =
+point.name + ", " + point.city;
+},
+{language:"hu",country:"hu"}
+);
+}
+
+/* FOXPOST */
+if(type === "fox"){
+openFoxMap();
 }
 
 }
 
-/* ===== MAP INIT ===== */
-
-function initMap(type){
+/* FOX MAP */
+function openFoxMap(){
 
 document.getElementById("map").style.display = "block";
 
-if(map){
-map.remove();
-}
+if(map) map.remove();
 
-map = L.map('map').setView([47.4979, 19.0402], 7);
+map = L.map("map").setView([47.2,19.5],7);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-attribution:'OSM'
-}).addTo(map);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-/* MOCK PONTOK (ide később jön teljes API) */
+foxPoints.forEach(p=>{
 
-let points = [];
+let m = L.marker([p.lat,p.lng]).addTo(map);
 
-if(type === "fox"){
-points = foxPoints;
-}
-
-if(type === "packeta"){
-points = packetaPoints;
-}
-
-points.forEach(p=>{
-
-let m = L.marker(p.coords).addTo(map);
-
-m.on("click", ()=>{
+m.on("click",()=>{
 
 document.getElementById("pickup").value = p.name;
 
@@ -139,31 +162,8 @@ document.getElementById("pickup").value = p.name;
 
 }
 
-/* ===== FOXPOST PONTOK (teljes HU minta bővíthető API-val később) ===== */
-
-const foxPoints = [
-{name:"Budapest Deák",coords:[47.4979,19.0402]},
-{name:"Miskolc Centrum",coords:[48.1031,20.7784]},
-{name:"Debrecen Fórum",coords:[47.5316,21.6273]},
-{name:"Szeged Árkád",coords:[46.2530,20.1414]},
-{name:"Pécs Árkád",coords:[46.0727,18.2323]},
-{name:"Győr Belváros",coords:[47.6875,17.6504]},
-{name:"Eger Centrum",coords:[47.9025,20.3772]}
-];
-
-/* ===== PACKETA PONTOK ===== */
-
-const packetaPoints = [
-{name:"Budapest Westend Z-BOX",coords:[47.5062,19.0633]},
-{name:"Miskolc Szinvapark Z-BOX",coords:[48.1031,20.7784]},
-{name:"Debrecen Pláza Z-BOX",coords:[47.5316,21.6273]},
-{name:"Szeged Belváros Z-BOX",coords:[46.2530,20.1414]},
-{name:"Pécs Centrum Z-BOX",coords:[46.0727,18.2323]}
-];
-
-/* ===== CHECKOUT ===== */
-
-function checkout(){
+/* PAY */
+function pay(){
 
 const name = document.getElementById("name").value;
 const email = document.getElementById("email").value;
@@ -172,11 +172,11 @@ const shipping = document.getElementById("shipping").value;
 const pickup = document.getElementById("pickup").value;
 
 if(!name || !email || !phone || !shipping || !pickup){
-alert("Minden adat kötelező");
+alert("Minden mezőt tölts ki");
 return;
 }
 
-alert("Stripe fizetés indul (következő lépés)");
+alert("Sikeres adatellenőrzés. Stripe következik.");
 
 }
 
