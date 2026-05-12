@@ -71,31 +71,39 @@ margin-top:5px;
 
 <body>
 
-<h1>Fizetés</h1>
+<h1>Szállítási adatok</h1>
 
-<!-- STEP 1 -->
+<!-- STEP 1: ADATOK -->
+
 <div id="step1">
 
 <input id="name" placeholder="Teljes név">
+
 <input id="email" type="email" placeholder="Email cím">
+
 <input id="phone" placeholder="Telefonszám">
 
 <input id="pickup" placeholder="Packeta átvételi pont">
 
 <div class="small">
-Kattints és válassz Packeta pontot
+Válaszd ki a Packeta átvételi pontot
 </div>
 
-<button onclick="nextStep()">Tovább</button>
+<button onclick="nextStep()">
+Tovább a fizetéshez
+</button>
 
 </div>
 
-<!-- STEP 2 -->
+<!-- STEP 2: FIZETÉS -->
+
 <div id="step2">
 
 <div id="summary"></div>
 
-<button onclick="pay()">Fizetés indítása</button>
+<button onclick="pay()">
+Fizetés indítása
+</button>
 
 </div>
 
@@ -103,10 +111,10 @@ Kattints és válassz Packeta pontot
 
 <script>
 
-/* ÖSSZEG */
-let total = parseInt(localStorage.getItem("cartTotal") || "0");
+let total = Number(localStorage.getItem("cartTotal")) || 0;
 
 /* PACKETA */
+
 document.getElementById("pickup").addEventListener("click", openPacketa);
 
 function openPacketa(){
@@ -131,7 +139,8 @@ view:"modal"
 
 }
 
-/* STEP 1 -> STEP 2 */
+/* STEP 1 → STEP 2 */
+
 function nextStep(){
 
 const name = document.getElementById("name").value.trim();
@@ -144,13 +153,6 @@ alert("Minden mezőt ki kell tölteni.");
 return;
 }
 
-/* mentés */
-localStorage.setItem("buyerName", name);
-localStorage.setItem("buyerEmail", email);
-localStorage.setItem("buyerPhone", phone);
-localStorage.setItem("pickupPoint", pickup);
-
-/* step váltás */
 document.getElementById("step1").style.display = "none";
 document.getElementById("step2").style.display = "block";
 
@@ -160,19 +162,19 @@ document.getElementById("summary").innerText =
 }
 
 /* FIZETÉS */
+
 function pay(){
 
-const name = localStorage.getItem("buyerName");
-const email = localStorage.getItem("buyerEmail");
-const phone = localStorage.getItem("buyerPhone");
-const pickup = localStorage.getItem("pickupPoint");
+const name = document.getElementById("name").value.trim();
+const email = document.getElementById("email").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const pickup = document.getElementById("pickup").value.trim();
 
 if(!name || !email || !phone || !pickup){
 alert("Hiányzó adatok");
 return;
 }
 
-/* STRIPE INDÍTÁS */
 fetch("/.netlify/functions/create-checkout-session", {
 method: "POST",
 headers: {
