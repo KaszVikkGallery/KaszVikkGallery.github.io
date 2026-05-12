@@ -1,9 +1,13 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const { Resend } = require("resend");
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.handler = async (event) => {
   try {
 
     const data = JSON.parse(event.body);
+
     const amount = Number(data.amount);
 
     const session = await stripe.checkout.sessions.create({
@@ -23,6 +27,22 @@ exports.handler = async (event) => {
 
       success_url: `${process.env.URL}/success.html`,
       cancel_url: `${process.env.URL}/checkout.html`
+    });
+
+    // EMAIL KÜLDÉS NEKED
+    await resend.emails.send({
+      from: "Kasz Vikk Webshop <onboarding@resend.dev>",
+      to: "Kaszvikkfestmeny@gmail.com",
+      subject: "Új rendelés érkezett",
+      html: `
+        <h2>Új rendelés</h2>
+
+        <p><b>Név:</b> ${data.name}</p>
+        <p><b>Email:</b> ${data.email}</p>
+        <p><b>Telefon:</b> ${data.phone}</p>
+        <p><b>Packeta pont:</b> ${data.pickup}</p>
+        <p><b>Összeg:</b> ${amount} Ft</p>
+      `
     });
 
     return {
