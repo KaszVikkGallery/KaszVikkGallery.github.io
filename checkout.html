@@ -63,6 +63,43 @@ color:green;
 font-size:14px;
 }
 
+/* FOXPOST MODAL */
+
+#foxModal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+z-index:9999;
+}
+
+#foxBox{
+background:white;
+width:90%;
+max-width:450px;
+margin:60px auto;
+padding:20px;
+border-radius:12px;
+max-height:70vh;
+overflow:auto;
+}
+
+.point{
+padding:12px;
+margin:6px 0;
+border:1px solid #ddd;
+border-radius:8px;
+cursor:pointer;
+text-align:left;
+}
+
+.point:hover{
+background:#f3f3f3;
+}
+
 .hidden{
 display:none;
 }
@@ -74,14 +111,12 @@ display:none;
 
 <h1>Fizetés</h1>
 
-<!-- ADATOK -->
 <input id="name" placeholder="Név">
 
 <input id="email" type="email" placeholder="Email">
 
 <input id="phone" placeholder="Telefonszám">
 
-<!-- SZÁLLÍTÁS -->
 <select id="shipping" onchange="shippingChanged()">
 
 <option value="">Szállítás módja</option>
@@ -92,24 +127,26 @@ display:none;
 
 </select>
 
-<!-- PACKETA GOMB -->
+<!-- PACKETA -->
 <button
 id="packetaBtn"
 class="hidden"
-type="button"
 onclick="openPacketa()">
 
-Packeta átvételi pont választása
+Packeta pont választása
 
 </button>
 
 <!-- FOXPOST -->
-<input
-id="foxpostInput"
+<button
+id="foxBtn"
 class="hidden"
-placeholder="Foxpost automata neve vagy címe">
+onclick="openFoxpost()">
 
-<!-- KIVÁLASZTOTT -->
+Foxpost automata választása
+
+</button>
+
 <input
 id="pickup"
 placeholder="Kiválasztott átvételi pont"
@@ -117,15 +154,41 @@ readonly>
 
 <div id="pickupStatus"></div>
 
-<!-- ÖSSZEG -->
 <div id="summary"></div>
 
-<!-- FIZETÉS -->
 <button onclick="goToStripe()">
+
 Fizetés indítása
+
 </button>
 
-<!-- PACKETA WIDGET -->
+<!-- FOXPOST MODAL -->
+
+<div id="foxModal">
+
+<div id="foxBox">
+
+<h2>Foxpost automaták</h2>
+
+<input
+id="foxSearch"
+placeholder="Keresés városra..."
+oninput="filterFoxpost()">
+
+<div id="foxList"></div>
+
+<button onclick="closeFoxpost()">
+
+Bezárás
+
+</button>
+
+</div>
+
+</div>
+
+<!-- PACKETA -->
+
 <script src="https://widget.packeta.com/www/js/library.js"></script>
 
 <script>
@@ -138,7 +201,35 @@ localStorage.getItem("cartTotal") || 0;
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-/* SZÁLLÍTÁS VÁLTÁS */
+/* FOXPOST LISTA */
+
+const foxpostPoints = [
+
+"Budapest – Deák tér",
+"Budapest – Nyugati",
+"Budapest – Árkád",
+
+"Miskolc – Plaza",
+"Miskolc – Szinvapark",
+
+"Debrecen – Fórum",
+"Nyíregyháza – Korzó",
+
+"Szeged – Árkád",
+"Pécs – Árkád",
+"Győr – Belváros",
+
+"Eger – Tesco",
+"Kazincbarcika – Tesco",
+"Ózd – Center",
+
+"Sátoraljaújhely – Tesco",
+"Szerencs – Penny",
+
+"Mezőkövesd – Lidl",
+"Tiszaújváros – Spar"
+
+];
 
 function shippingChanged(){
 
@@ -148,7 +239,7 @@ document.getElementById("shipping").value;
 document.getElementById("packetaBtn")
 .classList.add("hidden");
 
-document.getElementById("foxpostInput")
+document.getElementById("foxBtn")
 .classList.add("hidden");
 
 document.getElementById("pickup").value = "";
@@ -165,8 +256,10 @@ document.getElementById("packetaBtn")
 
 if(type === "foxpost"){
 
-document.getElementById("foxpostInput")
+document.getElementById("foxBtn")
 .classList.remove("hidden");
+
+renderFoxpost(foxpostPoints);
 
 }
 
@@ -174,8 +267,7 @@ document.getElementById("foxpostInput")
 
 /* PACKETA */
 
-const packetaApiKey =
-"test";
+const packetaApiKey = "test";
 
 function openPacketa(){
 
@@ -183,9 +275,9 @@ Packeta.Widget.pick(
 packetaApiKey,
 showSelectedPickupPoint,
 {
-language: "hu",
-country: "hu",
-view: "modal"
+language:"hu",
+country:"hu",
+view:"modal"
 }
 );
 
@@ -209,6 +301,72 @@ document.getElementById("pickupStatus")
 
 }
 
+/* FOXPOST */
+
+function openFoxpost(){
+
+document.getElementById("foxModal")
+.style.display = "block";
+
+}
+
+function closeFoxpost(){
+
+document.getElementById("foxModal")
+.style.display = "none";
+
+}
+
+function renderFoxpost(list){
+
+const box =
+document.getElementById("foxList");
+
+box.innerHTML = "";
+
+list.forEach(p=>{
+
+const div =
+document.createElement("div");
+
+div.className = "point";
+
+div.innerText = p;
+
+div.onclick = () => {
+
+document.getElementById("pickup")
+.value = p;
+
+document.getElementById("pickupStatus")
+.innerText =
+"✔ Kiválasztva: " + p;
+
+closeFoxpost();
+
+};
+
+box.appendChild(div);
+
+});
+
+}
+
+function filterFoxpost(){
+
+const q =
+document.getElementById("foxSearch")
+.value.toLowerCase();
+
+const filtered =
+foxpostPoints.filter(p =>
+p.toLowerCase().includes(q)
+);
+
+renderFoxpost(filtered);
+
+}
+
 /* FIZETÉS */
 
 function goToStripe(){
@@ -225,20 +383,8 @@ document.getElementById("phone").value;
 const shipping =
 document.getElementById("shipping").value;
 
-let pickup =
+const pickup =
 document.getElementById("pickup").value;
-
-/* FOXPOST */
-
-if(shipping === "foxpost"){
-
-pickup =
-document.getElementById("foxpostInput").value;
-
-document.getElementById("pickup").value =
-pickup;
-
-}
 
 if(
 !name ||
@@ -252,8 +398,6 @@ alert("Minden mezőt tölts ki!");
 return;
 
 }
-
-/* IDE JÖN MAJD A STRIPE */
 
 alert(
 "Sikeres adatellenőrzés. Itt indul majd a Stripe fizetés."
