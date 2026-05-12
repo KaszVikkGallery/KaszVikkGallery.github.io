@@ -15,8 +15,6 @@ background:#fff;
 color:#222;
 }
 
-/* MENÜ */
-
 .menu-button{
 position:fixed;
 top:16px;
@@ -53,8 +51,6 @@ color:#222;
 
 nav a:hover{ background:#f5f5f5; }
 
-/* HEADER */
-
 header{
 text-align:center;
 padding:100px 20px 30px;
@@ -62,8 +58,6 @@ padding:100px 20px 30px;
 
 header h1{ font-size:30px; margin:0; }
 header p{ font-size:18px; color:#666; margin-top:10px; }
-
-/* KOSÁR */
 
 #openCart{
 position:fixed;
@@ -87,8 +81,6 @@ padding:4px 10px;
 font-size:16px;
 margin-left:8px;
 }
-
-/* GALÉRIA */
 
 .gallery{
 display:grid;
@@ -124,8 +116,6 @@ font-size:18px;
 font-weight:bold;
 color:red;
 }
-
-/* KOSÁR */
 
 #cartOverlay{
 position:fixed;
@@ -291,7 +281,7 @@ gallery.innerHTML="";
 
 products.forEach(p=>{
 
-const div = document.createElement("div");
+const div=document.createElement("div");
 div.className="item";
 
 div.innerHTML=`
@@ -299,10 +289,9 @@ div.innerHTML=`
 <img src="${p.img}">
 <h3>${p.name}</h3>
 </a>
-${p.sold ?
-`<div class="sold">ELKELT!</div>`
-:
-`<button class="buy-btn" onclick="addToCart('${p.name}',${p.price})">Kosárba</button>`
+${p.sold
+? `<div class="sold">ELKELT!</div>`
+: `<button class="buy-btn" onclick="addToCart('${p.name}',${p.price})">Kosárba</button>`
 }
 `;
 
@@ -334,7 +323,7 @@ updateCartCount();
 
 function renderCart(){
 
-const box = document.getElementById("cartItems");
+const box=document.getElementById("cartItems");
 box.innerHTML="";
 
 let total=0;
@@ -370,8 +359,6 @@ cart.forEach(i=>total+=i.price);
 localStorage.setItem("cartTotal", total+shippingPrice);
 
 window.location.href="checkout.html";
-
-}
 
 }
 
