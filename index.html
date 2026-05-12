@@ -41,9 +41,7 @@ z-index:4000;
 box-shadow:-5px 0 20px rgba(0,0,0,0.08);
 }
 
-nav.open{
-right:0;
-}
+nav.open{ right:0; }
 
 nav a{
 display:block;
@@ -53,9 +51,7 @@ text-decoration:none;
 color:#222;
 }
 
-nav a:hover{
-background:#f5f5f5;
-}
+nav a:hover{ background:#f5f5f5; }
 
 /* HEADER */
 
@@ -64,16 +60,8 @@ text-align:center;
 padding:100px 20px 30px;
 }
 
-header h1{
-font-size:30px;
-margin:0;
-}
-
-header p{
-font-size:18px;
-color:#666;
-margin-top:10px;
-}
+header h1{ font-size:30px; margin:0; }
+header p{ font-size:18px; color:#666; margin-top:10px; }
 
 /* KOSÁR */
 
@@ -109,9 +97,7 @@ gap:20px;
 padding:20px;
 }
 
-.item{
-text-align:center;
-}
+.item{text-align:center;}
 
 .item img{
 width:100%;
@@ -152,9 +138,7 @@ display:none;
 z-index:5500;
 }
 
-#cartOverlay.show{
-display:block;
-}
+#cartOverlay.show{display:block;}
 
 #cartDrawer{
 position:fixed;
@@ -170,9 +154,7 @@ display:flex;
 flex-direction:column;
 }
 
-#cartDrawer.open{
-right:0;
-}
+#cartDrawer.open{right:0;}
 
 .cart-content{
 flex:1;
@@ -196,11 +178,6 @@ font-size:22px;
 .cart-summary{
 border-top:1px solid #ddd;
 padding:20px;
-}
-
-#shippingText{
-font-size:18px;
-margin-bottom:12px;
 }
 
 #total{
@@ -239,31 +216,20 @@ cursor:pointer;
 <p>Eredeti akril festmények</p>
 </header>
 
-<button id="openCart" onclick="toggleCart()">
-🛒 <span id="cartCount">0</span>
-</button>
+<button id="openCart" onclick="toggleCart()">🛒 <span id="cartCount">0</span></button>
 
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
 <div id="cartDrawer">
 
 <div class="cart-content">
-
 <h2>Kosár</h2>
-
 <div id="cartItems"></div>
-
 </div>
 
 <div class="cart-summary">
 
-<div id="shippingText">
-Szállítás: Packeta — 1490 Ft
-</div>
-
-<div id="total">
-Összesen: 0 Ft
-</div>
+<div id="total">Összesen: 0 Ft</div>
 
 <button id="checkoutBtn" onclick="checkout()">
 Fizetés
@@ -278,7 +244,6 @@ Fizetés
 <script>
 
 const products = [
-
 {name:"Bor",price:3500,img:"bor.jpg",page:"bor.html"},
 {name:"Fanyar pillanat",price:3000,img:"fanyarpillanat.jpg",page:"fanyarpillanat.html"},
 {name:"Johnny Bravo",price:4000,img:"johnny.jpg",page:"johnny.html"},
@@ -300,7 +265,6 @@ const products = [
 {name:"Tűz és hamu",price:2000,img:"tuzeshamu.jpg",page:"tuzeshamu.html"},
 {name:"Kezdetek",price:2000,img:"kezdetek.jpg",page:"kezdetek.html"},
 {name:"Elviselés",price:4000,img:"elviseles.jpg",page:"elviseles.html"}
-
 ];
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -323,35 +287,23 @@ document.getElementById("cartOverlay").classList.toggle("show");
 function renderGallery(){
 
 const gallery = document.getElementById("gallery");
-
-gallery.innerHTML = "";
+gallery.innerHTML="";
 
 products.forEach(p=>{
 
 const div = document.createElement("div");
+div.className="item";
 
-div.className = "item";
-
-div.innerHTML = `
-
+div.innerHTML=`
 <a href="${p.page}">
 <img src="${p.img}">
 <h3>${p.name}</h3>
 </a>
-
 ${p.sold ?
-
 `<div class="sold">ELKELT!</div>`
-
 :
-
-`<button class="buy-btn"
-onclick="addToCart('${p.name}',${p.price})">
-Kosárba
-</button>`
-
+`<button class="buy-btn" onclick="addToCart('${p.name}',${p.price})">Kosárba</button>`
 }
-
 `;
 
 gallery.appendChild(div);
@@ -365,11 +317,8 @@ function addToCart(name,price){
 if(cart.find(i=>i.name===name)) return;
 
 cart.push({name,price});
-
 saveCart();
-
 renderCart();
-
 updateCartCount();
 
 }
@@ -377,11 +326,8 @@ updateCartCount();
 function removeItem(name){
 
 cart = cart.filter(i=>i.name!==name);
-
 saveCart();
-
 renderCart();
-
 updateCartCount();
 
 }
@@ -389,68 +335,41 @@ updateCartCount();
 function renderCart(){
 
 const box = document.getElementById("cartItems");
+box.innerHTML="";
 
-box.innerHTML = "";
-
-let total = 0;
+let total=0;
 
 cart.forEach(i=>{
-
-box.innerHTML += `
-
+box.innerHTML+=`
 <div class="cart-item">
-
-<div>
-${i.name} - ${i.price} Ft
-</div>
-
-<span class="remove"
-onclick="removeItem('${i.name}')">
-✕
-</span>
-
-</div>
-
-`;
-
-total += i.price;
-
+<div>${i.name} - ${i.price} Ft</div>
+<span class="remove" onclick="removeItem('${i.name}')">✕</span>
+</div>`;
+total+=i.price;
 });
 
-document.getElementById("total").innerText =
-"Összesen: " + (total + shippingPrice) + " Ft";
+document.getElementById("total").innerText=
+"Összesen: "+(total+shippingPrice)+" Ft";
 
 }
 
 function updateCartCount(){
-
-document.getElementById("cartCount").innerText =
-cart.length;
-
+document.getElementById("cartCount").innerText=cart.length;
 }
 
 function checkout(){
 
-if(cart.length === 0){
-
+if(cart.length===0){
 alert("Kosár üres");
-
 return;
-
 }
 
-let total = 0;
+let total=0;
+cart.forEach(i=>total+=i.price);
 
-cart.forEach(i=> total += i.price);
+localStorage.setItem("cartTotal", total+shippingPrice);
 
-/* PACKETA FIX */
-
-localStorage.setItem(
-"cartTotal",
-total + shippingPrice
-);
-
-window.location.href = "checkout.html";
+window.location.href="https://buy.stripe.com/6oU8wHfS27J69JCe9t2B201";
 
 }
 
