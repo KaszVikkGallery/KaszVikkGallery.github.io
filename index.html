@@ -380,7 +380,7 @@ return;
 let total=0;
 cart.forEach(i=> total+=i.price);
 
-const shipping = parseInt(document.getElementById("shipping").value);
+const shipping = Number(document.getElementById("shipping").value) || 0;
 
 localStorage.setItem("total", total + shipping);
 
