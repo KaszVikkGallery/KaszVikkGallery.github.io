@@ -7,6 +7,7 @@
 <title>Kasz Vikk – Fizetés</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -64,6 +65,7 @@ font-size:13px;
 color:#666;
 margin-top:5px;
 }
+
 </style>
 </head>
 
@@ -101,6 +103,7 @@ Kattints és válassz Packeta pontot
 
 <script>
 
+/* ÖSSZEG */
 let total = parseInt(localStorage.getItem("cartTotal") || "0");
 
 /* PACKETA */
@@ -141,6 +144,13 @@ alert("Minden mezőt ki kell tölteni.");
 return;
 }
 
+/* mentés */
+localStorage.setItem("buyerName", name);
+localStorage.setItem("buyerEmail", email);
+localStorage.setItem("buyerPhone", phone);
+localStorage.setItem("pickupPoint", pickup);
+
+/* step váltás */
 document.getElementById("step1").style.display = "none";
 document.getElementById("step2").style.display = "block";
 
@@ -152,36 +162,28 @@ document.getElementById("summary").innerText =
 /* FIZETÉS */
 function pay(){
 
-const name = document.getElementById("name").value.trim();
-const email = document.getElementById("email").value.trim();
-const phone = document.getElementById("phone").value.trim();
-const pickup = document.getElementById("pickup").value.trim();
+const name = localStorage.getItem("buyerName");
+const email = localStorage.getItem("buyerEmail");
+const phone = localStorage.getItem("buyerPhone");
+const pickup = localStorage.getItem("pickupPoint");
 
 if(!name || !email || !phone || !pickup){
 alert("Hiányzó adatok");
 return;
 }
 
-/* mentés */
-localStorage.setItem("buyerName", name);
-localStorage.setItem("buyerEmail", email);
-localStorage.setItem("buyerPhone", phone);
-localStorage.setItem("pickupPoint", pickup);
-
-/* fix: biztos szám */
-const safeTotal = parseInt(localStorage.getItem("cartTotal") || "0");
-
+/* STRIPE INDÍTÁS */
 fetch("/.netlify/functions/create-checkout-session", {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
 },
 body: JSON.stringify({
-amount: safeTotal,
-name: name,
-email: email,
-phone: phone,
-pickup: pickup
+amount: total,
+name,
+email,
+phone,
+pickup
 })
 })
 .then(res => res.json())
@@ -194,7 +196,7 @@ alert("Fizetési hiba");
 })
 .catch(err => {
 console.log(err);
-alert("Hiba történt a fizetés indításakor");
+alert("Hiba történt");
 });
 
 }
