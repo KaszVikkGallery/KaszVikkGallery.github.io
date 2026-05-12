@@ -51,6 +51,41 @@ margin-top:20px;
 font-size:18px;
 font-weight:bold;
 }
+
+/* MODAL */
+#pickupModal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+z-index:9999;
+}
+
+#pickupBox{
+background:#fff;
+max-width:420px;
+margin:80px auto;
+padding:20px;
+border-radius:12px;
+text-align:left;
+}
+
+#pickupList{
+width:100%;
+padding:10px;
+margin-top:10px;
+}
+
+.modal-buttons{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.modal-buttons button{
+flex:1;
+}
 </style>
 </head>
 
@@ -58,7 +93,7 @@ font-weight:bold;
 
 <h1>Fizetés</h1>
 
-<!-- VEVŐ ADATOK -->
+<!-- ADATOK -->
 <input id="name" placeholder="Név">
 <input id="email" placeholder="Email">
 <input id="phone" placeholder="Telefonszám">
@@ -71,7 +106,7 @@ font-weight:bold;
 </select>
 
 <!-- ÁTVÉTELI PONT -->
-<input id="pickup" placeholder="Átvételi pont nincs kiválasztva" readonly>
+<input id="pickup" placeholder="Átvételi pont" readonly>
 
 <button class="secondary" onclick="openPickupSelector()">
 Átvételi pont kiválasztása
@@ -83,6 +118,40 @@ font-weight:bold;
 <button onclick="goToStripe()">
 Fizetés indítása
 </button>
+
+<!-- MODAL -->
+<div id="pickupModal">
+  <div id="pickupBox">
+
+    <h3>Átvételi pont választás</h3>
+
+    <select id="pickupList">
+      <option value="">Válassz pontot</option>
+
+      <optgroup label="FOXPOST">
+        <option>Budapest - Deák tér automata</option>
+        <option>Miskolc - Centrum automata</option>
+        <option>Debrecen - Fórum automata</option>
+        <option>Szeged - Árkád automata</option>
+        <option>Pécs - Árkád automata</option>
+      </optgroup>
+
+      <optgroup label="PACKETA">
+        <option>Budapest - Westend Z-BOX</option>
+        <option>Miskolc - Szinvapark Z-BOX</option>
+        <option>Debrecen - Pláza Z-BOX</option>
+        <option>Szeged - Belváros Z-BOX</option>
+        <option>Pécs - Centrum Z-BOX</option>
+      </optgroup>
+    </select>
+
+    <div class="modal-buttons">
+      <button onclick="confirmPickup()">OK</button>
+      <button onclick="closePickup()">Mégse</button>
+    </div>
+
+  </div>
+</div>
 
 <script>
 
@@ -104,15 +173,24 @@ alert("Előbb válassz szállítást!");
 return;
 }
 
-if(type === "foxpost"){
-window.open("https://www.foxpost.hu/csomagautomata-kereso", "_blank");
+document.getElementById("pickupModal").style.display = "block";
 }
 
-if(type === "packeta"){
-window.open("https://www.packeta.hu/atveteli-pontok", "_blank");
+function closePickup(){
+document.getElementById("pickupModal").style.display = "none";
 }
 
-alert("Válassz egy pontot, majd másold be a nevét ide.");
+function confirmPickup(){
+
+const val = document.getElementById("pickupList").value;
+
+if(!val){
+alert("Válassz egy pontot!");
+return;
+}
+
+document.getElementById("pickup").value = val;
+closePickup();
 }
 
 function goToStripe(){
@@ -128,7 +206,7 @@ alert("Minden mezőt tölts ki!");
 return;
 }
 
-alert("Stripe fizetés következik (következő lépés)");
+alert("Stripe fizetés következik");
 
 }
 
