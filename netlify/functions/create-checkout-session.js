@@ -3,7 +3,15 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 exports.handler = async (event) => {
   try {
 
+    if (!event.body) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Nincs body" })
+      };
+    }
+
     const data = JSON.parse(event.body);
+
     const amount = Number(data.amount);
 
     const session = await stripe.checkout.sessions.create({
@@ -14,26 +22,26 @@ exports.handler = async (event) => {
         price_data: {
           currency: "huf",
           product_data: {
-            name: "Kasz Vikk festmények",
+            name: "Kasz Vikk festmények"
           },
-          unit_amount: amount * 100,
+          unit_amount: amount * 100
         },
-        quantity: 1,
+        quantity: 1
       }],
 
       success_url: `${process.env.URL}/success.html`,
-      cancel_url: `${process.env.URL}/checkout.html`,
+      cancel_url: `${process.env.URL}/checkout.html`
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ url: session.url }),
+      body: JSON.stringify({ url: session.url })
     };
 
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
+      body: JSON.stringify({ error: err.message })
     };
   }
 };
