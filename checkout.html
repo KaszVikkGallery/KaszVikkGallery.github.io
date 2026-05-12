@@ -3,26 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Kasz Vikk – Fizetés</title>
 
-<style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
+<style>
 body{
 margin:0;
 font-family:Arial,sans-serif;
-background:#fff;
-color:#222;
 text-align:center;
 padding:20px;
 }
 
-h1{
-margin-top:40px;
-font-size:32px;
-}
-
-input, select{
+input, select, button{
 width:90%;
 max-width:420px;
 padding:12px;
@@ -30,80 +23,28 @@ margin:8px 0;
 font-size:16px;
 border-radius:8px;
 border:1px solid #ccc;
-box-sizing:border-box;
 }
 
 button{
-width:90%;
-max-width:420px;
-padding:14px;
-margin-top:12px;
-font-size:18px;
-border:none;
-border-radius:10px;
-cursor:pointer;
 background:black;
 color:white;
+border:none;
+cursor:pointer;
 }
 
-.hidden{
+#map{
+height:300px;
+width:90%;
+max-width:420px;
+margin:10px auto;
 display:none;
+border-radius:10px;
 }
 
 #summary{
-margin-top:20px;
-font-size:20px;
 font-weight:bold;
+margin-top:15px;
 }
-
-#pickupStatus{
-margin-top:10px;
-font-size:14px;
-color:green;
-}
-
-/* FOXPOST MODAL */
-
-#foxModal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-z-index:9999;
-}
-
-#foxBox{
-background:white;
-width:90%;
-max-width:500px;
-margin:40px auto;
-padding:20px;
-border-radius:14px;
-max-height:80vh;
-overflow:auto;
-}
-
-.fox-item{
-padding:14px;
-border:1px solid #ddd;
-border-radius:10px;
-margin:8px 0;
-cursor:pointer;
-text-align:left;
-transition:0.2s;
-}
-
-.fox-item:hover{
-background:#f5f5f5;
-}
-
-#foxSearch{
-margin-bottom:10px;
-}
-
 </style>
 </head>
 
@@ -112,326 +53,130 @@ margin-bottom:10px;
 <h1>Fizetés</h1>
 
 <input id="name" placeholder="Név">
-
-<input id="email" type="email" placeholder="Email">
-
+<input id="email" placeholder="Email">
 <input id="phone" placeholder="Telefonszám">
 
 <select id="shipping" onchange="shippingChanged()">
-
-<option value="">Szállítás módja</option>
-
-<option value="foxpost">Foxpost</option>
-
+<option value="">Szállítás</option>
+<option value="fox">Foxpost</option>
 <option value="packeta">Packeta</option>
-
 </select>
 
-<!-- FOXPOST -->
-<button
-id="foxBtn"
-class="hidden"
-onclick="openFoxpost()">
+<div id="map"></div>
 
-Foxpost automata választása
+<input id="pickup" placeholder="Átvételi pont" readonly>
 
-</button>
-
-<!-- PACKETA -->
-<button
-id="packetaBtn"
-class="hidden"
-onclick="openPacketa()">
-
-Packeta átvételi pont választása
-
-</button>
-
-<input
-id="pickup"
-placeholder="Kiválasztott átvételi pont"
-readonly>
-
-<div id="pickupStatus"></div>
+<button onclick="checkout()">Fizetés</button>
 
 <div id="summary"></div>
 
-<button onclick="goToStripe()">
-
-Fizetés indítása
-
-</button>
-
-<!-- FOXPOST MODAL -->
-
-<div id="foxModal">
-
-<div id="foxBox">
-
-<h2>Foxpost automaták</h2>
-
-<input
-id="foxSearch"
-placeholder="Keresés városra..."
-oninput="filterFoxpost()">
-
-<div id="foxList"></div>
-
-<button onclick="closeFoxpost()">
-
-Bezárás
-
-</button>
-
-</div>
-
-</div>
-
-<!-- PACKETA -->
-
-<script src="https://widget.packeta.com/www/js/library.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-/* ÖSSZEG */
-
-let total =
-localStorage.getItem("cartTotal") || 0;
-
+/* ===== ÖSSZEG ===== */
+let total = localStorage.getItem("cartTotal") || 0;
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-/* FOXPOST PONTOK */
+/* ===== FOXPOST + PACKETA MAP ===== */
 
-const foxpostPoints = [
-
-"Budapest – Deák tér automata",
-"Budapest – Árkád automata",
-"Budapest – Westend automata",
-"Budapest – Etele Plaza automata",
-"Budapest – Allee automata",
-
-"Miskolc – Szinvapark automata",
-"Miskolc – Plaza automata",
-"Miskolc – Auchan automata",
-
-"Debrecen – Fórum automata",
-"Debrecen – Tesco automata",
-
-"Nyíregyháza – Korzó automata",
-
-"Szeged – Árkád automata",
-"Szeged – Tesco automata",
-
-"Pécs – Árkád automata",
-
-"Győr – Belváros automata",
-
-"Eger – Tesco automata",
-
-"Kazincbarcika – Tesco automata",
-
-"Ózd – Center automata",
-
-"Sátoraljaújhely – Tesco automata",
-
-"Szerencs – Penny automata",
-
-"Mezőkövesd – Lidl automata",
-
-"Tiszaújváros – Spar automata",
-
-"Salgótarján – Tesco automata",
-
-"Kecskemét – Malom automata",
-
-"Szolnok – Plaza automata",
-
-"Sopron – Tesco automata",
-
-"Veszprém – Stop Shop automata",
-
-"Székesfehérvár – Alba Plaza automata",
-
-"Zalaegerszeg – Tesco automata",
-
-"Kaposvár – Tesco automata"
-
-];
-
-/* SZÁLLÍTÁS */
+let map;
+let marker;
 
 function shippingChanged(){
 
-const type =
-document.getElementById("shipping").value;
-
-document.getElementById("foxBtn")
-.classList.add("hidden");
-
-document.getElementById("packetaBtn")
-.classList.add("hidden");
+const type = document.getElementById("shipping").value;
 
 document.getElementById("pickup").value = "";
+document.getElementById("map").style.display = "none";
 
-document.getElementById("pickupStatus")
-.innerText = "";
+if(type === "fox" || type === "packeta"){
+initMap(type);
+}
 
-if(type === "foxpost"){
+}
 
-document.getElementById("foxBtn")
-.classList.remove("hidden");
+/* ===== MAP INIT ===== */
 
-renderFoxpost(foxpostPoints);
+function initMap(type){
 
+document.getElementById("map").style.display = "block";
+
+if(map){
+map.remove();
+}
+
+map = L.map('map').setView([47.4979, 19.0402], 7);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+attribution:'OSM'
+}).addTo(map);
+
+/* MOCK PONTOK (ide később jön teljes API) */
+
+let points = [];
+
+if(type === "fox"){
+points = foxPoints;
 }
 
 if(type === "packeta"){
-
-document.getElementById("packetaBtn")
-.classList.remove("hidden");
-
+points = packetaPoints;
 }
 
-}
+points.forEach(p=>{
 
-/* PACKETA */
+let m = L.marker(p.coords).addTo(map);
 
-const packetaApiKey = "test";
+m.on("click", ()=>{
 
-function openPacketa(){
+document.getElementById("pickup").value = p.name;
 
-Packeta.Widget.pick(
-packetaApiKey,
-showSelectedPickupPoint,
-{
-language:"hu",
-country:"hu",
-view:"modal"
-}
-);
-
-}
-
-function showSelectedPickupPoint(point){
-
-if(!point) return;
-
-const text =
-point.name + ", "
-+ point.city + ", "
-+ point.street;
-
-document.getElementById("pickup").value =
-text;
-
-document.getElementById("pickupStatus")
-.innerText =
-"✔ Kiválasztva: " + text;
-
-}
-
-/* FOXPOST */
-
-function openFoxpost(){
-
-document.getElementById("foxModal")
-.style.display = "block";
-
-}
-
-function closeFoxpost(){
-
-document.getElementById("foxModal")
-.style.display = "none";
-
-}
-
-function renderFoxpost(list){
-
-const box =
-document.getElementById("foxList");
-
-box.innerHTML = "";
-
-list.forEach(p=>{
-
-const div =
-document.createElement("div");
-
-div.className = "fox-item";
-
-div.innerText = p;
-
-div.onclick = () => {
-
-document.getElementById("pickup").value =
-p;
-
-document.getElementById("pickupStatus")
-.innerText =
-"✔ Kiválasztva: " + p;
-
-closeFoxpost();
-
-};
-
-box.appendChild(div);
+});
 
 });
 
 }
 
-function filterFoxpost(){
+/* ===== FOXPOST PONTOK (teljes HU minta bővíthető API-val később) ===== */
 
-const q =
-document.getElementById("foxSearch")
-.value.toLowerCase();
+const foxPoints = [
+{name:"Budapest Deák",coords:[47.4979,19.0402]},
+{name:"Miskolc Centrum",coords:[48.1031,20.7784]},
+{name:"Debrecen Fórum",coords:[47.5316,21.6273]},
+{name:"Szeged Árkád",coords:[46.2530,20.1414]},
+{name:"Pécs Árkád",coords:[46.0727,18.2323]},
+{name:"Győr Belváros",coords:[47.6875,17.6504]},
+{name:"Eger Centrum",coords:[47.9025,20.3772]}
+];
 
-const filtered =
-foxpostPoints.filter(p =>
-p.toLowerCase().includes(q)
-);
+/* ===== PACKETA PONTOK ===== */
 
-renderFoxpost(filtered);
+const packetaPoints = [
+{name:"Budapest Westend Z-BOX",coords:[47.5062,19.0633]},
+{name:"Miskolc Szinvapark Z-BOX",coords:[48.1031,20.7784]},
+{name:"Debrecen Pláza Z-BOX",coords:[47.5316,21.6273]},
+{name:"Szeged Belváros Z-BOX",coords:[46.2530,20.1414]},
+{name:"Pécs Centrum Z-BOX",coords:[46.0727,18.2323]}
+];
 
-}
+/* ===== CHECKOUT ===== */
 
-/* FIZETÉS */
+function checkout(){
 
-function goToStripe(){
+const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const phone = document.getElementById("phone").value;
+const shipping = document.getElementById("shipping").value;
+const pickup = document.getElementById("pickup").value;
 
-const name =
-document.getElementById("name").value;
-
-const email =
-document.getElementById("email").value;
-
-const phone =
-document.getElementById("phone").value;
-
-const shipping =
-document.getElementById("shipping").value;
-
-const pickup =
-document.getElementById("pickup").value;
-
-if(
-!name ||
-!email ||
-!phone ||
-!shipping ||
-!pickup
-){
-
-alert("Minden mezőt tölts ki!");
+if(!name || !email || !phone || !shipping || !pickup){
+alert("Minden adat kötelező");
 return;
-
 }
 
-alert(
-"Sikeres adatellenőrzés. Itt indul majd a Stripe fizetés."
-);
+alert("Stripe fizetés indul (következő lépés)");
 
 }
 
