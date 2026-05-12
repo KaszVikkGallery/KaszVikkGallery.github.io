@@ -67,15 +67,11 @@ margin-top:5px;
 
 <h1>Fizetés</h1>
 
-<!-- ADATOK -->
-
 <input id="name" placeholder="Teljes név">
 
 <input id="email" type="email" placeholder="Email cím">
 
 <input id="phone" placeholder="Telefonszám">
-
-<!-- ÁTVÉTELI PONT -->
 
 <input id="pickup" placeholder="Packeta átvételi pont" readonly>
 
@@ -84,43 +80,28 @@ margin-top:5px;
 </button>
 
 <div class="small">
-Kattints a gombra és válaszd ki a hozzád legközelebbi átvételi pontot.
+Válaszd ki a hozzád legközelebbi Packeta pontot.
 </div>
 
-<!-- ÖSSZEG -->
-
 <div id="summary"></div>
-
-<!-- FIZETÉS -->
 
 <button onclick="pay()">
 Fizetés indítása
 </button>
 
-<!-- PACKETA -->
-
 <script src="https://widget.packeta.com/v6/www/js/library.js"></script>
 
 <script>
 
-/* VÉGÖSSZEG BETÖLTÉSE */
-/* EZ MÁR TARTALMAZZA A SZÁLLÍTÁST */
-
 let total = parseInt(localStorage.getItem("cartTotal")) || 0;
-
-/* KIÍRÁS */
 
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-/* PACKETA */
-
 function openPacketa(){
 
 Packeta.Widget.pick(
-
 "test",
-
 function(point){
 
 if(!point) return;
@@ -129,7 +110,6 @@ document.getElementById("pickup").value =
 point.name + " — " + point.city;
 
 },
-
 {
 language:"hu",
 country:"hu"
@@ -139,53 +119,57 @@ country:"hu"
 
 }
 
-/* FIZETÉS */
-
 function pay(){
 
-const name =
-document.getElementById("name").value.trim();
-
-const email =
-document.getElementById("email").value.trim();
-
-const phone =
-document.getElementById("phone").value.trim();
-
-const pickup =
-document.getElementById("pickup").value.trim();
-
-/* ELLENŐRZÉS */
+const name = document.getElementById("name").value.trim();
+const email = document.getElementById("email").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const pickup = document.getElementById("pickup").value.trim();
 
 if(!name || !email || !phone || !pickup){
-
-alert("Kérlek tölts ki minden mezőt.");
-
+alert("Minden mezőt ki kell tölteni.");
 return;
-
 }
 
-/* MENTÉS */
-
+/* mentés */
 localStorage.setItem("buyerName", name);
 localStorage.setItem("buyerEmail", email);
 localStorage.setItem("buyerPhone", phone);
 localStorage.setItem("pickupPoint", pickup);
 
-/* STRIPE HELY */
+/* EZ A FONTOS RÉSZ */
+/* Stripe-hoz előkészítés */
 
-alert("Sikeres adatellenőrzés. Itt indul majd a Stripe fizetés.");
+const data = {
+amount: total,
+name: name,
+email: email,
+phone: phone,
+pickup: pickup
+};
+
+fetch("create-checkout-session", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(session => {
+window.location.href = session.url;
+})
+.catch(err => {
+alert("Fizetési hiba történt.");
+console.log(err);
+});
 
 }
 
-/* ENTER */
-
 document.addEventListener("keydown", function(e){
-
 if(e.key === "Enter"){
 pay();
 }
-
 });
 
 </script>
