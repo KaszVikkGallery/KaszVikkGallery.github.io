@@ -172,7 +172,7 @@ Fizetés indítása
 
 <input
 id="foxSearch"
-placeholder="Keresés városra vagy címre..."
+placeholder="Keresés városra..."
 oninput="filterFoxpost()">
 
 <div id="foxList"></div>
@@ -201,6 +201,64 @@ localStorage.getItem("cartTotal") || 0;
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
+/* FOXPOST PONTOK */
+
+const foxpostPoints = [
+
+"Budapest – Deák tér automata",
+"Budapest – Árkád automata",
+"Budapest – Westend automata",
+"Budapest – Etele Plaza automata",
+"Budapest – Allee automata",
+
+"Miskolc – Szinvapark automata",
+"Miskolc – Plaza automata",
+"Miskolc – Auchan automata",
+
+"Debrecen – Fórum automata",
+"Debrecen – Tesco automata",
+
+"Nyíregyháza – Korzó automata",
+
+"Szeged – Árkád automata",
+"Szeged – Tesco automata",
+
+"Pécs – Árkád automata",
+
+"Győr – Belváros automata",
+
+"Eger – Tesco automata",
+
+"Kazincbarcika – Tesco automata",
+
+"Ózd – Center automata",
+
+"Sátoraljaújhely – Tesco automata",
+
+"Szerencs – Penny automata",
+
+"Mezőkövesd – Lidl automata",
+
+"Tiszaújváros – Spar automata",
+
+"Salgótarján – Tesco automata",
+
+"Kecskemét – Malom automata",
+
+"Szolnok – Plaza automata",
+
+"Sopron – Tesco automata",
+
+"Veszprém – Stop Shop automata",
+
+"Székesfehérvár – Alba Plaza automata",
+
+"Zalaegerszeg – Tesco automata",
+
+"Kaposvár – Tesco automata"
+
+];
+
 /* SZÁLLÍTÁS */
 
 function shippingChanged(){
@@ -224,7 +282,7 @@ if(type === "foxpost"){
 document.getElementById("foxBtn")
 .classList.remove("hidden");
 
-loadFoxpost();
+renderFoxpost(foxpostPoints);
 
 }
 
@@ -275,39 +333,10 @@ document.getElementById("pickupStatus")
 
 /* FOXPOST */
 
-let foxpostPoints = [];
-
-async function loadFoxpost(){
-
-if(foxpostPoints.length > 0) return;
-
-try{
-
-const response =
-await fetch(
-"https://cdn.foxpost.hu/foxpost_terminals_v1.json"
-);
-
-foxpostPoints =
-await response.json();
-
-renderFoxpost(foxpostPoints);
-
-}
-catch(e){
-
-alert("Foxpost automaták betöltése sikertelen.");
-
-}
-
-}
-
 function openFoxpost(){
 
 document.getElementById("foxModal")
 .style.display = "block";
-
-renderFoxpost(foxpostPoints);
 
 }
 
@@ -332,25 +361,16 @@ document.createElement("div");
 
 div.className = "fox-item";
 
-div.innerHTML = `
-<b>${p.name}</b><br>
-${p.address}<br>
-${p.city}
-`;
+div.innerText = p;
 
 div.onclick = () => {
 
-const text =
-p.name + ", "
-+ p.city + ", "
-+ p.address;
-
 document.getElementById("pickup").value =
-text;
+p;
 
 document.getElementById("pickupStatus")
 .innerText =
-"✔ Kiválasztva: " + text;
+"✔ Kiválasztva: " + p;
 
 closeFoxpost();
 
@@ -370,20 +390,7 @@ document.getElementById("foxSearch")
 
 const filtered =
 foxpostPoints.filter(p =>
-
-(p.city &&
-p.city.toLowerCase().includes(q))
-
-||
-
-(p.address &&
-p.address.toLowerCase().includes(q))
-
-||
-
-(p.name &&
-p.name.toLowerCase().includes(q))
-
+p.toLowerCase().includes(q)
 );
 
 renderFoxpost(filtered);
