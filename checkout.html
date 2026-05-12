@@ -14,9 +14,7 @@ text-align:center;
 padding:20px;
 }
 
-h1{
-margin-top:40px;
-}
+h1{ margin-top:40px; }
 
 input, select{
 width:90%;
@@ -52,39 +50,17 @@ font-size:18px;
 font-weight:bold;
 }
 
-/* MODAL */
-#pickupModal{
-display:none;
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.5);
-z-index:9999;
-}
-
-#pickupBox{
-background:#fff;
-max-width:420px;
-margin:80px auto;
-padding:20px;
-border-radius:12px;
-text-align:left;
-}
-
-#pickupList{
-width:100%;
-padding:10px;
-margin-top:10px;
-}
-
-.modal-buttons{
-display:flex;
-gap:10px;
+/* PICKER BOX */
+#pickupContainer{
 margin-top:15px;
 }
 
-.modal-buttons button{
-flex:1;
+iframe{
+width:100%;
+max-width:420px;
+height:420px;
+border:0;
+border-radius:10px;
 }
 </style>
 </head>
@@ -99,59 +75,21 @@ flex:1;
 <input id="phone" placeholder="Telefonszám">
 
 <!-- SZÁLLÍTÁS -->
-<select id="shipping" onchange="resetPickup()">
+<select id="shipping" onchange="loadPickup()">
   <option value="">Szállítás módja</option>
   <option value="foxpost">Foxpost</option>
   <option value="packeta">Packeta</option>
 </select>
 
-<!-- ÁTVÉTELI PONT -->
-<input id="pickup" placeholder="Átvételi pont" readonly>
+<!-- PICKER -->
+<div id="pickupContainer"></div>
 
-<button class="secondary" onclick="openPickupSelector()">
-Átvételi pont kiválasztása
-</button>
+<input id="pickup" placeholder="Átvételi pont" readonly>
 
 <!-- ÖSSZEG -->
 <div id="summary"></div>
 
-<button onclick="goToStripe()">
-Fizetés indítása
-</button>
-
-<!-- MODAL -->
-<div id="pickupModal">
-  <div id="pickupBox">
-
-    <h3>Átvételi pont választás</h3>
-
-    <select id="pickupList">
-      <option value="">Válassz pontot</option>
-
-      <optgroup label="FOXPOST">
-        <option>Budapest - Deák tér automata</option>
-        <option>Miskolc - Centrum automata</option>
-        <option>Debrecen - Fórum automata</option>
-        <option>Szeged - Árkád automata</option>
-        <option>Pécs - Árkád automata</option>
-      </optgroup>
-
-      <optgroup label="PACKETA">
-        <option>Budapest - Westend Z-BOX</option>
-        <option>Miskolc - Szinvapark Z-BOX</option>
-        <option>Debrecen - Pláza Z-BOX</option>
-        <option>Szeged - Belváros Z-BOX</option>
-        <option>Pécs - Centrum Z-BOX</option>
-      </optgroup>
-    </select>
-
-    <div class="modal-buttons">
-      <button onclick="confirmPickup()">OK</button>
-      <button onclick="closePickup()">Mégse</button>
-    </div>
-
-  </div>
-</div>
+<button onclick="goToStripe()">Fizetés indítása</button>
 
 <script>
 
@@ -160,37 +98,29 @@ let total = localStorage.getItem("cartTotal") || 0;
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-function resetPickup(){
-document.getElementById("pickup").value = "";
-}
-
-function openPickupSelector(){
+function loadPickup(){
 
 const type = document.getElementById("shipping").value;
+const box = document.getElementById("pickupContainer");
 
-if(!type){
-alert("Előbb válassz szállítást!");
-return;
+document.getElementById("pickup").value = "";
+
+if(type === "foxpost"){
+box.innerHTML = `
+<iframe src="https://www.foxpost.hu/csomagautomata-kereso"></iframe>
+`;
 }
 
-document.getElementById("pickupModal").style.display = "block";
+else if(type === "packeta"){
+box.innerHTML = `
+<iframe src="https://www.packeta.hu/atveteli-pontok"></iframe>
+`;
 }
 
-function closePickup(){
-document.getElementById("pickupModal").style.display = "none";
+else{
+box.innerHTML = "";
 }
 
-function confirmPickup(){
-
-const val = document.getElementById("pickupList").value;
-
-if(!val){
-alert("Válassz egy pontot!");
-return;
-}
-
-document.getElementById("pickup").value = val;
-closePickup();
 }
 
 function goToStripe(){
@@ -206,7 +136,7 @@ alert("Minden mezőt tölts ki!");
 return;
 }
 
-alert("Stripe fizetés következik");
+alert("Stripe fizetés indul (következő lépés)");
 
 }
 
