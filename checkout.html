@@ -103,20 +103,17 @@ Fizetés indítása
 
 <script>
 
-/* ÖSSZEG */
+/* VÉGÖSSZEG BETÖLTÉSE */
+/* EZ MÁR TARTALMAZZA A SZÁLLÍTÁST */
 
 let total = parseInt(localStorage.getItem("cartTotal")) || 0;
 
-/* PACKETA SZÁLLÍTÁS */
-
-const shippingPrice = 1490;
-
-/* VÉGÖSSZEG */
+/* KIÍRÁS */
 
 document.getElementById("summary").innerText =
-"Fizetendő: " + (total + shippingPrice) + " Ft";
+"Fizetendő: " + total + " Ft";
 
-/* PACKETA MEGNYITÁS */
+/* PACKETA */
 
 function openPacketa(){
 
@@ -134,8 +131,8 @@ point.name + " — " + point.city;
 },
 
 {
-language: "hu",
-country: "hu"
+language:"hu",
+country:"hu"
 }
 
 );
@@ -175,15 +172,13 @@ localStorage.setItem("buyerEmail", email);
 localStorage.setItem("buyerPhone", phone);
 localStorage.setItem("pickupPoint", pickup);
 
-/* KÖVETKEZŐ LÉPÉS */
+/* STRIPE HELY */
 
 alert("Sikeres adatellenőrzés. Itt indul majd a Stripe fizetés.");
 
-/* IDE JÖN MAJD A STRIPE */
-
 }
 
-/* ENTER LENYOMÁS */
+/* ENTER */
 
 document.addEventListener("keydown", function(e){
 
