@@ -7,7 +7,6 @@
 <title>Kasz Vikk – Fizetés</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -65,7 +64,6 @@ font-size:13px;
 color:#666;
 margin-top:5px;
 }
-
 </style>
 </head>
 
@@ -74,13 +72,10 @@ margin-top:5px;
 <h1>Fizetés</h1>
 
 <!-- STEP 1 -->
-
 <div id="step1">
 
 <input id="name" placeholder="Teljes név">
-
 <input id="email" type="email" placeholder="Email cím">
-
 <input id="phone" placeholder="Telefonszám">
 
 <input id="pickup" placeholder="Packeta átvételi pont">
@@ -89,21 +84,16 @@ margin-top:5px;
 Kattints és válassz Packeta pontot
 </div>
 
-<button onclick="nextStep()">
-Tovább
-</button>
+<button onclick="nextStep()">Tovább</button>
 
 </div>
 
 <!-- STEP 2 -->
-
 <div id="step2">
 
 <div id="summary"></div>
 
-<button onclick="pay()">
-Fizetés indítása
-</button>
+<button onclick="pay()">Fizetés indítása</button>
 
 </div>
 
@@ -111,7 +101,7 @@ Fizetés indítása
 
 <script>
 
-let total = Number(localStorage.getItem("cartTotal")) || 0;
+let total = parseInt(localStorage.getItem("cartTotal") || "0");
 
 /* PACKETA */
 document.getElementById("pickup").addEventListener("click", openPacketa);
@@ -138,8 +128,7 @@ view:"modal"
 
 }
 
-/* STEP 1 */
-
+/* STEP 1 -> STEP 2 */
 function nextStep(){
 
 const name = document.getElementById("name").value.trim();
@@ -161,7 +150,6 @@ document.getElementById("summary").innerText =
 }
 
 /* FIZETÉS */
-
 function pay(){
 
 const name = document.getElementById("name").value.trim();
@@ -174,10 +162,14 @@ alert("Hiányzó adatok");
 return;
 }
 
+/* mentés */
 localStorage.setItem("buyerName", name);
 localStorage.setItem("buyerEmail", email);
 localStorage.setItem("buyerPhone", phone);
 localStorage.setItem("pickupPoint", pickup);
+
+/* fix: biztos szám */
+const safeTotal = parseInt(localStorage.getItem("cartTotal") || "0");
 
 fetch("/.netlify/functions/create-checkout-session", {
 method: "POST",
@@ -185,11 +177,11 @@ headers: {
 "Content-Type": "application/json"
 },
 body: JSON.stringify({
-amount: total,
-name,
-email,
-phone,
-pickup
+amount: safeTotal,
+name: name,
+email: email,
+phone: phone,
+pickup: pickup
 })
 })
 .then(res => res.json())
