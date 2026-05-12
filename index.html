@@ -7,6 +7,7 @@
 <title>Kasz Vikk – Galéria</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -15,6 +16,7 @@ color:#222;
 }
 
 /* MENÜ */
+
 .menu-button{
 position:fixed;
 top:16px;
@@ -39,7 +41,9 @@ z-index:4000;
 box-shadow:-5px 0 20px rgba(0,0,0,0.08);
 }
 
-nav.open{ right:0; }
+nav.open{
+right:0;
+}
 
 nav a{
 display:block;
@@ -49,18 +53,30 @@ text-decoration:none;
 color:#222;
 }
 
-nav a:hover{ background:#f5f5f5; }
+nav a:hover{
+background:#f5f5f5;
+}
 
 /* HEADER */
+
 header{
 text-align:center;
 padding:100px 20px 30px;
 }
 
-header h1{ font-size:30px; margin:0; }
-header p{ font-size:18px; color:#666; margin-top:10px; }
+header h1{
+font-size:30px;
+margin:0;
+}
+
+header p{
+font-size:18px;
+color:#666;
+margin-top:10px;
+}
 
 /* KOSÁR */
+
 #openCart{
 position:fixed;
 top:14px;
@@ -85,6 +101,7 @@ margin-left:8px;
 }
 
 /* GALÉRIA */
+
 .gallery{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -123,6 +140,7 @@ color:red;
 }
 
 /* KOSÁR */
+
 #cartOverlay{
 position:fixed;
 top:0;
@@ -134,7 +152,9 @@ display:none;
 z-index:5500;
 }
 
-#cartOverlay.show{ display:block; }
+#cartOverlay.show{
+display:block;
+}
 
 #cartDrawer{
 position:fixed;
@@ -150,7 +170,9 @@ display:flex;
 flex-direction:column;
 }
 
-#cartDrawer.open{ right:0; }
+#cartDrawer.open{
+right:0;
+}
 
 .cart-content{
 flex:1;
@@ -176,10 +198,9 @@ border-top:1px solid #ddd;
 padding:20px;
 }
 
-select{
-width:100%;
-padding:12px;
-margin-bottom:10px;
+#shippingText{
+font-size:18px;
+margin-bottom:12px;
 }
 
 #total{
@@ -198,6 +219,7 @@ font-size:18px;
 border-radius:10px;
 cursor:pointer;
 }
+
 </style>
 </head>
 
@@ -217,29 +239,38 @@ cursor:pointer;
 <p>Eredeti akril festmények</p>
 </header>
 
-<button id="openCart" onclick="toggleCart()">🛒 <span id="cartCount">0</span></button>
+<button id="openCart" onclick="toggleCart()">
+🛒 <span id="cartCount">0</span>
+</button>
 
 <div id="cartOverlay" onclick="toggleCart()"></div>
 
 <div id="cartDrawer">
+
 <div class="cart-content">
+
 <h2>Kosár</h2>
+
 <div id="cartItems"></div>
+
 </div>
 
 <div class="cart-summary">
 
-<select id="shipping" onchange="renderCart()">
-<option value="0">Szállítás</option>
-<option value="1699">Foxpost</option>
-<option value="1490">Packeta</option>
-</select>
+<div id="shippingText">
+Szállítás: Packeta — 1490 Ft
+</div>
 
-<div id="total">Összesen: 0 Ft</div>
+<div id="total">
+Összesen: 0 Ft
+</div>
 
-<button id="checkoutBtn" onclick="checkout()">Fizetés</button>
+<button id="checkoutBtn" onclick="checkout()">
+Fizetés
+</button>
 
 </div>
+
 </div>
 
 <section class="gallery" id="gallery"></section>
@@ -247,6 +278,7 @@ cursor:pointer;
 <script>
 
 const products = [
+
 {name:"Bor",price:3500,img:"bor.jpg",page:"bor.html"},
 {name:"Fanyar pillanat",price:3000,img:"fanyarpillanat.jpg",page:"fanyarpillanat.html"},
 {name:"Johnny Bravo",price:4000,img:"johnny.jpg",page:"johnny.html"},
@@ -268,9 +300,12 @@ const products = [
 {name:"Tűz és hamu",price:2000,img:"tuzeshamu.jpg",page:"tuzeshamu.html"},
 {name:"Kezdetek",price:2000,img:"kezdetek.jpg",page:"kezdetek.html"},
 {name:"Elviselés",price:4000,img:"elviseles.jpg",page:"elviseles.html"}
+
 ];
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const shippingPrice = 1490;
 
 function saveCart(){
 localStorage.setItem("cart", JSON.stringify(cart));
@@ -289,21 +324,34 @@ function renderGallery(){
 
 const gallery = document.getElementById("gallery");
 
+gallery.innerHTML = "";
+
 products.forEach(p=>{
 
 const div = document.createElement("div");
-div.className="item";
+
+div.className = "item";
 
 div.innerHTML = `
+
 <a href="${p.page}">
 <img src="${p.img}">
 <h3>${p.name}</h3>
 </a>
+
 ${p.sold ?
+
 `<div class="sold">ELKELT!</div>`
+
 :
-`<button class="buy-btn" onclick="addToCart('${p.name}',${p.price})">Kosárba</button>`
+
+`<button class="buy-btn"
+onclick="addToCart('${p.name}',${p.price})">
+Kosárba
+</button>`
+
 }
+
 `;
 
 gallery.appendChild(div);
@@ -313,67 +361,97 @@ gallery.appendChild(div);
 }
 
 function addToCart(name,price){
+
 if(cart.find(i=>i.name===name)) return;
+
 cart.push({name,price});
+
 saveCart();
+
 renderCart();
+
 updateCartCount();
+
 }
 
 function removeItem(name){
+
 cart = cart.filter(i=>i.name!==name);
+
 saveCart();
+
 renderCart();
+
 updateCartCount();
+
 }
 
 function renderCart(){
 
 const box = document.getElementById("cartItems");
-box.innerHTML="";
 
-let total=0;
+box.innerHTML = "";
+
+let total = 0;
 
 cart.forEach(i=>{
+
 box.innerHTML += `
+
 <div class="cart-item">
-<div>${i.name} - ${i.price} Ft</div>
-<span class="remove" onclick="removeItem('${i.name}')">✕</span>
-</div>`;
+
+<div>
+${i.name} - ${i.price} Ft
+</div>
+
+<span class="remove"
+onclick="removeItem('${i.name}')">
+✕
+</span>
+
+</div>
+
+`;
+
 total += i.price;
+
 });
 
-const shipping = parseInt(document.getElementById("shipping").value)||0;
-
 document.getElementById("total").innerText =
-"Összesen: " + (total + shipping) + " Ft";
+"Összesen: " + (total + shippingPrice) + " Ft";
+
 }
 
 function updateCartCount(){
-document.getElementById("cartCount").innerText = cart.length;
+
+document.getElementById("cartCount").innerText =
+cart.length;
+
 }
 
 function checkout(){
 
-if(cart.length===0){
+if(cart.length === 0){
+
 alert("Kosár üres");
+
 return;
+
 }
 
-if(document.getElementById("shipping").value==="0"){
-alert("Válassz szállítást");
-return;
-}
+let total = 0;
 
-let total=0;
-cart.forEach(i=> total+=i.price);
+cart.forEach(i=> total += i.price);
 
-const shipping = parseInt(document.getElementById("shipping").value);
+/* PACKETA FIX */
 
-// 🔥 EZ A HIÁNYZÓ RÉSZ
-localStorage.setItem("cartTotal", total + shipping);
+localStorage.setItem(
+"cartTotal",
+total + shippingPrice
+);
 
-window.location.href="checkout.html";
+window.location.href = "checkout.html";
+
 }
 
 renderGallery();
