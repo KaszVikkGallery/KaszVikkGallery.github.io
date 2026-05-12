@@ -88,7 +88,7 @@ color:green;
   <option value="packeta">Packeta</option>
 </select>
 
-<!-- TÉRKÉP -->
+<!-- PICKUP TÉR -->
 <div id="pickupContainer"></div>
 
 <!-- RÖGZÍTÉS -->
@@ -128,7 +128,14 @@ box.innerHTML = `
 
 else if(type === "packeta"){
 box.innerHTML = `
-<iframe src="https://www.packeta.hu/atveteli-pontok"></iframe>
+<div style="margin-top:10px;">
+<button onclick="window.open('https://www.packeta.hu/atveteli-pontok','_blank')">
+Packeta csomagpont kereső megnyitása
+</button>
+<p style="font-size:14px;color:#555;margin-top:10px;">
+Nyisd meg, válaszd ki a pontot, majd írd be lent.
+</p>
+</div>
 `;
 }
 
@@ -143,7 +150,7 @@ function confirmPickup(){
 const val = prompt("Írd be vagy másold be a kiválasztott csomagpont nevét:");
 
 if(!val){
-alert("Nem adtál meg pontot!");
+alert("Nem adtál meg csomagpontot!");
 return;
 }
 
