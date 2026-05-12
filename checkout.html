@@ -50,9 +50,26 @@ font-size:18px;
 font-weight:bold;
 }
 
+#pickupBox{
+margin-top:15px;
+display:none;
+}
+
+.point{
+padding:10px;
+margin:6px auto;
+max-width:420px;
+border:1px solid #ddd;
+border-radius:8px;
+cursor:pointer;
+}
+
+.point:hover{
+background:#f2f2f2;
+}
+
 #pickupStatus{
 margin-top:10px;
-font-size:14px;
 color:green;
 }
 </style>
@@ -62,28 +79,22 @@ color:green;
 
 <h1>Fizetés</h1>
 
-<!-- ADATOK -->
 <input id="name" placeholder="Név">
 <input id="email" placeholder="Email">
 <input id="phone" placeholder="Telefonszám">
 
-<!-- SZÁLLÍTÁS -->
-<select id="shipping" onchange="openMap()">
-  <option value="">Szállítás módja</option>
-  <option value="foxpost">Foxpost</option>
-  <option value="packeta">Packeta</option>
+<select id="shipping" onchange="loadPoints()">
+<option value="">Szállítás</option>
+<option value="foxpost">Foxpost</option>
+<option value="packeta">Packeta</option>
 </select>
 
-<!-- CSAK 1 MEZŐ -->
-<input id="pickup" placeholder="Átvételi pont (válaszd a térképen)" readonly>
+<div id="pickupBox"></div>
 
-<button class="secondary" onclick="openMap()">
-Átvételi pont kiválasztása
-</button>
+<input id="pickup" placeholder="Átvételi pont" readonly>
 
 <div id="pickupStatus"></div>
 
-<!-- ÖSSZEG -->
 <div id="summary"></div>
 
 <button onclick="goToStripe()">Fizetés indítása</button>
@@ -95,41 +106,52 @@ let total = localStorage.getItem("cartTotal") || 0;
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-function openMap(){
+/* FAKE LISTA (itt később bővítjük országosra API-val) */
+
+const foxpostPoints = [
+"Budapest Deák tér",
+"Miskolc Pláza",
+"Debrecen Fórum",
+"Szeged Árkád",
+"Pécs Centrum"
+];
+
+const packetaPoints = [
+"Budapest Westend Z-BOX",
+"Miskolc Szinvapark Z-BOX",
+"Debrecen Pláza Z-BOX",
+"Szeged Belváros Z-BOX",
+"Pécs Központ Z-BOX"
+];
+
+function loadPoints(){
 
 const type = document.getElementById("shipping").value;
+const box = document.getElementById("pickupBox");
 
-if(!type){
-alert("Válassz szállítást!");
-return;
-}
+box.innerHTML = "";
+box.style.display = "block";
 
-/* FOXPOST */
-if(type === "foxpost"){
-window.open("https://www.foxpost.hu/csomagautomata-kereso", "_blank");
+let list = [];
 
-/* ide kézzel visszajön az érték (egyelőre workaround) */
-setTimeout(()=>{
-let val = prompt("Másold be a kiválasztott Foxpost automata nevét:");
-if(val){
-document.getElementById("pickup").value = val;
-document.getElementById("pickupStatus").innerText = "✔ Foxpost kiválasztva";
-}
-}, 1000);
-}
+if(type === "foxpost") list = foxpostPoints;
+if(type === "packeta") list = packetaPoints;
 
-/* PACKETA */
-if(type === "packeta"){
-window.open("https://www.packeta.hu/atvevohelyek", "_blank");
+list.forEach(p=>{
+const div = document.createElement("div");
+div.className = "point";
+div.innerText = p;
 
-setTimeout(()=>{
-let val = prompt("Másold be a kiválasztott Packeta pont nevét:");
-if(val){
-document.getElementById("pickup").value = val;
-document.getElementById("pickupStatus").innerText = "✔ Packeta kiválasztva";
-}
-}, 1000);
-}
+div.onclick = () => {
+document.getElementById("pickup").value = p;
+document.getElementById("pickupStatus").innerText =
+"✔ kiválasztva: " + p;
+
+box.style.display = "none";
+};
+
+box.appendChild(div);
+});
 
 }
 
