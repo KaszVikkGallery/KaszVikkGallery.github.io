@@ -171,7 +171,14 @@ const phone = document.getElementById("phone").value.trim();
 const pickup = document.getElementById("pickup").value.trim();
 
 if(!name || !email || !phone || !pickup){
-alert("Hiányzó adatok");
+alert("Minden mezőt ki kell tölteni");
+return;
+}
+
+let total = Number(localStorage.getItem("cartTotal"));
+
+if(!total || total <= 0){
+alert("Kosár hiba");
 return;
 }
 
@@ -182,23 +189,26 @@ headers: {
 },
 body: JSON.stringify({
 amount: total,
-name,
-email,
-phone,
-pickup
+name: name,
+email: email,
+phone: phone,
+pickup: pickup
 })
 })
 .then(res => res.json())
 .then(data => {
+
 if(data.url){
 window.location.href = data.url;
 } else {
-alert("Fizetési hiba");
+alert("Stripe hiba: nincs URL");
+console.log(data);
 }
+
 })
 .catch(err => {
 console.log(err);
-alert("Hiba történt");
+alert("Hiba történt a fizetésnél");
 });
 
 }
