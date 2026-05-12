@@ -19,7 +19,8 @@ color:#222;
 
 h1{
 margin-top:30px;
-font-size:32px;
+font-size:28px;
+font-weight:normal;
 }
 
 input, button{
@@ -41,7 +42,7 @@ cursor:pointer;
 }
 
 button:hover{
-opacity:0.95;
+opacity:0.9;
 }
 
 #pickup{
@@ -51,7 +52,7 @@ cursor:pointer;
 
 #summary{
 margin-top:18px;
-font-size:22px;
+font-size:20px;
 font-weight:bold;
 }
 
@@ -60,7 +61,7 @@ display:none;
 }
 
 .small{
-font-size:14px;
+font-size:13px;
 color:#666;
 margin-top:5px;
 }
@@ -85,7 +86,7 @@ margin-top:5px;
 <input id="pickup" placeholder="Packeta átvételi pont">
 
 <div class="small">
-Kattints a mezőre és válassz Packeta pontot
+Kattints és válassz Packeta pontot
 </div>
 
 <button onclick="nextStep()">
@@ -110,9 +111,9 @@ Fizetés indítása
 
 <script>
 
-let total = parseInt(localStorage.getItem("cartTotal")) || 0;
+let total = Number(localStorage.getItem("cartTotal")) || 0;
 
-/* PACKETA FIX – input click */
+/* PACKETA */
 document.getElementById("pickup").addEventListener("click", openPacketa);
 
 function openPacketa(){
@@ -137,7 +138,7 @@ view:"modal"
 
 }
 
-/* STEP 1 → STEP 2 */
+/* STEP 1 */
 
 function nextStep(){
 
@@ -178,9 +179,7 @@ localStorage.setItem("buyerEmail", email);
 localStorage.setItem("buyerPhone", phone);
 localStorage.setItem("pickupPoint", pickup);
 
-/* STRIPE INDÍTÁS (backend kell hozzá) */
-
-fetch("create-checkout-session", {
+fetch("/.netlify/functions/create-checkout-session", {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
@@ -194,12 +193,16 @@ pickup
 })
 })
 .then(res => res.json())
-.then(session => {
-window.location.href = session.url;
+.then(data => {
+if(data.url){
+window.location.href = data.url;
+} else {
+alert("Fizetési hiba");
+}
 })
 .catch(err => {
-alert("Fizetési hiba történt");
 console.log(err);
+alert("Hiba történt a fizetés indításakor");
 });
 
 }
