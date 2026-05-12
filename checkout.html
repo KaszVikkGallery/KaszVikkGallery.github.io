@@ -3,16 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kasz Vikk – Fizetés</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
 text-align:center;
 padding:20px;
+}
+
+h1{
+margin-top:30px;
 }
 
 input, select, button{
@@ -23,6 +29,7 @@ margin:8px 0;
 font-size:16px;
 border-radius:8px;
 border:1px solid #ccc;
+box-sizing:border-box;
 }
 
 button{
@@ -37,18 +44,20 @@ height:320px;
 width:90%;
 max-width:420px;
 margin:10px auto;
-border-radius:10px;
 display:none;
+border-radius:10px;
 }
 
 #summary{
 font-weight:bold;
 margin-top:15px;
+font-size:20px;
 }
 
 #pickup{
-background:#f7f7f7;
+background:#f5f5f5;
 }
+
 </style>
 </head>
 
@@ -60,10 +69,11 @@ background:#f7f7f7;
 <input id="email" placeholder="Email">
 <input id="phone" placeholder="Telefonszám">
 
-<select id="shipping" onchange="changeShipping()">
+<select id="shipping" onchange="onShippingChange()">
 <option value="">Szállítás</option>
-<option value="fox">Foxpost</option>
-<option value="packeta">Packeta</option>
+<option value="0">Személyes / alap</option>
+<option value="1699">Foxpost</option>
+<option value="1490">Packeta</option>
 </select>
 
 <div id="map"></div>
@@ -81,106 +91,14 @@ background:#f7f7f7;
 
 <script>
 
-let total = localStorage.getItem("cartTotal") || 0;
-document.getElementById("summary").innerText =
-"Fizetendő: " + total + " Ft";
+let baseTotal = parseInt(localStorage.getItem("cartTotal")) || 0;
 
 let map;
-let markers = [];
 
-/* FOXPOST PONTOK (reális HU lefedés minta) */
+/* FOXPOST PONTOK */
 const foxPoints = [
 {name:"Budapest Deák",lat:47.4979,lng:19.0402},
 {name:"Budapest Westend",lat:47.5062,lng:19.0633},
 {name:"Miskolc Centrum",lat:48.1031,lng:20.7784},
 {name:"Debrecen Fórum",lat:47.5316,lng:21.6273},
-{name:"Szeged Árkád",lat:46.2530,lng:20.1414},
-{name:"Pécs Árkád",lat:46.0727,lng:18.2323},
-{name:"Győr Belváros",lat:47.6875,lng:17.6504},
-{name:"Eger Centrum",lat:47.9025,lng:20.3772}
-];
-
-/* SZÁLLÍTÁS VÁLTÁS */
-function changeShipping(){
-document.getElementById("pickup").value = "";
-document.getElementById("map").style.display = "none";
-}
-
-/* SELECTOR */
-function openSelector(){
-
-const type = document.getElementById("shipping").value;
-
-if(!type){
-alert("Válassz szállítást");
-return;
-}
-
-/* PACKETA */
-if(type === "packeta"){
-Packeta.Widget.pick(
-"test",
-function(point){
-if(!point) return;
-
-document.getElementById("pickup").value =
-point.name + ", " + point.city;
-},
-{language:"hu",country:"hu"}
-);
-}
-
-/* FOXPOST */
-if(type === "fox"){
-openFoxMap();
-}
-
-}
-
-/* FOX MAP */
-function openFoxMap(){
-
-document.getElementById("map").style.display = "block";
-
-if(map) map.remove();
-
-map = L.map("map").setView([47.2,19.5],7);
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-
-foxPoints.forEach(p=>{
-
-let m = L.marker([p.lat,p.lng]).addTo(map);
-
-m.on("click",()=>{
-
-document.getElementById("pickup").value = p.name;
-
-});
-
-});
-
-}
-
-/* PAY */
-function pay(){
-
-const name = document.getElementById("name").value;
-const email = document.getElementById("email").value;
-const phone = document.getElementById("phone").value;
-const shipping = document.getElementById("shipping").value;
-const pickup = document.getElementById("pickup").value;
-
-if(!name || !email || !phone || !shipping || !pickup){
-alert("Minden mezőt tölts ki");
-return;
-}
-
-alert("Sikeres adatellenőrzés. Stripe következik.");
-
-}
-
-</script>
-
-</body>
-</html>
+{name:"Szeged Árkád",lat:46.2530,lng:20.1414
