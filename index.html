@@ -14,7 +14,7 @@ background:#fff;
 color:#222;
 }
 
-/* ===== MENÜ ===== */
+/* MENÜ */
 .menu-button{
 position:fixed;
 top:16px;
@@ -51,7 +51,7 @@ color:#222;
 
 nav a:hover{ background:#f5f5f5; }
 
-/* ===== HEADER ===== */
+/* HEADER */
 header{
 text-align:center;
 padding:100px 20px 30px;
@@ -60,7 +60,7 @@ padding:100px 20px 30px;
 header h1{ font-size:30px; margin:0; }
 header p{ font-size:18px; color:#666; margin-top:10px; }
 
-/* ===== KOSÁR ===== */
+/* KOSÁR */
 #openCart{
 position:fixed;
 top:14px;
@@ -84,7 +84,7 @@ font-size:16px;
 margin-left:8px;
 }
 
-/* ===== GALÉRIA ===== */
+/* GALÉRIA */
 .gallery{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -115,7 +115,6 @@ cursor:pointer;
 margin-top:10px;
 }
 
-/* ELKELT */
 .sold{
 margin-top:10px;
 font-size:18px;
@@ -123,7 +122,7 @@ font-weight:bold;
 color:red;
 }
 
-/* ===== KOSÁR ===== */
+/* KOSÁR */
 #cartOverlay{
 position:fixed;
 top:0;
@@ -199,7 +198,6 @@ font-size:18px;
 border-radius:10px;
 cursor:pointer;
 }
-
 </style>
 </head>
 
@@ -315,23 +313,18 @@ gallery.appendChild(div);
 }
 
 function addToCart(name,price){
-
 if(cart.find(i=>i.name===name)) return;
-
 cart.push({name,price});
 saveCart();
 renderCart();
 updateCartCount();
-
 }
 
 function removeItem(name){
-
 cart = cart.filter(i=>i.name!==name);
 saveCart();
 renderCart();
 updateCartCount();
-
 }
 
 function renderCart(){
@@ -342,23 +335,18 @@ box.innerHTML="";
 let total=0;
 
 cart.forEach(i=>{
-
 box.innerHTML += `
 <div class="cart-item">
 <div>${i.name} - ${i.price} Ft</div>
 <span class="remove" onclick="removeItem('${i.name}')">✕</span>
-</div>
-`;
-
+</div>`;
 total += i.price;
-
 });
 
 const shipping = parseInt(document.getElementById("shipping").value)||0;
 
 document.getElementById("total").innerText =
 "Összesen: " + (total + shipping) + " Ft";
-
 }
 
 function updateCartCount(){
@@ -380,12 +368,12 @@ return;
 let total=0;
 cart.forEach(i=> total+=i.price);
 
-const shipping = Number(document.getElementById("shipping").value) || 0;
+const shipping = parseInt(document.getElementById("shipping").value);
 
-localStorage.setItem("total", total + shipping);
+// 🔥 EZ A HIÁNYZÓ RÉSZ
+localStorage.setItem("cartTotal", total + shipping);
 
 window.location.href="checkout.html";
-
 }
 
 renderGallery();
