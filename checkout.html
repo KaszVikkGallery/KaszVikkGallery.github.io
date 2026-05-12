@@ -73,7 +73,7 @@ margin-top:5px;
 
 <h1>Szállítási adatok</h1>
 
-<!-- STEP 1: ADATOK -->
+<!-- STEP 1 -->
 
 <div id="step1">
 
@@ -95,7 +95,7 @@ Tovább a fizetéshez
 
 </div>
 
-<!-- STEP 2: FIZETÉS -->
+<!-- STEP 2 -->
 
 <div id="step2">
 
@@ -111,9 +111,7 @@ Fizetés indítása
 
 <script>
 
-let total = Number(localStorage.getItem("cartTotal")) || 0;
-
-/* PACKETA */
+/* PACKETA PICKER */
 
 document.getElementById("pickup").addEventListener("click", openPacketa);
 
@@ -149,12 +147,15 @@ const phone = document.getElementById("phone").value.trim();
 const pickup = document.getElementById("pickup").value.trim();
 
 if(!name || !email || !phone || !pickup){
-alert("Minden mezőt ki kell tölteni.");
+alert("Minden mezőt ki kell tölteni");
 return;
 }
 
 document.getElementById("step1").style.display = "none";
 document.getElementById("step2").style.display = "block";
+
+/* FIXED TOTAL */
+const total = Number(localStorage.getItem("cartTotal") || 0);
 
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
@@ -175,10 +176,11 @@ alert("Minden mezőt ki kell tölteni");
 return;
 }
 
-let total = Number(localStorage.getItem("cartTotal"));
+const totalRaw = localStorage.getItem("cartTotal");
+const total = Number(totalRaw);
 
-if(!total || total <= 0){
-alert("Kosár hiba");
+if(!totalRaw || isNaN(total) || total <= 0){
+alert("Kosár hiba - nincs összeg");
 return;
 }
 
@@ -201,7 +203,7 @@ pickup: pickup
 if(data.url){
 window.location.href = data.url;
 } else {
-alert("Stripe hiba: nincs URL");
+alert("Stripe hiba - nincs URL");
 console.log(data);
 }
 
