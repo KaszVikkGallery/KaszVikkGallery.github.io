@@ -3,24 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasz Vikk – Checkout</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<title>Kasz Vikk – Fizetés</title>
 
 <style>
+
 body{
-font-family:Arial;
+margin:0;
+font-family:Arial,sans-serif;
+background:#fff;
 text-align:center;
 padding:20px;
+color:#222;
 }
 
-input,select,button{
+h1{
+margin-top:30px;
+font-size:28px;
+font-weight:normal;
+}
+
+input, button{
 width:90%;
 max-width:420px;
-padding:12px;
-margin:8px;
-border-radius:8px;
+padding:14px;
+margin:8px 0;
+font-size:16px;
+border-radius:10px;
 border:1px solid #ccc;
+box-sizing:border-box;
 }
 
 button{
@@ -30,104 +41,165 @@ border:none;
 cursor:pointer;
 }
 
-#map{
-height:300px;
-width:90%;
-max-width:420px;
-margin:auto;
+button:hover{
+opacity:0.9;
+}
+
+#pickup{
+background:#f5f5f5;
+cursor:pointer;
+}
+
+#summary{
+margin-top:18px;
+font-size:20px;
+font-weight:bold;
+}
+
+#step2{
 display:none;
 }
+
+.small{
+font-size:13px;
+color:#666;
+margin-top:5px;
+}
+
 </style>
 </head>
 
 <body>
 
-<h2>Fizetés</h2>
+<h1>Szállítási adatok</h1>
 
-<input id="name" placeholder="Név">
-<input id="email" placeholder="Email">
-<input id="phone" placeholder="Telefon">
+<!-- STEP 1: ADATOK -->
 
-<select id="shipping" onchange="resetPickup()">
-<option value="">Szállítás</option>
-<option value="fox">Foxpost</option>
-<option value="packeta">Packeta</option>
-</select>
+<div id="step1">
 
-<input id="pickup" placeholder="Átvételi pont" readonly>
+<input id="name" placeholder="Teljes név">
 
-<button onclick="openPickup()">Átvételi pont kiválasztása</button>
+<input id="email" type="email" placeholder="Email cím">
 
-<div id="map"></div>
+<input id="phone" placeholder="Telefonszám">
 
-<div id="sum"></div>
+<input id="pickup" placeholder="Packeta átvételi pont">
 
-<button onclick="pay()">Fizetés</button>
+<div class="small">
+Válaszd ki a Packeta átvételi pontot
+</div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<button onclick="nextStep()">
+Tovább a fizetéshez
+</button>
+
+</div>
+
+<!-- STEP 2: FIZETÉS -->
+
+<div id="step2">
+
+<div id="summary"></div>
+
+<button onclick="pay()">
+Fizetés indítása
+</button>
+
+</div>
+
+<script src="https://widget.packeta.com/v6/www/js/library.js"></script>
 
 <script>
 
-let total = localStorage.getItem("cartTotal") || 0;
-document.getElementById("sum").innerText = "Összeg: " + total + " Ft";
+let total = Number(localStorage.getItem("cartTotal")) || 0;
 
-let map;
+/* PACKETA */
 
-function resetPickup(){
-document.getElementById("pickup").value="";
-document.getElementById("map").style.display="none";
+document.getElementById("pickup").addEventListener("click", openPacketa);
+
+function openPacketa(){
+
+Packeta.Widget.pick(
+"test",
+function(point){
+
+if(!point) return;
+
+document.getElementById("pickup").value =
+point.name + " - " + point.city;
+
+},
+{
+language:"hu",
+country:"hu",
+view:"modal"
 }
 
-function openPickup(){
+);
 
-let type=document.getElementById("shipping").value;
+}
 
-if(!type){
-alert("Válassz szállítást");
+/* STEP 1 → STEP 2 */
+
+function nextStep(){
+
+const name = document.getElementById("name").value.trim();
+const email = document.getElementById("email").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const pickup = document.getElementById("pickup").value.trim();
+
+if(!name || !email || !phone || !pickup){
+alert("Minden mezőt ki kell tölteni.");
 return;
 }
 
-/* PACKETA (nem törjük el, csak jelzés) */
-if(type==="packeta"){
-alert("Packeta widget jön majd (itt volt a működő verzió)");
-return;
-}
+document.getElementById("step1").style.display = "none";
+document.getElementById("step2").style.display = "block";
 
-function showMap(){
-
-document.getElementById("map").style.display="block";
-
-if(map) map.remove();
-
-map=L.map("map").setView([47.2,19.5],7);
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-
-foxPoints.forEach(p=>{
-
-let m=L.marker([p[1],p[2]]).addTo(map);
-
-m.on("click",()=>{
-document.getElementById("pickup").value=p[0];
-});
-
-});
+document.getElementById("summary").innerText =
+"Fizetendő: " + total + " Ft";
 
 }
+
+/* FIZETÉS */
 
 function pay(){
 
-if(!document.getElementById("name").value ||
-!document.getElementById("email").value ||
-!document.getElementById("phone").value ||
-!document.getElementById("shipping").value ||
-!document.getElementById("pickup").value){
+const name = document.getElementById("name").value.trim();
+const email = document.getElementById("email").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const pickup = document.getElementById("pickup").value.trim();
 
-alert("Minden mezőt tölts ki");
+if(!name || !email || !phone || !pickup){
+alert("Hiányzó adatok");
 return;
 }
 
-alert("OK → Stripe következik");
+fetch("/.netlify/functions/create-checkout-session", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+amount: total,
+name,
+email,
+phone,
+pickup
+})
+})
+.then(res => res.json())
+.then(data => {
+if(data.url){
+window.location.href = data.url;
+} else {
+alert("Fizetési hiba");
+}
+})
+.catch(err => {
+console.log(err);
+alert("Hiba történt");
+});
 
 }
 
