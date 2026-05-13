@@ -7,7 +7,6 @@
 <title>Kasz Vikk – Fizetés</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -41,9 +40,7 @@ border:none;
 cursor:pointer;
 }
 
-button:hover{
-opacity:0.9;
-}
+button:hover{opacity:0.9;}
 
 #pickup{
 background:#f5f5f5;
@@ -56,16 +53,13 @@ font-size:20px;
 font-weight:bold;
 }
 
-#step2{
-display:none;
-}
+#step2{display:none;}
 
 .small{
 font-size:13px;
 color:#666;
 margin-top:5px;
 }
-
 </style>
 </head>
 
@@ -76,30 +70,20 @@ margin-top:5px;
 <div id="step1">
 
 <input id="name" placeholder="Teljes név">
-
 <input id="email" type="email" placeholder="Email cím">
-
 <input id="phone" placeholder="Telefonszám">
-
 <input id="pickup" placeholder="Packeta átvételi pont">
 
-<div class="small">
-Válaszd ki a Packeta átvételi pontot
-</div>
+<div class="small">Válaszd ki a Packeta átvételi pontot</div>
 
-<button onclick="nextStep()">
-Tovább a fizetéshez
-</button>
+<button onclick="nextStep()">Tovább a fizetéshez</button>
 
 </div>
 
 <div id="step2">
 
 <div id="summary"></div>
-
-<button onclick="pay()">
-Fizetés indítása
-</button>
+<button onclick="pay()">Fizetés indítása</button>
 
 </div>
 
@@ -108,11 +92,9 @@ Fizetés indítása
 <script>
 
 /* PACKETA */
-
 document.getElementById("pickup").addEventListener("click", openPacketa);
 
 function openPacketa(){
-
 Packeta.Widget.pick(
 "test",
 function(point){
@@ -127,11 +109,9 @@ country:"hu",
 view:"modal"
 }
 );
-
 }
 
-/* STEP */
-
+/* STEP 1 */
 function nextStep(){
 
 const name = document.getElementById("name").value.trim();
@@ -147,15 +127,17 @@ return;
 document.getElementById("step1").style.display = "none";
 document.getElementById("step2").style.display = "block";
 
-const total = Number(localStorage.getItem("cartTotal") || 0);
+const totalRaw = localStorage.getItem("cartTotal");
+const total = Number(totalRaw);
+
+console.log("TOTAL RAW:", totalRaw);
+console.log("TOTAL NUMBER:", total);
 
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
-
 }
 
-/* PAY - JAVÍTOTT */
-
+/* PAY */
 function pay(){
 
 const name = document.getElementById("name").value.trim();
@@ -168,9 +150,13 @@ alert("Minden mezőt ki kell tölteni");
 return;
 }
 
-const total = Number(localStorage.getItem("cartTotal"));
+const totalRaw = localStorage.getItem("cartTotal");
+const total = Number(totalRaw);
 
-if(!total || total <= 0){
+console.log("PAY TOTAL RAW:", totalRaw);
+console.log("PAY TOTAL:", total);
+
+if(!totalRaw || isNaN(total) || total <= 0){
 alert("Kosár hiba - nincs összeg");
 return;
 }
@@ -184,22 +170,19 @@ body: JSON.stringify({
 amount: total
 })
 })
-.then(async (res) => {
-const data = await res.json();
-return data;
-})
-.then((data) => {
+.then(res => res.json())
+.then(data => {
+
+console.log("STRIPE RESPONSE:", data);
 
 if(data.url){
 window.location.href = data.url;
 } else {
 alert("Stripe hiba - nincs URL");
-console.log(data);
 }
-
 })
-.catch((err) => {
-console.log(err);
+.catch(err => {
+console.log("FETCH ERROR:", err);
 alert("Hiba történt a fizetésnél");
 });
 
