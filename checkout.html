@@ -181,12 +181,16 @@ window.location.href = data.url;
 alert("Stripe válasz:\n\n" + JSON.stringify(data));
 }
 })
-.catch(err => {
-console.log("FETCH ERROR:", err);
-alert("Hiba történt a fizetésnél");
+.catch(async (err) => {
+  console.log("FETCH ERROR:", err);
+
+  alert(
+    "HIBA:\n" +
+    JSON.stringify(err, null, 2)
+  );
 });
 
-}
+} 
 
 </script>
 
