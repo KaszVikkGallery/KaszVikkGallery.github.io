@@ -1,11 +1,20 @@
 import Stripe from "stripe";
 
 export default async function handler(req, res) {
-  try {
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Only POST allowed" });
-    }
 
+  console.log("STRIPE KEY:", process.env.STRIPE_SECRET_KEY);
+
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return res.status(500).json({
+      error: "ENV VARIABLE MISSING"
+    });
+  }
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST allowed" });
+  }
+
+  try {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: "2023-10-16",
     });
