@@ -73,8 +73,6 @@ margin-top:5px;
 
 <h1>Szállítási adatok</h1>
 
-<!-- STEP 1 -->
-
 <div id="step1">
 
 <input id="name" placeholder="Teljes név">
@@ -95,8 +93,6 @@ Tovább a fizetéshez
 
 </div>
 
-<!-- STEP 2 -->
-
 <div id="step2">
 
 <div id="summary"></div>
@@ -111,7 +107,7 @@ Fizetés indítása
 
 <script>
 
-/* PACKETA PICKER */
+/* PACKETA */
 
 document.getElementById("pickup").addEventListener("click", openPacketa);
 
@@ -120,24 +116,21 @@ function openPacketa(){
 Packeta.Widget.pick(
 "test",
 function(point){
-
 if(!point) return;
 
 document.getElementById("pickup").value =
 point.name + " - " + point.city;
-
 },
 {
 language:"hu",
 country:"hu",
 view:"modal"
 }
-
 );
 
 }
 
-/* STEP 1 → STEP 2 */
+/* STEP */
 
 function nextStep(){
 
@@ -161,7 +154,7 @@ document.getElementById("summary").innerText =
 
 }
 
-/* FIZETÉS - JAVÍTVA */
+/* PAY - JAVÍTOTT */
 
 function pay(){
 
@@ -175,15 +168,13 @@ alert("Minden mezőt ki kell tölteni");
 return;
 }
 
-const totalRaw = localStorage.getItem("cartTotal");
-const total = Number(totalRaw);
+const total = Number(localStorage.getItem("cartTotal"));
 
-if(!totalRaw || isNaN(total) || total <= 0){
+if(!total || total <= 0){
 alert("Kosár hiba - nincs összeg");
 return;
 }
 
-/* 🔥 VERCEL BACKEND */
 fetch("https://kasz-vikk-gallery-github-io-p8gm.vercel.app/api/create-checkout-session", {
 method: "POST",
 headers: {
@@ -193,8 +184,11 @@ body: JSON.stringify({
 amount: total
 })
 })
-.then(res => res.json())
-.then(data => {
+.then(async (res) => {
+const data = await res.json();
+return data;
+})
+.then((data) => {
 
 if(data.url){
 window.location.href = data.url;
@@ -204,7 +198,7 @@ console.log(data);
 }
 
 })
-.catch(err => {
+.catch((err) => {
 console.log(err);
 alert("Hiba történt a fizetésnél");
 });
