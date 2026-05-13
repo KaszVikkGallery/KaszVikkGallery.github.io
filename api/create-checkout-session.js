@@ -2,7 +2,9 @@ import Stripe from "stripe";
 
 export default async function handler(req, res) {
 
-  console.log("STRIPE KEY:", process.env.STRIPE_SECRET_KEY);
+  // 🔍 DEBUG: ENV ellenőrzés
+  console.log("STRIPE KEY EXISTS:", !!process.env.STRIPE_SECRET_KEY);
+  console.log("STRIPE KEY LENGTH:", process.env.STRIPE_SECRET_KEY?.length);
 
   if (!process.env.STRIPE_SECRET_KEY) {
     return res.status(500).json({
