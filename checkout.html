@@ -178,7 +178,7 @@ console.log("STRIPE RESPONSE:", data);
 if(data.url){
 window.location.href = data.url;
 } else {
-alert("Stripe hiba - nincs URL");
+alert("Stripe válasz:\n\n" + JSON.stringify(data));
 }
 })
 .catch(err => {
