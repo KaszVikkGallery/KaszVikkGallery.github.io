@@ -3,12 +3,17 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST allowed" });
-  }
-
   try {
-    const { amount } = req.body;
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Only POST allowed" });
+    }
+
+    const body = req.body || {};
+    const amount = body.amount;
+
+    if (!amount || isNaN(amount)) {
+      return res.status(400).json({ error: "Invalid amount", body });
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -20,7 +25,7 @@ export default async function handler(req, res) {
             product_data: {
               name: "Kasz Vikk festmény rendelés",
             },
-            unit_amount: amount,
+            unit_amount: Math.round(amount),
           },
           quantity: 1,
         },
@@ -29,9 +34,10 @@ export default async function handler(req, res) {
       cancel_url: "https://kaszvikkgallery.github.io/",
     });
 
-    res.status(200).json({ url: session.url });
+    return res.status(200).json({ url: session.url });
 
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.log("Stripe error:", err);
+    return res.status(500).json({ error: err.message });
   }
 }
