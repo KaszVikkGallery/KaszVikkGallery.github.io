@@ -154,7 +154,6 @@ return;
 document.getElementById("step1").style.display = "none";
 document.getElementById("step2").style.display = "block";
 
-/* FIXED TOTAL */
 const total = Number(localStorage.getItem("cartTotal") || 0);
 
 document.getElementById("summary").innerText =
@@ -162,7 +161,7 @@ document.getElementById("summary").innerText =
 
 }
 
-/* FIZETÉS */
+/* FIZETÉS - JAVÍTVA */
 
 function pay(){
 
@@ -184,17 +183,14 @@ alert("Kosár hiba - nincs összeg");
 return;
 }
 
-fetch("/.netlify/functions/create-checkout-session", {
+/* 🔥 VERCEL BACKEND */
+fetch("https://kasz-vikk-gallery-github-io-p8gm.vercel.app/api/create-checkout-session", {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
 },
 body: JSON.stringify({
-amount: total,
-name: name,
-email: email,
-phone: phone,
-pickup: pickup
+amount: total
 })
 })
 .then(res => res.json())
