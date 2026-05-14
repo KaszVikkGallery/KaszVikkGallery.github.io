@@ -5,8 +5,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
-export default async function handler(req, res) {
-
+module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -16,63 +15,37 @@ export default async function handler(req, res) {
   }
 
   try {
-
-    // 🔥 LEKÉRÉS (ADMIN)
     if (req.method === "GET") {
-
       const { data, error } = await supabase
         .from("orders")
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       return res.status(200).json(data);
     }
 
-    // 🔥 MENTÉS
     if (req.method === "POST") {
-
       let body = req.body;
 
-      if (!body) body = {};
       if (typeof body === "string") {
         body = JSON.parse(body);
       }
 
       const { error } = await supabase
         .from("orders")
-        .insert([
-          {
-            name: body.name,
-            email: body.email,
-            phone: body.phone,
-            pickup: body.pickup,
-            amount: body.amount
-          }
-        ]);
+        .insert([body]);
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
-      return res.status(200).json({
-        ok: true
-      });
+      return res.status(200).json({ ok: true });
     }
 
-    return res.status(405).json({
-      error: "Only GET/POST allowed"
-    });
+    return res.status(405).json({ error: "Only GET/POST allowed" });
 
   } catch (err) {
-
-    console.log("SUPABASE ERROR:", err);
-
-    return res.status(500).json({
-      error: err.message
-    });
+    console.log("ERROR:", err);
+    return res.status(500).json({ error: err.message });
   }
-}
+};
