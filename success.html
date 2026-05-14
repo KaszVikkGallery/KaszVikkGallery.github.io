@@ -10,6 +10,20 @@
 <p>A fizetés sikeres volt.</p>
 
 <a href="index.html">Vissza a főoldalra</a>
+<script>
+const data = JSON.parse(localStorage.getItem("lastOrder"));
 
+if (data) {
+  fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/send-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  localStorage.removeItem("lastOrder");
+}
+</script>
 </body>
 </html>
