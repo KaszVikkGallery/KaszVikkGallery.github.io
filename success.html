@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Sikeres fizetés</title>
 </head>
-
 <body style="text-align:center;font-family:Arial;padding:50px;">
 
 <h1>Köszönjük a rendelést! 🎉</h1>
@@ -12,27 +11,5 @@
 
 <a href="index.html">Vissza a főoldalra</a>
 
-<script>
-window.addEventListener("load", () => {
-
-  console.log("SUCCESS PAGE LOADED");
-
-  const dataRaw = localStorage.getItem("lastOrder");
-
-  console.log("RAW DATA:", dataRaw);
-
-  if (!dataRaw) {
-    console.log("NINCS ORDER DATA → EMAIL NEM KÜLDŐDIK");
-    return;
-  }
-
-  let data;
-
-  try {
-    data = JSON.parse(dataRaw);
-  } catch (e) {
-    console.log("JSON PARSE ERROR:", e);
-    return;
-  }
-
-  fetch("https://kasz-vikk-gallery-github
+</body>
+</html>
