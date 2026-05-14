@@ -2,7 +2,6 @@ const { createClient } = require("@supabase/supabase-js");
 
 module.exports = async function handler(req, res) {
 
-  // CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -13,15 +12,11 @@ module.exports = async function handler(req, res) {
 
   try {
 
-    // Supabase client
     const supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_KEY
     );
 
-    // -------------------------
-    // GET → admin lekérdezés
-    // -------------------------
     if (req.method === "GET") {
 
       const { data, error } = await supabase
@@ -34,9 +29,6 @@ module.exports = async function handler(req, res) {
       return res.status(200).json(data);
     }
 
-    // -------------------------
-    // POST → rendelés mentés
-    // -------------------------
     if (req.method === "POST") {
 
       const body =
@@ -48,20 +40,18 @@ module.exports = async function handler(req, res) {
 
       const { error } = await supabase
         .from("orders")
-        .insert([
-          {
-            name: body.name || "",
-            email: body.email || "",
-            phone: body.phone || "",
-            pickup: body.pickup || "",
-            amount: body.amount || 0,
+        .insert([{
+          name: body.name || "",
+          email: body.email || "",
+          phone: body.phone || "",
+          pickup: body.pickup || "",
+          amount: body.amount || 0,
 
-            // 💥 EZ A LÉNYEG (festmények)
-            items: body.items || [],
+          // 💥 EZ A LÉNYEG
+          items: body.items || [],
 
-            created_at: new Date().toISOString()
-          }
-        ]);
+          created_at: new Date().toISOString()
+        }]);
 
       if (error) throw error;
 
@@ -71,7 +61,6 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Only GET/POST allowed" });
 
   } catch (err) {
-
     console.log("ERROR:", err);
 
     return res.status(500).json({
