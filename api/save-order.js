@@ -39,14 +39,15 @@ module.exports = async function handler(req, res) {
       console.log("ORDER RECEIVED:", body);
 
       const { error } = await supabase
-        .from("orders")
-        .insert([{
-          name: body.name || "",
-          email: body.email || "",
-          phone: body.phone || "",
-          pickup: body.pickup || "",
-          amount: body.amount || 0,
-
+  .from("orders")
+  .insert([{
+    name: body.name || "",
+    email: body.email || "",
+    phone: body.phone || "",
+    pickup: body.pickup || "",
+    amount: body.amount || 0,
+    created_at: new Date().toISOString()
+  }]);
           // 💥 EZ A LÉNYEG
           items: body.items || [],
 
