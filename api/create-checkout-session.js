@@ -23,7 +23,12 @@ export default async function handler(req, res) {
 
     const amount = Number(body.amount);
 
-    console.log("AMOUNT:", amount);
+    const name = body.name || "-";
+    const email = body.email || "-";
+    const phone = body.phone || "-";
+    const pickup = body.pickup || "-";
+
+    console.log("ORDER:", { amount, name, email, phone, pickup });
 
     if (!amount || amount < 175) {
       return res.status(400).json({ error: "Minimum 175 Ft" });
@@ -32,6 +37,7 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+
       line_items: [
         {
           price_data: {
@@ -44,6 +50,16 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
+
+      // 🔥 EZ A LÉNYEG
+      metadata: {
+        name,
+        email,
+        phone,
+        pickup,
+        amount
+      },
+
       success_url: "https://kaszvikkgallery.github.io/success.html",
       cancel_url: "https://kaszvikkgallery.github.io/cancel.html",
     });
