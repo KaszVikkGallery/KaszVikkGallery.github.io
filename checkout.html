@@ -91,7 +91,6 @@ margin-top:5px;
 
 <script>
 
-/* PACKETA */
 document.getElementById("pickup").addEventListener("click", openPacketa);
 
 function openPacketa(){
@@ -124,22 +123,29 @@ alert("Minden mezőt ki kell tölteni");
 return;
 }
 
-document.getElementById("step1").style.display = "none";
-document.getElementById("step2").style.display = "block";
-
 const totalRaw = localStorage.getItem("cartTotal");
 const total = Number(totalRaw);
 
-localStorage.setItem("lastOrder", JSON.stringify({
-  amount: total,
-  name: name,
-  email: email,
-  phone: phone,
-  pickup: pickup
-}));
+if(!total || total <= 0){
+alert("Kosár hiba - nincs összeg");
+return;
+}
+
+document.getElementById("step1").style.display = "none";
+document.getElementById("step2").style.display = "block";
 
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
+
+/* 🔥 FONTOS: EZ AZ EGYETLEN MENTÉS */
+localStorage.setItem("lastOrder", JSON.stringify({
+  amount: total,
+  name,
+  email,
+  phone,
+  pickup
+}));
+
 }
 
 /* PAY */
@@ -147,36 +153,21 @@ function pay(){
 
 console.log("PAY FUNCTION ELINDULT");
 
-const name = document.getElementById("name").value.trim();
-const email = document.getElementById("email").value.trim();
-const phone = document.getElementById("phone").value.trim();
-const pickup = document.getElementById("pickup").value.trim();
+const orderRaw = localStorage.getItem("lastOrder");
 
-if(!name || !email || !phone || !pickup){
-alert("Minden mezőt ki kell tölteni");
+if(!orderRaw){
+alert("Hiba: nincs rendelési adat");
 return;
 }
 
-const totalRaw = localStorage.getItem("cartTotal");
-const total = Number(totalRaw);
-
-if(!totalRaw || isNaN(total) || total <= 0){
-alert("Kosár hiba - nincs összeg");
-return;
-}
+const order = JSON.parse(orderRaw);
 
 fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
 method: "POST",
 headers: {
 "Content-Type": "application/json"
 },
-body: JSON.stringify({
-amount: total,
-name: name,
-email: email,
-phone: phone,
-pickup: pickup
-})
+body: JSON.stringify(order)
 })
 .then(res => res.json())
 .then(data => {
@@ -191,7 +182,6 @@ alert("Stripe válasz:\n\n" + JSON.stringify(data));
 })
 .catch(err => {
 console.log("FETCH ERROR:", err);
-
 alert("HIBA:\n" + JSON.stringify(err));
 });
 
