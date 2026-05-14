@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
     try {
       await resend.emails.send({
         from: "Rendelés <onboarding@resend.dev>",
-        to: "SAJAT_EMAIL_CIMED",
+        to: "kaszvikkfestmeny@gmail.com",
         subject: "Új rendelés érkezett",
         html: `
           <h2>Új rendelés</h2>
