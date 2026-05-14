@@ -1,13 +1,18 @@
 const { createClient } = require("@supabase/supabase-js");
 
+// 🚨 FONTOS: client csak egyszer, de SAFE beállítással
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY,
   {
+    db: {
+      schema: "public"
+    },
+    auth: {
+      persistSession: false
+    },
     realtime: {
-      params: {
-        eventsPerSecond: 0
-      }
+      enabled: false
     }
   }
 );
@@ -23,17 +28,22 @@ module.exports = async function handler(req, res) {
 
   try {
 
+    // 🔥 GET (ADMIN)
     if (req.method === "GET") {
       const { data, error } = await supabase
         .from("orders")
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.log("SUPABASE GET ERROR:", error);
+        throw error;
+      }
 
       return res.status(200).json(data);
     }
 
+    // 🔥 POST (ORDER SAVE)
     if (req.method === "POST") {
       const body =
         typeof req.body === "string"
@@ -44,16 +54,19 @@ module.exports = async function handler(req, res) {
         .from("orders")
         .insert([
           {
-            name: body.name,
-            email: body.email,
-            phone: body.phone,
-            pickup: body.pickup,
-            amount: body.amount,
+            name: body.name || "",
+            email: body.email || "",
+            phone: body.phone || "",
+            pickup: body.pickup || "",
+            amount: body.amount || 0,
             created_at: new Date().toISOString()
           }
         ]);
 
-      if (error) throw error;
+      if (error) {
+        console.log("SUPABASE INSERT ERROR:", error);
+        throw error;
+      }
 
       return res.status(200).json({ ok: true });
     }
@@ -61,10 +74,10 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Only GET/POST allowed" });
 
   } catch (err) {
-    console.log("ERROR:", err);
+    console.log("FATAL ERROR:", err);
 
     return res.status(500).json({
-      error: err.message
+      error: err.message || "Unknown error"
     });
   }
 };
