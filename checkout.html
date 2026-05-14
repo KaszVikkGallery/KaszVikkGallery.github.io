@@ -137,13 +137,15 @@ document.getElementById("step2").style.display = "block";
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-/* 🔥 FONTOS: EZ AZ EGYETLEN MENTÉS */
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
 localStorage.setItem("lastOrder", JSON.stringify({
   amount: total,
   name,
   email,
   phone,
-  pickup
+  pickup,
+  items: cart
 }));
 
 }
