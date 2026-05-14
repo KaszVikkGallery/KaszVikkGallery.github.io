@@ -48,6 +48,7 @@ module.exports = async function handler(req, res) {
           phone: body.phone || "",
           pickup: body.pickup || "",
           amount: body.amount || 0,
+          items: body.items || [],
           created_at: new Date().toISOString()
         }]);
 
