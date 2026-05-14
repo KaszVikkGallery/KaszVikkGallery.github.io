@@ -19,12 +19,14 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    console.log({ name, email, phone, pickup, amount });
 
-    if (!amount || amount <= 0) {
-      return res.status(400).json({ error: "Invalid amount" });
-    }
+  const { amount, name, email, phone, pickup } = req.body;
 
+  console.log({ name, email, phone, pickup, amount });
+
+  if (!amount || amount <= 0) {
+    return res.status(400).json({ error: "Invalid amount" });
+  }
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
