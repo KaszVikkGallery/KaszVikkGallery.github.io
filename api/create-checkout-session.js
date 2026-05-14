@@ -1,15 +1,15 @@
 const Stripe = require("stripe");
+const { Resend } = require("resend");
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
 
-  // 🔥 CORS HEADEREK MINDIG
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // 🔥 EZ A HIÁNYZÓ RÉSZ NÁLAD
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -20,13 +20,27 @@ module.exports = async function handler(req, res) {
 
   try {
 
-  const { amount, name, email, phone, pickup } = req.body;
+    const { amount, name, email, phone, pickup } = req.body;
 
-  console.log({ name, email, phone, pickup, amount });
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
 
-  if (!amount || amount <= 0) {
-    return res.status(400).json({ error: "Invalid amount" });
-  }
+    // 🔥 EMAIL NEKED (RENDELÉS ÉRTESÍTÉS)
+    await resend.emails.send({
+      from: "Rendelés <onboarding@resend.dev>",
+      to: "kaszvikkfestmeny@gmail.com",
+      subject: "Új rendelés érkezett",
+      html: `
+        <h2>Új rendelés</h2>
+        <p><b>Név:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Telefon:</b> ${phone}</p>
+        <p><b>Packeta:</b> ${pickup}</p>
+        <p><b>Összeg:</b> ${amount} Ft</p>
+      `
+    });
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -51,7 +65,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ url: session.url });
 
   } catch (err) {
-    console.log("STRIPE ERROR:", err);
+    console.log("ERROR:", err);
 
     return res.status(500).json({
       error: err.message,
