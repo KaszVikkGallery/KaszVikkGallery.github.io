@@ -1,8 +1,10 @@
 {
-  "name": "kasz-vikk-functions",
+  "name": "kasz-vikk-backend",
   "version": "1.0.0",
+  "type": "commonjs",
   "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
     "stripe": "^14.0.0",
-    "@supabase/supabase-js": "^2.0.0"
+    "ws": "^8.18.0"
   }
 }
