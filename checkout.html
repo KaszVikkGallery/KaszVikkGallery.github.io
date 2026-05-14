@@ -72,9 +72,14 @@ margin-top:5px;
 <input id="name" placeholder="Teljes név">
 <input id="email" type="email" placeholder="Email cím">
 <input id="phone" placeholder="Telefonszám">
-<input id="pickup" placeholder="Packeta átvételi pont">
 
-<div class="small">Válaszd ki a Packeta átvételi pontot</div>
+<!-- 🔥 Packeta fix -->
+<input id="pickup"
+       placeholder="Packeta átvételi pont"
+       readonly
+       onclick="openPacketa()">
+
+<div class="small">Kattints a kiválasztáshoz</div>
 
 <button onclick="nextStep()">Tovább a fizetéshez</button>
 
@@ -91,23 +96,22 @@ margin-top:5px;
 
 <script>
 
-document.getElementById("pickup").addEventListener("focus", openPacketa);
-
+/* PACKETA */
 function openPacketa(){
-Packeta.Widget.pick(
-"null",
-function(point){
-if(!point) return;
+  Packeta.Widget.pick(
+    "test",
+    function(point){
+      if(!point) return;
 
-document.getElementById("pickup").value =
-point.name + " - " + point.city;
-},
-{
-language:"hu",
-country:"hu",
-view:"modal"
-}
-);
+      document.getElementById("pickup").value =
+        point.name + " - " + point.city;
+    },
+    {
+      language: "hu",
+      country: "hu",
+      view: "modal"
+    }
+  );
 }
 
 /* STEP 1 */
@@ -155,9 +159,14 @@ function pay(){
 
 const order = JSON.parse(localStorage.getItem("lastOrder"));
 
+if(!order){
+alert("Hiba: nincs rendelési adat");
+return;
+}
+
 console.log("SENDING ORDER:", order);
 
-// 🔥 CSAK EZ EGY FETCH MENT SENKIT NEM ZAVAR
+// 🔥 1. mentés
 fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -165,9 +174,10 @@ fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
 })
 .then(res => res.json())
 .then(data => {
+
   console.log("SAVED:", data);
 
-  // 👉 CSAK EZUTÁN INDUL STRIPE
+  // 🔥 2. stripe csak UTÁNA
   return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -182,6 +192,8 @@ fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
 
   if(data.url){
     window.location.href = data.url;
+  } else {
+    alert(JSON.stringify(data));
   }
 
 })
@@ -190,32 +202,6 @@ fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
 });
 
 }
-
-// 🔥 2. STRIPE FIZETÉS
-fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify(order)
-})
-.then(res => res.json())
-.then(data => {
-
-console.log("STRIPE RESPONSE:", data);
-
-if(data.url){
-window.location.href = data.url;
-} else {
-alert("Stripe válasz:\n\n" + JSON.stringify(data));
-}
-})
-.catch(err => {
-console.log("FETCH ERROR:", err);
-alert("HIBA:\n" + JSON.stringify(err));
-});
-
-} 
 
 </script>
 
