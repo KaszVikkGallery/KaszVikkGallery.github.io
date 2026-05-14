@@ -10,22 +10,16 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    // 🔥 ENV CHECK (EZ A LEGFONTOSABB)
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
-      return res.status(500).json({
-        error: "Missing Supabase environment variables"
-      });
-    }
-
-    // 🔥 SUPABASE CLIENT CSAK ITT (NEM TOP LEVEL!)
     const supabase = createClient(
       process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_KEY
+      process.env.SUPABASE_SERVICE_KEY,
+      {
+        realtime: {
+          enabled: false   // 💥 EZ A LÉNYEG
+        }
+      }
     );
 
-    // =========================
-    // GET ORDERS (ADMIN)
-    // =========================
     if (req.method === "GET") {
       const { data, error } = await supabase
         .from("orders")
@@ -37,9 +31,6 @@ module.exports = async function handler(req, res) {
       return res.status(200).json(data);
     }
 
-    // =========================
-    // SAVE ORDER
-    // =========================
     if (req.method === "POST") {
       const body =
         typeof req.body === "string"
@@ -48,12 +39,11 @@ module.exports = async function handler(req, res) {
 
       const { error } = await supabase.from("orders").insert([
         {
-          name: body.name || "",
-          email: body.email || "",
-          phone: body.phone || "",
-          pickup: body.pickup || "",
-          amount: body.amount || 0,
-          created_at: new Date().toISOString()
+          name: body.name,
+          email: body.email,
+          phone: body.phone,
+          pickup: body.pickup,
+          amount: body.amount
         }
       ]);
 
@@ -65,10 +55,7 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Only GET/POST allowed" });
 
   } catch (err) {
-    console.log("ERROR:", err);
-
-    return res.status(500).json({
-      error: err.message || "Unknown error"
-    });
+    console.log(err);
+    return res.status(500).json({ error: err.message });
   }
 };
