@@ -15,73 +15,48 @@ module.exports = async function handler(req, res) {
     process.env.SUPABASE_SERVICE_KEY
   );
 
-  try {
+  if (req.method === "GET") {
+    const { data } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-    // ---------------- GET ----------------
-    if (req.method === "GET") {
+    return res.status(200).json(data || []);
+  }
 
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.log("GET ERROR:", error);
-        return res.status(500).json(error);
-      }
-
-      return res.status(200).json(data);
-    }
-
-    // ---------------- POST ----------------
-    if (req.method === "POST") {
+  if (req.method === "POST") {
+    try {
 
       const body =
         typeof req.body === "string"
           ? JSON.parse(req.body)
           : req.body || {};
 
-      console.log("🔥 ORDER RECEIVED:", body);
-
-      const insertData = {
+      const order = {
         name: body.name || "",
         email: body.email || "",
         phone: body.phone || "",
         pickup: body.pickup || "",
-        amount: body.amount || 0,
+        amount: Number(body.amount) || 0,
         created_at: new Date().toISOString()
       };
 
-      // items csak ha van és jó
-      if (Array.isArray(body.items)) {
-        insertData.items = body.items;
-      }
-
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("orders")
-        .insert([insertData])
-        .select();
+        .insert([order]);
 
       if (error) {
-        console.log("💥 SUPABASE ERROR:", error);
-        return res.status(500).json(error);
+        console.log("SUPABASE ERROR:", error);
+        return res.status(500).json({ error: error.message });
       }
 
-      console.log("✅ SAVED:", data);
+      return res.status(200).json({ ok: true });
 
-      return res.status(200).json({
-        ok: true,
-        data
-      });
+    } catch (e) {
+      console.log("SERVER ERROR:", e);
+      return res.status(500).json({ error: e.message });
     }
-
-    return res.status(405).json({ error: "Only GET/POST allowed" });
-
-  } catch (err) {
-    console.log("💥 CATCH ERROR:", err);
-
-    return res.status(500).json({
-      error: err.message
-    });
   }
+
+  return res.status(405).json({ error: "Only GET/POST allowed" });
 };
