@@ -6,6 +6,7 @@ const supabase = createClient(
 );
 
 module.exports = async function handler(req, res) {
+
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -15,6 +16,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+
     if (req.method === "GET") {
       const { data, error } = await supabase
         .from("orders")
@@ -27,15 +29,20 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === "POST") {
-      let body = req.body;
 
-      if (typeof body === "string") {
-        body = JSON.parse(body);
-      }
+      const body = typeof req.body === "string"
+        ? JSON.parse(req.body)
+        : req.body || {};
 
       const { error } = await supabase
         .from("orders")
-        .insert([body]);
+        .insert([{
+          name: body.name || "",
+          email: body.email || "",
+          phone: body.phone || "",
+          pickup: body.pickup || "",
+          amount: body.amount || 0
+        }]);
 
       if (error) throw error;
 
