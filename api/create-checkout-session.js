@@ -1,6 +1,8 @@
 const Stripe = require("stripe");
+const { Resend } = require("resend");
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
 
@@ -29,21 +31,32 @@ module.exports = async function handler(req, res) {
     const phone = body.phone;
     const pickup = body.pickup;
 
-    console.log("BODY:", body);
+    console.log("NEW ORDER:", { amount, name, email, phone, pickup });
 
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
 
-    console.log("NEW ORDER:");
-    console.log({
-      amount,
-      name,
-      email,
-      phone,
-      pickup
-    });
+    // 🔥 EMAIL (NEM BLOKKOLHAT SEMMIT)
+    try {
+      await resend.emails.send({
+        from: "Rendelés <onboarding@resend.dev>",
+        to: "kaszvikkfestmeny@gmail.com", // <-- ide a saját email címed
+        subject: "Új rendelés érkezett",
+        html: `
+          <h2>Új rendelés</h2>
+          <p><b>Név:</b> ${name}</p>
+          <p><b>Email:</b> ${email}</p>
+          <p><b>Telefon:</b> ${phone}</p>
+          <p><b>Packeta:</b> ${pickup}</p>
+          <p><b>Összeg:</b> ${amount} Ft</p>
+        `
+      });
+    } catch (e) {
+      console.log("EMAIL ERROR:", e);
+    }
 
+    // 🔥 STRIPE CHECKOUT
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
