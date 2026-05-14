@@ -19,11 +19,21 @@ export default async function handler(req, res) {
 
     const session = event.data.object;
 
-    const name = session.customer_details?.name || "-";
-    const email = session.customer_details?.email || "-";
-    const phone = session.customer_details?.phone || "-";
+    // 🔥 FONTOS: innen jön a TE adataid
+    const name = session.metadata?.name || "-";
+    const email = session.metadata?.email || session.customer_details?.email || "-";
+    const phone = session.metadata?.phone || "-";
+    const pickup = session.metadata?.pickup || "-";
 
-    const amount = session.amount_total / 100;
+    const amount = (session.amount_total || 0) / 100;
+
+    console.log("ORDER RECEIVED:", {
+      name,
+      email,
+      phone,
+      pickup,
+      amount
+    });
 
     await resend.emails.send({
       from: "Rendelés <onboarding@resend.dev>",
@@ -34,6 +44,7 @@ export default async function handler(req, res) {
         <p><b>Név:</b> ${name}</p>
         <p><b>Email:</b> ${email}</p>
         <p><b>Telefon:</b> ${phone}</p>
+        <p><b>Packeta:</b> ${pickup}</p>
         <p><b>Összeg:</b> ${amount} Ft</p>
       `
     });
@@ -41,7 +52,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
 
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: err.message });
+    console.log("WEBHOOK ERROR:", err);
+    return res.status(500).json({ error: err.message || "Unknown error" });
   }
 }
