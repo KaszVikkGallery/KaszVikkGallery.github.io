@@ -130,9 +130,6 @@ document.getElementById("step2").style.display = "block";
 const totalRaw = localStorage.getItem("cartTotal");
 const total = Number(totalRaw);
 
-console.log("TOTAL RAW:", totalRaw);
-console.log("TOTAL NUMBER:", total);
-
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 }
@@ -153,12 +150,7 @@ return;
 }
 
 const totalRaw = localStorage.getItem("cartTotal");
-
-console.log("CART TOTAL:", totalRaw);
-
 const total = Number(totalRaw);
-console.log("PAY TOTAL RAW:", totalRaw);
-console.log("PAY TOTAL:", total);
 
 if(!totalRaw || isNaN(total) || total <= 0){
 alert("Kosár hiba - nincs összeg");
@@ -177,7 +169,7 @@ email: email,
 phone: phone,
 pickup: pickup
 })
-  
+})
 .then(res => res.json())
 .then(data => {
 
@@ -189,16 +181,13 @@ window.location.href = data.url;
 alert("Stripe válasz:\n\n" + JSON.stringify(data));
 }
 })
-.catch(async (err) => {
-  console.log("FETCH ERROR:", err);
+.catch(err => {
+console.log("FETCH ERROR:", err);
 
-  alert(
-    "HIBA:\n" +
-    JSON.stringify(err, null, 2)
-  );
+alert("HIBA:\n" + JSON.stringify(err));
 });
 
-} 
+}
 
 </script>
 
