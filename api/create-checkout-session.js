@@ -30,6 +30,14 @@ module.exports = async function handler(req, res) {
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
+    console.log("NEW ORDER:");
+console.log({
+  amount,
+  name,
+  email,
+  phone,
+  pickup
+});
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
