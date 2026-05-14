@@ -1,5 +1,17 @@
 const { createClient } = require("@supabase/supabase-js");
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY,
+  {
+    realtime: {
+      params: {
+        eventsPerSecond: 0
+      }
+    }
+  }
+);
+
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -10,15 +22,6 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_KEY,
-      {
-        realtime: {
-          enabled: false   // 💥 EZ A LÉNYEG
-        }
-      }
-    );
 
     if (req.method === "GET") {
       const { data, error } = await supabase
@@ -37,15 +40,18 @@ module.exports = async function handler(req, res) {
           ? JSON.parse(req.body)
           : req.body || {};
 
-      const { error } = await supabase.from("orders").insert([
-        {
-          name: body.name,
-          email: body.email,
-          phone: body.phone,
-          pickup: body.pickup,
-          amount: body.amount
-        }
-      ]);
+      const { error } = await supabase
+        .from("orders")
+        .insert([
+          {
+            name: body.name,
+            email: body.email,
+            phone: body.phone,
+            pickup: body.pickup,
+            amount: body.amount,
+            created_at: new Date().toISOString()
+          }
+        ]);
 
       if (error) throw error;
 
@@ -55,7 +61,10 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Only GET/POST allowed" });
 
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: err.message });
+    console.log("ERROR:", err);
+
+    return res.status(500).json({
+      error: err.message
+    });
   }
 };
