@@ -15,6 +15,7 @@ module.exports = async function handler(req, res) {
     process.env.SUPABASE_SERVICE_KEY
   );
 
+  // ---------------- GET ----------------
   if (req.method === "GET") {
     const { data } = await supabase
       .from("orders")
@@ -24,6 +25,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json(data || []);
   }
 
+  // ---------------- POST ----------------
   if (req.method === "POST") {
     try {
 
@@ -32,12 +34,23 @@ module.exports = async function handler(req, res) {
           ? JSON.parse(req.body)
           : req.body || {};
 
+      // 🔥 biztonságos items kezelés
+      let items = [];
+
+      if (Array.isArray(body.items)) {
+        items = body.items.map(i => ({
+          name: i.name || "",
+          price: Number(i.price) || 0
+        }));
+      }
+
       const order = {
         name: body.name || "",
         email: body.email || "",
         phone: body.phone || "",
         pickup: body.pickup || "",
         amount: Number(body.amount) || 0,
+        items: items,
         created_at: new Date().toISOString()
       };
 
