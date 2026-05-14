@@ -17,16 +17,22 @@ module.exports = async function handler(req, res) {
 
   // ---------------- GET ----------------
   if (req.method === "GET") {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("orders")
       .select("*")
       .order("created_at", { ascending: false });
+
+    if (error) {
+      console.log("GET ERROR:", error);
+      return res.status(500).json({ error: error.message });
+    }
 
     return res.status(200).json(data || []);
   }
 
   // ---------------- POST ----------------
   if (req.method === "POST") {
+
     try {
 
       const body =
@@ -34,29 +40,18 @@ module.exports = async function handler(req, res) {
           ? JSON.parse(req.body)
           : req.body || {};
 
-      // 🔥 biztonságos items kezelés
-      let items = [];
-
-      if (Array.isArray(body.items)) {
-        items = body.items.map(i => ({
-          name: i.name || "",
-          price: Number(i.price) || 0
-        }));
-      }
-
-      const order = {
-        name: body.name || "",
-        email: body.email || "",
-        phone: body.phone || "",
-        pickup: body.pickup || "",
-        amount: Number(body.amount) || 0,
-        items: items,
-        created_at: new Date().toISOString()
-      };
+      console.log("ORDER RECEIVED:", body);
 
       const { error } = await supabase
         .from("orders")
-        .insert([order]);
+        .insert([{
+          name: body.name || "",
+          email: body.email || "",
+          phone: body.phone || "",
+          pickup: body.pickup || "",
+          amount: Number(body.amount) || 0,
+          created_at: new Date().toISOString()
+        }]);
 
       if (error) {
         console.log("SUPABASE ERROR:", error);
