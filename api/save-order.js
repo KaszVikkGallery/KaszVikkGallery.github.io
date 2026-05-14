@@ -17,6 +17,7 @@ module.exports = async function handler(req, res) {
       process.env.SUPABASE_SERVICE_KEY
     );
 
+    // ---------------- GET ----------------
     if (req.method === "GET") {
 
       const { data, error } = await supabase
@@ -29,6 +30,7 @@ module.exports = async function handler(req, res) {
       return res.status(200).json(data);
     }
 
+    // ---------------- POST ----------------
     if (req.method === "POST") {
 
       const body =
@@ -39,18 +41,13 @@ module.exports = async function handler(req, res) {
       console.log("ORDER RECEIVED:", body);
 
       const { error } = await supabase
-  .from("orders")
-  .insert([{
-    name: body.name || "",
-    email: body.email || "",
-    phone: body.phone || "",
-    pickup: body.pickup || "",
-    amount: body.amount || 0,
-    created_at: new Date().toISOString()
-  }]);
-          // 💥 EZ A LÉNYEG
-          items: body.items || [],
-
+        .from("orders")
+        .insert([{
+          name: body.name || "",
+          email: body.email || "",
+          phone: body.phone || "",
+          pickup: body.pickup || "",
+          amount: body.amount || 0,
           created_at: new Date().toISOString()
         }]);
 
