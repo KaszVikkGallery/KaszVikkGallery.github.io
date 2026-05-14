@@ -153,18 +153,11 @@ localStorage.setItem("lastOrder", JSON.stringify({
 /* PAY */
 function pay(){
 
-console.log("PAY FUNCTION ELINDULT");
+const order = JSON.parse(localStorage.getItem("lastOrder"));
 
-const orderRaw = localStorage.getItem("lastOrder");
+console.log("SENDING ORDER:", order);
 
-if(!orderRaw){
-alert("Hiba: nincs rendelési adat");
-return;
-}
-
-const order = JSON.parse(orderRaw);
-
-// 🔥 1. ELMENTÉS (EZ AZ ÚJ RÉSZ)
+// 🔥 CSAK EZ EGY FETCH MENT SENKIT NEM ZAVAR
 fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -172,11 +165,31 @@ fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
 })
 .then(res => res.json())
 .then(data => {
-  console.log("ORDER SAVED:", data);
+  console.log("SAVED:", data);
+
+  // 👉 CSAK EZUTÁN INDUL STRIPE
+  return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(order)
+  });
+
+})
+.then(res => res.json())
+.then(data => {
+
+  console.log("STRIPE:", data);
+
+  if(data.url){
+    window.location.href = data.url;
+  }
+
 })
 .catch(err => {
-  console.log("SAVE ERROR:", err);
+  console.log("ERROR:", err);
 });
+
+}
 
 // 🔥 2. STRIPE FIZETÉS
 fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
