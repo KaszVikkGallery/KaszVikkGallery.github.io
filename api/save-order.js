@@ -1,7 +1,11 @@
-import fs from "fs";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
 export default async function handler(req, res) {
-  const filePath = "/tmp/orders.json";
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -12,45 +16,63 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 🔥 LEKÉRÉS
+
+    // 🔥 LEKÉRÉS (ADMIN)
     if (req.method === "GET") {
-      if (!fs.existsSync(filePath)) {
-        return res.status(200).json([]);
+
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        throw error;
       }
 
-      const data = fs.readFileSync(filePath, "utf8");
-
-      return res.status(200).json(JSON.parse(data || "[]"));
+      return res.status(200).json(data);
     }
 
     // 🔥 MENTÉS
     if (req.method === "POST") {
+
       let body = req.body;
 
       if (!body) body = {};
-      if (typeof body === "string") body = JSON.parse(body);
-
-      let orders = [];
-
-      if (fs.existsSync(filePath)) {
-        const data = fs.readFileSync(filePath, "utf8");
-        orders = JSON.parse(data || "[]");
+      if (typeof body === "string") {
+        body = JSON.parse(body);
       }
 
-      orders.push({
-        ...body,
-        time: new Date().toISOString()
+      const { error } = await supabase
+        .from("orders")
+        .insert([
+          {
+            name: body.name,
+            email: body.email,
+            phone: body.phone,
+            pickup: body.pickup,
+            amount: body.amount
+          }
+        ]);
+
+      if (error) {
+        throw error;
+      }
+
+      return res.status(200).json({
+        ok: true
       });
-
-      fs.writeFileSync(filePath, JSON.stringify(orders, null, 2));
-
-      return res.status(200).json({ ok: true });
     }
 
-    return res.status(405).json({ error: "Only GET/POST allowed" });
+    return res.status(405).json({
+      error: "Only GET/POST allowed"
+    });
 
   } catch (err) {
-    console.log("SAVE ORDER ERROR:", err);
-    return res.status(500).json({ error: err.message });
+
+    console.log("SUPABASE ERROR:", err);
+
+    return res.status(500).json({
+      error: err.message
+    });
   }
 }
