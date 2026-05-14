@@ -11,12 +11,20 @@ module.exports = async function handler(req, res) {
 
   try {
 
+    // 🔥 FONTOS: csak request alatt hozzuk létre
     const supabase = createClient(
       process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_KEY
+      process.env.SUPABASE_SERVICE_KEY,
+      {
+        realtime: {
+          enabled: false
+        },
+        auth: {
+          persistSession: false
+        }
+      }
     );
 
-    // GET (admin)
     if (req.method === "GET") {
       const { data, error } = await supabase
         .from("orders")
@@ -28,7 +36,6 @@ module.exports = async function handler(req, res) {
       return res.status(200).json(data);
     }
 
-    // POST (save order)
     if (req.method === "POST") {
       const body =
         typeof req.body === "string"
