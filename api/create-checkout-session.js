@@ -19,7 +19,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const amount = Number(req.body.amount);
+    const { amount, name, email, phone, pickup } = req.body;
 
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
