@@ -1,8 +1,6 @@
 const Stripe = require("stripe");
-const { Resend } = require("resend");
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 module.exports = async function handler(req, res) {
 
@@ -20,13 +18,24 @@ module.exports = async function handler(req, res) {
 
   try {
 
-    const { amount, name, email, phone, pickup } = req.body;
+    // 🔥 BODY FIX (EZ VOLT A HIBA OKA)
+    let body = req.body;
+
+    if (!body) {
+      body = {};
+    }
+
+    if (typeof body === "string") {
+      body = JSON.parse(body);
+    }
+
+    const { amount, name, email, phone, pickup } = body;
+
+    console.log("ORDER DATA:", body);
 
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
-
-    
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -52,10 +61,10 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ url: session.url });
 
   } catch (err) {
-    console.log("ERROR:", err);
+    console.log("STRIPE ERROR:", err);
 
     return res.status(500).json({
-      error: err.message,
+      error: err.message || "Unknown error",
     });
   }
 };
