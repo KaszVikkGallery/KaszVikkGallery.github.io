@@ -40,19 +40,25 @@ module.exports = async function handler(req, res) {
 
       console.log("ORDER RECEIVED:", body);
 
-      const { error } = await supabase
-        .from("orders")
-        .insert([{
-          name: body.name || "",
-          email: body.email || "",
-          phone: body.phone || "",
-          pickup: body.pickup || "",
-          amount: body.amount || 0,
-          items: body.items || [],
-          created_at: new Date().toISOString()
-        }]);
+      const insertData = {
+  name: body.name || "",
+  email: body.email || "",
+  phone: body.phone || "",
+  pickup: body.pickup || "",
+  amount: body.amount || 0,
+  created_at: new Date().toISOString()
+};
 
-      if (error) throw error;
+// csak akkor tesszük hozzá az items-et ha létezik
+if (body.items && Array.isArray(body.items)) {
+  insertData.items = body.items;
+}
+
+const { error } = await supabase
+  .from("orders")
+  .insert([insertData]);
+
+if (error) throw error;
 
       return res.status(200).json({ ok: true });
     }
