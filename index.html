@@ -364,15 +364,20 @@ alert("Kosár üres");
 return;
 }
 
-let total=0;
-cart.forEach(i=>total+=i.price);
+let total = 0;
+cart.forEach(i => total += i.price);
 
-localStorage.setItem("cartTotal", total+shippingPrice);
+const order = {
+  items: cart,
+  amount: total + shippingPrice
+};
 
-window.location.href="checkout.html";
+localStorage.setItem("lastOrder", JSON.stringify(order));
+localStorage.setItem("cartTotal", total + shippingPrice);
+
+window.location.href = "checkout.html";
 
 }
-
 renderGallery();
 renderCart();
 updateCartCount();
