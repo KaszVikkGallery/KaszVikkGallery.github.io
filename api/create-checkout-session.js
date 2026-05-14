@@ -23,21 +23,26 @@ module.exports = async function handler(req, res) {
     if (!body) body = {};
     if (typeof body === "string") body = JSON.parse(body);
 
-    const { amount } = body;
+    const amount = body.amount;
+    const name = body.name;
+    const email = body.email;
+    const phone = body.phone;
+    const pickup = body.pickup;
 
     console.log("BODY:", body);
 
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
+
     console.log("NEW ORDER:");
-console.log({
-  amount,
-  name,
-  email,
-  phone,
-  pickup
-});
+    console.log({
+      amount,
+      name,
+      email,
+      phone,
+      pickup
+    });
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -66,7 +71,7 @@ console.log({
     console.log("ERROR:", err);
 
     return res.status(500).json({
-      error: err.message,
+      error: err.message || "Unknown error",
     });
   }
 };
