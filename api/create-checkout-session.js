@@ -1,56 +1,63 @@
-import Stripe from "stripe";
+const Stripe = require("stripe");
 
-export default async function handler(req, res) {
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Only POST allowed" });
-  }
+module.exports = async function handler(req, res) {
 
-  let body = req.body;
-
-  // 🔥 FIX: biztos JSON parse
-  if (!body || typeof body === "string") {
-    try {
-      body = JSON.parse(body || "{}");
-    } catch (e) {
-      body = {};
-    }
-  }
-
-  const amount = Number(body.amount);
-
-  if (!amount) {
-    return res.status(400).json({ error: "Missing amount" });
-  }
-
-  if (!process.env.STRIPE_SECRET_KEY) {
-    return res.status(500).json({ error: "ENV VARIABLE MISSING" });
-  }
-
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2023-10-16",
-  });
-
-  try {
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      payment_method_types: ["card"],
-      line_items: [{
-        price_data: {
-          currency: "huf",
-          product_data: { name: "Kasz Vikk festmény" },
-          unit_amount: Math.round(amount),
-        },
-        quantity: 1,
-      }],
-      success_url: "https://kaszvikkgallery.github.io/",
-      cancel_url: "https://kaszvikkgallery.github.io/",
-    });
-
-    return res.status(200).json({ url: session.url });
-
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: err.message });
-  }
+if(req.method !== "POST"){
+return res.status(405).json({
+error: "Only POST allowed"
+});
 }
+
+try {
+
+const amount = Number(req.body.amount);
+
+if(!amount || amount <= 0){
+return res.status(400).json({
+error: "Invalid amount"
+});
+}
+
+const session = await stripe.checkout.sessions.create({
+payment_method_types: ["card"],
+
+mode: "payment",
+
+line_items: [
+{
+price_data: {
+currency: "huf",
+
+product_data: {
+name: "Kasz Vikk rendelés",
+},
+
+unit_amount: Math.round(amount * 100),
+},
+
+quantity: 1,
+},
+],
+
+success_url:
+"https://kaszvikkgallery.github.io/success.html",
+
+cancel_url:
+"https://kaszvikkgallery.github.io/cancel.html",
+});
+
+return res.status(200).json({
+url: session.url
+});
+
+} catch(err){
+
+console.log("STRIPE ERROR:", err);
+
+return res.status(500).json({
+error: err.message
+});
+}
+};
