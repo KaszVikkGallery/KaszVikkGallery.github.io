@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-<meta charset="UTF-8">
-<title>Sikeres fizetés</title>
-</head>
-<body style="text-align:center;font-family:Arial;padding:50px;">
-
-<h1>Köszönjük a rendelést! 🎉</h1>
-<p>A fizetés sikeres volt.</p>
-
-<a href="index.html">Vissza a főoldalra</a>
 <script>
-const data = JSON.parse(localStorage.getItem("lastOrder"));
+window.addEventListener("load", () => {
 
-if (data) {
+  console.log("SUCCESS PAGE LOADED");
+
+  const dataRaw = localStorage.getItem("lastOrder");
+  console.log("RAW DATA:", dataRaw);
+
+  if (!dataRaw) {
+    console.log("NINCS ORDER DATA → NEM KÜLDÜNK EMAILT");
+    return;
+  }
+
+  const data = JSON.parse(dataRaw);
+
   fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/send-email", {
     method: "POST",
     headers: {
@@ -26,7 +25,5 @@ if (data) {
   .catch(err => console.log("EMAIL ERROR:", err));
 
   localStorage.removeItem("lastOrder");
-}
+});
 </script>
-</body>
-</html>
