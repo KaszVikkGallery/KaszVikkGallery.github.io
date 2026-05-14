@@ -153,8 +153,10 @@ return;
 }
 
 const totalRaw = localStorage.getItem("cartTotal");
-const total = Number(totalRaw);
 
+console.log("CART TOTAL:", totalRaw);
+
+const total = Number(totalRaw);
 console.log("PAY TOTAL RAW:", totalRaw);
 console.log("PAY TOTAL:", total);
 
