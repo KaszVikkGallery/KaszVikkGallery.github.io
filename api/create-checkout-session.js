@@ -26,20 +26,7 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: "Invalid amount" });
     }
 
-    // 🔥 EMAIL NEKED (RENDELÉS ÉRTESÍTÉS)
-    await resend.emails.send({
-      from: "Rendelés <onboarding@resend.dev>",
-      to: "kaszvikkfestmeny@gmail.com",
-      subject: "Új rendelés érkezett",
-      html: `
-        <h2>Új rendelés</h2>
-        <p><b>Név:</b> ${name}</p>
-        <p><b>Email:</b> ${email}</p>
-        <p><b>Telefon:</b> ${phone}</p>
-        <p><b>Packeta:</b> ${pickup}</p>
-        <p><b>Összeg:</b> ${amount} Ft</p>
-      `
-    });
+    
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
