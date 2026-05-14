@@ -162,6 +162,21 @@ return;
 
 const order = JSON.parse(orderRaw);
 
+// 🔥 1. ELMENTÉS (EZ AZ ÚJ RÉSZ)
+fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(order)
+})
+.then(res => res.json())
+.then(data => {
+  console.log("ORDER SAVED:", data);
+})
+.catch(err => {
+  console.log("SAVE ERROR:", err);
+});
+
+// 🔥 2. STRIPE FIZETÉS
 fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
 method: "POST",
 headers: {
@@ -185,7 +200,7 @@ console.log("FETCH ERROR:", err);
 alert("HIBA:\n" + JSON.stringify(err));
 });
 
-}
+} 
 
 </script>
 
