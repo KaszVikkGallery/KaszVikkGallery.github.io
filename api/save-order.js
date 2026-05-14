@@ -44,12 +44,13 @@ module.exports = async function handler(req, res) {
 
       const { error } = await supabase.from("orders").insert([
         {
-          name: body.name || "",
-          email: body.email || "",
-          phone: body.phone || "",
-          pickup: body.pickup || "",
-          amount: body.amount || 0,
-          created_at: new Date().toISOString()
+  name: body.name || "",
+  email: body.email || "",
+  phone: body.phone || "",
+  pickup: body.pickup || "",
+  amount: body.amount || 0,
+  items: body.items || [],   // 🔥 EZ HIÁNYZOTT
+  created_at: new Date().toISOString()
         }
       ]);
 
