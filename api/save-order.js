@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
           phone: body.phone || "",
           pickup: body.pickup || "",
           amount: Number(body.amount) || 0,
-          created_at: new Date().toISOString()
+          items: body.items || []
         }]);
 
       if (error) {
