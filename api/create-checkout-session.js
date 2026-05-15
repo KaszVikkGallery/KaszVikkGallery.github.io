@@ -21,14 +21,28 @@ export default async function handler(req, res) {
     if (!body) body = {};
     if (typeof body === "string") body = JSON.parse(body);
 
-    const amount = Number(body.amount);
+    const amount = Number(body.amount) || 0;
 
     const name = body.name || "-";
     const email = body.email || "-";
     const phone = body.phone || "-";
     const pickup = body.pickup || "-";
 
-    console.log("ORDER:", { amount, name, email, phone, pickup });
+    // 🔥 EZ AZ ÚJ RÉSZ
+    const items = Array.isArray(body.items)
+      ? body.items
+      : Array.isArray(body.painting)
+        ? body.painting
+        : [];
+
+    console.log("ORDER:", {
+      amount,
+      name,
+      email,
+      phone,
+      pickup,
+      items
+    });
 
     if (!amount || amount < 175) {
       return res.status(400).json({ error: "Minimum 175 Ft" });
@@ -43,7 +57,7 @@ export default async function handler(req, res) {
           price_data: {
             currency: "huf",
             product_data: {
-              name: "Kasz Vikk termék",
+              name: "Kasz Vikk rendelés",
             },
             unit_amount: Math.round(amount * 100),
           },
@@ -51,13 +65,15 @@ export default async function handler(req, res) {
         },
       ],
 
-      // 🔥 EZ A LÉNYEG
       metadata: {
         name,
         email,
         phone,
         pickup,
-        amount
+        amount: String(amount),
+
+        // 🔥 FESTMÉNYEK IS MENNEK
+        items: JSON.stringify(items)
       },
 
       success_url: "https://kaszvikkgallery.github.io/success.html",
