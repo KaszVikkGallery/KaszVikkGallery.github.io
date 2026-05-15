@@ -120,7 +120,6 @@ function nextStep(){
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const pickup = document.getElementById("pickup").value.trim();
-  const Title of painting(s) = document.getElementById("Title of painting(s)").value.trim(); 
 
   if(!name || !email || !phone || !pickup){
     alert("Minden mezőt ki kell tölteni");
@@ -136,20 +135,18 @@ function nextStep(){
 
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+  // 🔥 FONTOS: rendelés összeállítása
   const order = {
     name,
     email,
     phone,
     pickup,
-    Title of painting(s), 
     amount: total,
     items: cart
   };
 
-  // elmentjük
   localStorage.setItem("lastOrder", JSON.stringify(order));
 
-  // UI váltás
   document.getElementById("step1").style.display = "none";
   document.getElementById("step2").style.display = "block";
 
