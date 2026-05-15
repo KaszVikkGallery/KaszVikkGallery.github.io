@@ -27,7 +27,10 @@ module.exports = async function handler(req, res) {
 
       if (error) {
         console.log("GET ERROR:", error);
-        return res.status(500).json({ error: error.message });
+
+        return res.status(500).json({
+          error: error.message
+        });
       }
 
       return res.status(200).json(data || []);
@@ -41,20 +44,46 @@ module.exports = async function handler(req, res) {
           ? JSON.parse(req.body)
           : req.body || {};
 
-      console.log("POST BODY:", body);
+      /* ITEMS */
+      const items =
+        Array.isArray(body.items)
+          ? body.items
+          : [];
 
-      // 🔥 FONTOS: items NEM nyúlunk át, csak elmentjük
-      const items = Array.isArray(body.items) ? body.items : [];
+      /* BASIC VALIDATION */
+      if (
+        !body.name ||
+        !body.email ||
+        !body.phone ||
+        !body.pickup
+      ) {
 
+        return res.status(400).json({
+          error: "Missing required fields"
+        });
+
+      }
+
+      /* ORDER */
       const order = {
-        name: body.name || "",
-        email: body.email || "",
-        phone: body.phone || "",
-        pickup: body.pickup || "",
-        amount: Number(body.amount) || 0,
 
-        // 🔥 EZ A LÉNYEG
+        name: String(body.name).trim(),
+
+        email: String(body.email).trim(),
+
+        phone: String(body.phone).trim(),
+
+        pickup: String(body.pickup).trim(),
+
+        /*
+          FONTOS:
+          Frontend amount nem megbízható.
+          Backend számolja majd újra.
+        */
+        amount: null,
+
         items: items
+
       };
 
       const { data, error } = await supabase
@@ -63,22 +92,34 @@ module.exports = async function handler(req, res) {
         .select();
 
       if (error) {
+
         console.log("SUPABASE ERROR:", error);
-        return res.status(500).json({ error: error.message });
+
+        return res.status(500).json({
+          error: error.message
+        });
+
       }
 
       return res.status(200).json({
         ok: true,
         inserted: data
       });
+
     }
 
-    return res.status(405).json({ error: "Only GET/POST allowed" });
+    return res.status(405).json({
+      error: "Only GET/POST allowed"
+    });
 
   } catch (e) {
 
     console.log("SERVER ERROR:", e);
 
-    return res.status(500).json({ error: e.message });
+    return res.status(500).json({
+      error: e.message
+    });
+
   }
+
 };
