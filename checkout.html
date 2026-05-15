@@ -133,45 +133,48 @@ function nextStep(){
 }  
   
 /* PAY */  
-function pay(){  
-  
-  const order = JSON.parse(localStorage.getItem("lastOrder"));  
-  
-  if(!order){  
-    alert("Nincs rendelési adat");  
-    return;  
-  }  
-  
-  fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {  
-    method: "POST",  
-    headers: { "Content-Type": "application/json" },  
-    body: JSON.stringify(order)  
-  })  
-  .then(res => res.json())  
-  .then(() => {  
-  
-    return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {  
-      method: "POST",  
-      headers: { "Content-Type": "application/json" },  
-      body: JSON.stringify(order)  
-    });  
-  
-  })  
-  .then(res => res.json())  
-  .then(data => {  
-  
-    if(data.url){  
-      window.location.href = data.url;  
-    } else {  
-      alert("Stripe hiba");  
-    }  
-  
-  })  
-  .catch(() => {  
-    alert("Hiba történt");  
-  });  
-  
-}  
+function pay(){
+
+  const order = JSON.parse(localStorage.getItem("lastOrder"));
+
+  console.log("ORDER SENT:", order);
+
+  fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(order)
+  })
+  .then(async res => {
+    const data = await res.json();
+    console.log("SAVE RESPONSE:", data);
+    return data;
+  })
+  .then(() => {
+
+    return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
+    });
+
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    if(data.url){
+      window.location.href = data.url;
+    } else {
+      console.log("STRIPE ERROR:", data);
+      alert("Stripe hiba");
+    }
+
+  })
+  .catch(err => {
+    console.log("FULL ERROR:", err);
+    alert("Mentési hiba");
+  });
+
+}
   
 </script> 
 </body>  
