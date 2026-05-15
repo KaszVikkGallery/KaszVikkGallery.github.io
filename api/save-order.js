@@ -15,24 +15,26 @@ module.exports = async function handler(req, res) {
     process.env.SUPABASE_SERVICE_KEY
   );
 
-  // ---------------- GET ----------------
-  if (req.method === "GET") {
-    const { data, error } = await supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false });
+  try {
 
-    if (error) {
-      console.log("GET ERROR:", error);
-      return res.status(500).json({ error: error.message });
+    // ---------------- GET ----------------
+    if (req.method === "GET") {
+
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.log("GET ERROR:", error);
+        return res.status(500).json({ error: error.message });
+      }
+
+      return res.status(200).json(data || []);
     }
 
-    return res.status(200).json(data || []);
-  }
-
-  // ---------------- POST ----------------
-  if (req.method === "POST") {
-    try {
+    // ---------------- POST ----------------
+    if (req.method === "POST") {
 
       const body =
         typeof req.body === "string"
@@ -41,30 +43,42 @@ module.exports = async function handler(req, res) {
 
       console.log("POST BODY:", body);
 
-      const { error } = await supabase
+      // 🔥 FONTOS: items NEM nyúlunk át, csak elmentjük
+      const items = Array.isArray(body.items) ? body.items : [];
+
+      const order = {
+        name: body.name || "",
+        email: body.email || "",
+        phone: body.phone || "",
+        pickup: body.pickup || "",
+        amount: Number(body.amount) || 0,
+
+        // 🔥 EZ A LÉNYEG
+        items: items
+      };
+
+      const { data, error } = await supabase
         .from("orders")
-        .insert([{
-          name: body.name || "",
-          email: body.email || "",
-          phone: body.phone || "",
-          pickup: body.pickup || "",
-          amount: Number(body.amount) || 0,
-          items: body.items || [],
-      title: body.items?.[0]?.title || ""
-    }]);
+        .insert([order])
+        .select();
 
       if (error) {
         console.log("SUPABASE ERROR:", error);
         return res.status(500).json({ error: error.message });
       }
 
-      return res.status(200).json({ ok: true });
-
-    } catch (e) {
-      console.log("SERVER ERROR:", e);
-      return res.status(500).json({ error: e.message });
+      return res.status(200).json({
+        ok: true,
+        inserted: data
+      });
     }
-  }
 
-  return res.status(405).json({ error: "Only GET/POST allowed" });
+    return res.status(405).json({ error: "Only GET/POST allowed" });
+
+  } catch (e) {
+
+    console.log("SERVER ERROR:", e);
+
+    return res.status(500).json({ error: e.message });
+  }
 };
