@@ -95,15 +95,28 @@ margin-top:5px;
 
 <script>
 
-/* PACKETA */
+/* PACKETA – FIX */
 function openPacketa(){
+
+  if(!window.Packeta || !Packeta.Widget){
+    alert("Packeta nem töltődött be");
+    return;
+  }
+
   Packeta.Widget.pick(
     "test",
     function(point){
-      if(!point) return;
 
-      document.getElementById("pickup").value =
-        point.name + " - " + point.city;
+      if(!point){
+        alert("Nem választottál átvevőhelyet");
+        return;
+      }
+
+      const place =
+        (point.name ? point.name : "") +
+        (point.city ? " - " + point.city : "");
+
+      document.getElementById("pickup").value = place.trim();
     },
     {
       language: "hu",
@@ -120,7 +133,7 @@ function nextStep(){
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const pickup = document.getElementById("pickup").value.trim();
-  const items = document.getElementById("items").value.trim();
+  const pickup = document.getElementById("items").value.trim(); 
 
   if(!name || !email || !phone || !pickup){
     alert("Minden mezőt ki kell tölteni");
@@ -135,7 +148,6 @@ function nextStep(){
     return;
   }
 
-  // ✔ FONTOS FIX: minden termék biztosan kap címet
   const items = cart.map(p => ({
     title: p.title || p.name || "Névtelen festmény",
     price: Number(p.price) || 0
@@ -164,10 +176,7 @@ function nextStep(){
 /* PAY */
 function pay(){
 
-  console.log("PAY CLICKED");
-
   const orderRaw = localStorage.getItem("lastOrder");
-  console.log("LOCALSTORAGE:", orderRaw);
 
   if(!orderRaw){
     alert("Nincs rendelési adat");
@@ -184,8 +193,6 @@ function pay(){
   .then(res => res.json())
   .then(data => {
 
-    console.log("SAVE RESULT:", data);
-
     return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -195,8 +202,6 @@ function pay(){
   })
   .then(res => res.json())
   .then(data => {
-
-    console.log("STRIPE:", data);
 
     if(data.url){
       window.location.href = data.url;
