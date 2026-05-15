@@ -95,27 +95,20 @@ margin-top:5px;
 
 <script>
 
-/* PACKETA – FIX */
-
+/* PACKETA */
 function openPacketa(){
 
   if (!window.Packeta || !Packeta.Widget) {
-    alert("Packeta nem töltődött be");
+    alert("Packeta nem elérhető");
     return;
   }
 
   Packeta.Widget.pick(
     function(point){
-
-      if (!point) return;
-
-      const name = point?.name || "";
-      const city = point?.city || "";
-      const address = point?.street || "";
+      if(!point) return;
 
       document.getElementById("pickup").value =
-        (name + " " + address + " " + city).trim();
-
+        (point.name || "") + " - " + (point.city || "");
     },
     {
       language: "hu",
@@ -123,8 +116,8 @@ function openPacketa(){
       view: "modal"
     }
   );
-
 }
+
 /* STEP 1 */
 function nextStep(){
 
@@ -132,7 +125,6 @@ function nextStep(){
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const pickup = document.getElementById("pickup").value.trim();
-  const pickup = document.getElementById("items").value.trim(); 
 
   if(!name || !email || !phone || !pickup){
     alert("Minden mezőt ki kell tölteni");
@@ -143,14 +135,9 @@ function nextStep(){
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if(!total || total <= 0){
-    alert("Kosár hiba - nincs összeg");
+    alert("Kosár hiba");
     return;
   }
-
-  const items = cart.map(p => ({
-    title: p.title || p.name || "Névtelen festmény",
-    price: Number(p.price) || 0
-  }));
 
   const order = {
     name,
@@ -158,10 +145,8 @@ function nextStep(){
     phone,
     pickup,
     amount: total,
-    items
+    items: cart
   };
-
-  console.log("ORDER CREATED:", order);
 
   localStorage.setItem("lastOrder", JSON.stringify(order));
 
@@ -175,14 +160,12 @@ function nextStep(){
 /* PAY */
 function pay(){
 
-  const orderRaw = localStorage.getItem("lastOrder");
+  const order = JSON.parse(localStorage.getItem("lastOrder"));
 
-  if(!orderRaw){
+  if(!order){
     alert("Nincs rendelési adat");
     return;
   }
-
-  const order = JSON.parse(orderRaw);
 
   fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
     method: "POST",
@@ -190,7 +173,7 @@ function pay(){
     body: JSON.stringify(order)
   })
   .then(res => res.json())
-  .then(data => {
+  .then(() => {
 
     return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
       method: "POST",
@@ -205,12 +188,11 @@ function pay(){
     if(data.url){
       window.location.href = data.url;
     } else {
-      alert(JSON.stringify(data));
+      alert("Stripe hiba");
     }
 
   })
-  .catch(err => {
-    console.log("ERROR:", err);
+  .catch(() => {
     alert("Hiba történt");
   });
 
@@ -219,4 +201,4 @@ function pay(){
 </script>
 
 </body>
-</html>
+</html> 
