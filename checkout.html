@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hu">
 <head>
@@ -8,57 +9,67 @@
 
 <style>
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#fff;
-text-align:center;
-padding:20px;
-color:#222;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#fff;
+  text-align:center;
+  padding:20px;
+  color:#222;
 }
 
 h1{
-margin-top:30px;
-font-size:28px;
-font-weight:normal;
+  margin-top:30px;
+  font-size:28px;
+  font-weight:normal;
 }
 
 input, button{
-width:90%;
-max-width:420px;
-padding:14px;
-margin:8px 0;
-font-size:16px;
-border-radius:10px;
-border:1px solid #ccc;
-box-sizing:border-box;
+  width:90%;
+  max-width:420px;
+  padding:14px;
+  margin:8px 0;
+  font-size:16px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
 }
 
 button{
-background:black;
-color:white;
-border:none;
-cursor:pointer;
+  background:black;
+  color:white;
+  border:none;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-button:hover{opacity:0.9;}
+button:hover{
+  opacity:0.9;
+}
+
+button:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
 
 #pickup{
-background:#f5f5f5;
-cursor:pointer;
+  background:#f5f5f5;
+  cursor:pointer;
 }
 
 #summary{
-margin-top:18px;
-font-size:20px;
-font-weight:bold;
+  margin-top:18px;
+  font-size:20px;
+  font-weight:bold;
 }
 
-#step2{display:none;}
+#step2{
+  display:none;
+}
 
 .small{
-font-size:13px;
-color:#666;
-margin-top:5px;
+  font-size:13px;
+  color:#666;
+  margin-top:5px;
 }
 </style>
 </head>
@@ -69,25 +80,42 @@ margin-top:5px;
 
 <div id="step1">
 
-<input id="name" placeholder="Teljes név">
-<input id="email" type="email" placeholder="Email cím">
-<input id="phone" placeholder="Telefonszám">
+  <input id="name" placeholder="Teljes név">
 
-<input id="pickup"
-       placeholder="Packeta átvételi pont"
-       readonly
-       onclick="openPacketa()">
+  <input
+    id="email"
+    type="email"
+    placeholder="Email cím"
+  >
 
-<div class="small">Kattints a kiválasztáshoz</div>
+  <input
+    id="phone"
+    type="tel"
+    placeholder="Telefonszám"
+  >
 
-<button onclick="nextStep()">Tovább a fizetéshez</button>
+  <input
+    id="pickup"
+    placeholder="Packeta átvételi pont"
+    readonly
+    onclick="openPacketa()"
+  >
+
+  <div class="small">Kattints a kiválasztáshoz</div>
+
+  <button onclick="nextStep()">
+    Tovább a fizetéshez
+  </button>
 
 </div>
 
 <div id="step2">
 
-<div id="summary"></div>
-<button onclick="pay()">Fizetés indítása</button>
+  <div id="summary"></div>
+
+  <button id="payBtn" onclick="pay()">
+    Fizetés indítása
+  </button>
 
 </div>
 
@@ -97,107 +125,217 @@ margin-top:5px;
 
 /* PACKETA */
 function openPacketa(){
+
   Packeta.Widget.pick(
-    "test",
+
+    "YOUR_PACKETA_API_KEY",
+
     function(point){
+
       if(!point) return;
 
       document.getElementById("pickup").value =
         point.name + " - " + point.city;
+
     },
+
     {
-      language: "hu",
-      country: "hu",
-      view: "modal"
+      language:"hu",
+      country:"hu",
+      view:"modal"
     }
+
   );
+
+}
+
+/* EMAIL VALIDATION */
+function isValidEmail(email){
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 }
 
 /* STEP 1 */
 function nextStep(){
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const pickup = document.getElementById("pickup").value.trim();
+  const name =
+    document.getElementById("name").value.trim();
 
+  const email =
+    document.getElementById("email").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const pickup =
+    document.getElementById("pickup").value.trim();
+
+  /* VALIDATION */
   if(!name || !email || !phone || !pickup){
+
     alert("Minden mezőt ki kell tölteni");
     return;
+
   }
 
-  const total = Number(localStorage.getItem("cartTotal"));
+  if(!isValidEmail(email)){
 
-  if(!total || total <= 0){
-    alert("Kosár hiba - nincs összeg");
+    alert("Hibás email cím");
     return;
+
   }
 
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  /* CART */
+  const cart =
+    JSON.parse(localStorage.getItem("cart")) || [];
 
-  // 🔥 FONTOS: rendelés összeállítása
+  if(cart.length === 0){
+
+    alert("A kosár üres");
+    return;
+
+  }
+
+  /* TOTAL */
+  const total =
+    parseInt(localStorage.getItem("cartTotal"), 10);
+
+  if(isNaN(total) || total <= 0){
+
+    alert("Hiba a kosár összegével");
+    return;
+
+  }
+
+  /* ORDER */
   const order = {
     name,
     email,
     phone,
     pickup,
-    amount: total,
     items: cart
+
+    /*
+      FONTOS:
+      Az amount NE legyen megbízható frontend adat.
+      Backend számolja újra.
+    */
   };
 
-  localStorage.setItem("lastOrder", JSON.stringify(order));
+  localStorage.setItem(
+    "lastOrder",
+    JSON.stringify(order)
+  );
 
-  document.getElementById("step1").style.display = "none";
-  document.getElementById("step2").style.display = "block";
+  /* UI */
+  document.getElementById("step1").style.display =
+    "none";
+
+  document.getElementById("step2").style.display =
+    "block";
 
   document.getElementById("summary").innerText =
-    "Fizetendő: " + total + " Ft";
+    "Fizetendő: " +
+    total.toLocaleString("hu-HU") +
+    " Ft";
+
 }
 
 /* PAY */
-function pay(){
+async function pay(){
 
-  const order = JSON.parse(localStorage.getItem("lastOrder"));
+  const btn =
+    document.getElementById("payBtn");
 
-  if(!order){
-    alert("Hiba: nincs rendelési adat");
-    return;
-  }
+  btn.disabled = true;
+  btn.innerText = "Betöltés...";
 
-  console.log("SENDING ORDER:", order);
+  try{
 
-  fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(order)
-  })
-  .then(res => res.json())
-  .then(data => {
+    const order =
+      JSON.parse(localStorage.getItem("lastOrder"));
 
-    console.log("SAVED:", data);
+    if(!order){
 
-    return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(order)
-    });
+      alert("Nincs rendelési adat");
+      btn.disabled = false;
+      btn.innerText = "Fizetés indítása";
+      return;
 
-  })
-  .then(res => res.json())
-  .then(data => {
-
-    console.log("STRIPE:", data);
-
-    if(data.url){
-      window.location.href = data.url;
-    } else {
-      alert(JSON.stringify(data));
     }
 
-  })
-  .catch(err => {
-    console.log("ERROR:", err);
-  });
+    /* SAVE ORDER */
+    const saveResponse = await fetch(
+
+      "https://kasz-vikk-gallery-github-io.vercel.app/api/save-order",
+
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify(order)
+      }
+
+    );
+
+    if(!saveResponse.ok){
+
+      throw new Error("Rendelés mentése sikertelen");
+
+    }
+
+    /* CREATE STRIPE SESSION */
+    const stripeResponse = await fetch(
+
+      "https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session",
+
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify(order)
+      }
+
+    );
+
+    if(!stripeResponse.ok){
+
+      throw new Error("Stripe session hiba");
+
+    }
+
+    const data =
+      await stripeResponse.json();
+
+    if(data.url){
+
+      window.location.href = data.url;
+
+    }else{
+
+      throw new Error("Nincs Stripe URL");
+
+    }
+
+  }catch(err){
+
+    console.error(err);
+
+    alert(
+      "Hiba történt a fizetés indításakor."
+    );
+
+    btn.disabled = false;
+    btn.innerText = "Fizetés indítása";
+
+  }
 
 }
 
