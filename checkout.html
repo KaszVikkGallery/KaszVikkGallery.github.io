@@ -96,27 +96,26 @@ margin-top:5px;
 <script>
 
 /* PACKETA – FIX */
+
 function openPacketa(){
 
-  if(!window.Packeta || !Packeta.Widget){
+  if (!window.Packeta || !Packeta.Widget) {
     alert("Packeta nem töltődött be");
     return;
   }
 
   Packeta.Widget.pick(
-    "test",
     function(point){
 
-      if(!point){
-        alert("Nem választottál átvevőhelyet");
-        return;
-      }
+      if (!point) return;
 
-      const place =
-        (point.name ? point.name : "") +
-        (point.city ? " - " + point.city : "");
+      const name = point?.name || "";
+      const city = point?.city || "";
+      const address = point?.street || "";
 
-      document.getElementById("pickup").value = place.trim();
+      document.getElementById("pickup").value =
+        (name + " " + address + " " + city).trim();
+
     },
     {
       language: "hu",
@@ -124,8 +123,8 @@ function openPacketa(){
       view: "modal"
     }
   );
-}
 
+}
 /* STEP 1 */
 function nextStep(){
 
