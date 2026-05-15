@@ -116,78 +116,90 @@ function openPacketa(){
 /* STEP 1 */
 function nextStep(){
 
-const name = document.getElementById("name").value.trim();
-const email = document.getElementById("email").value.trim();
-const phone = document.getElementById("phone").value.trim();
-const pickup = document.getElementById("pickup").value.trim();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const pickup = document.getElementById("pickup").value.trim();
 
-if(!name || !email || !phone || !pickup){
-alert("Minden mezőt ki kell tölteni");
-return;
+  if(!name || !email || !phone || !pickup){
+    alert("Minden mezőt ki kell tölteni");
+    return;
+  }
+
+  const total = Number(localStorage.getItem("cartTotal"));
+
+  if(!total || total <= 0){
+    alert("Kosár hiba - nincs összeg");
+    return;
+  }
+
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // 🔥 EZ A FONTOS RÉSZ
+  const order = {
+    name,
+    email,
+    phone,
+    pickup,
+    amount: total,
+    items: cart
+  };
+
+  // elmentjük
+  localStorage.setItem("lastOrder", JSON.stringify(order));
+
+  // UI váltás
+  document.getElementById("step1").style.display = "none";
+  document.getElementById("step2").style.display = "block";
+
+  document.getElementById("summary").innerText =
+    "Fizetendő: " + total + " Ft";
 }
 
-const total = Number(localStorage.getItem("cartTotal"));
-
-if(!total || total <= 0){
-alert("Kosár hiba - nincs összeg");
-return;
-}
-
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-const order = {
-  name,
-  email,
-  phone,
-  pickup,
-  amount: total,
-  items: cart
-};
-       
 /* PAY */
 function pay(){
 
-const order = JSON.parse(localStorage.getItem("lastOrder"));
+  const order = JSON.parse(localStorage.getItem("lastOrder"));
 
-if(!order){
-alert("Hiba: nincs rendelési adat");
-return;
-}
+  if(!order){
+    alert("Hiba: nincs rendelési adat");
+    return;
+  }
 
-console.log("SENDING ORDER:", order);
+  console.log("SENDING ORDER:", order);
 
-fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(order)
-})
-.then(res => res.json())
-.then(data => {
-
-  console.log("SAVED:", data);
-
-  return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
+  fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(order)
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    console.log("SAVED:", data);
+
+    return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
+    });
+
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    console.log("STRIPE:", data);
+
+    if(data.url){
+      window.location.href = data.url;
+    } else {
+      alert(JSON.stringify(data));
+    }
+
+  })
+  .catch(err => {
+    console.log("ERROR:", err);
   });
-
-})
-.then(res => res.json())
-.then(data => {
-
-  console.log("STRIPE:", data);
-
-  if(data.url){
-    window.location.href = data.url;
-  } else {
-    alert(JSON.stringify(data));
-  }
-
-})
-.catch(err => {
-  console.log("ERROR:", err);
-});
 
 }
 
