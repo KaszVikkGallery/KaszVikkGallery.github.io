@@ -73,7 +73,6 @@ margin-top:5px;
 <input id="email" type="email" placeholder="Email cím">
 <input id="phone" placeholder="Telefonszám">
 
-<!-- 🔥 Packeta fix -->
 <input id="pickup"
        placeholder="Packeta átvételi pont"
        readonly
@@ -127,13 +126,20 @@ alert("Minden mezőt ki kell tölteni");
 return;
 }
 
-const totalRaw = localStorage.getItem("cartTotal");
-const total = Number(totalRaw);
+const total = Number(localStorage.getItem("cartTotal"));
 
 if(!total || total <= 0){
 alert("Kosár hiba - nincs összeg");
 return;
 }
+
+const cartRaw = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* 🔥 FIX: egységes items struktúra */
+const items = cartRaw.map(item => ({
+  title: item.title || item.name || "Ismeretlen festmény",
+  price: Number(item.price) || 0
+}));
 
 document.getElementById("step1").style.display = "none";
 document.getElementById("step2").style.display = "block";
@@ -141,15 +147,13 @@ document.getElementById("step2").style.display = "block";
 document.getElementById("summary").innerText =
 "Fizetendő: " + total + " Ft";
 
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
 localStorage.setItem("lastOrder", JSON.stringify({
   amount: total,
   name,
   email,
   phone,
   pickup,
-  items: cart
+  items
 }));
 
 }
@@ -166,7 +170,6 @@ return;
 
 console.log("SENDING ORDER:", order);
 
-// 🔥 1. mentés
 fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -177,7 +180,6 @@ fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
 
   console.log("SAVED:", data);
 
-  // 🔥 2. stripe csak UTÁNA
   return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
