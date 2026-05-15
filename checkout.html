@@ -133,13 +133,19 @@ function nextStep(){
     return;
   }
 
+  // ✔ FONTOS FIX: minden termék biztosan kap címet
+  const items = cart.map(p => ({
+    title: p.title || p.name || "Névtelen festmény",
+    price: Number(p.price) || 0
+  }));
+
   const order = {
     name,
     email,
     phone,
     pickup,
     amount: total,
-    items: cart
+    items
   };
 
   console.log("ORDER CREATED:", order);
