@@ -2,86 +2,68 @@ const { createClient } = require("@supabase/supabase-js");
 
 module.exports = async function handler(req, res) {
 
-res.setHeader("Access-Control-Allow-Origin", "*");
-res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-if (req.method === "OPTIONS") {
-return res.status(200).end();
-}
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
-const supabase = createClient(
-process.env.SUPABASE_URL,
-process.env.SUPABASE_SERVICE_KEY
-);
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY
+  );
 
-try {
+  // ---------------- GET ----------------
+  if (req.method === "GET") {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-// ---------------- GET ----------------  
-const { data, error } = await supabase
-  .from("orders")
-  .insert([order])
-  .select();
+    if (error) {
+      console.log("GET ERROR:", error);
+      return res.status(500).json({ error: error.message });
+    }
 
-if (error) {
-  console.log("❌ INSERT ERROR:", error);
-  return res.status(500).json({ error: error.message });
-}
+    return res.status(200).json(data || []);
+  }
 
-console.log("✅ INSERT SUCCESS:", data);
+  // ---------------- POST ----------------
+  if (req.method === "POST") {
+    try {
 
-return res.status(200).json({
-  ok: true,
-  inserted: data
-});
+      const body =
+        typeof req.body === "string"
+          ? JSON.parse(req.body)
+          : req.body || {};
 
-// ---------------- POST ----------------  
-if (req.method === "POST") {  
+      console.log("POST BODY:", body);
 
-  const body =  
-    typeof req.body === "string"  
-      ? JSON.parse(req.body)  
-      : req.body || {};  
+      const { error } = await supabase
+        .from("orders")
+        .insert([{
+          name: body.name || "",
+          email: body.email || "",
+          phone: body.phone || "",
+          pickup: body.pickup || "",
+          amount: Number(body.amount) || 0,
+          created_at: new Date().toISOString()
+        }]);
 
-  console.log("POST BODY:", body);  
+      if (error) {
+        console.log("SUPABASE ERROR:", error);
+        return res.status(500).json({ error: error.message });
+      }
 
-  // 🔥 FONTOS: items NEM nyúlunk át, csak elmentjük  
-  const items = Array.isArray(body.items) ? body.items : [];  
+      return res.status(200).json({ ok: true });
 
-  const order = {  
-    name: body.name || "",  
-    email: body.email || "",  
-    phone: body.phone || "",  
-    pickup: body.pickup || "",  
-    amount: Number(body.amount) || 0,  
+    } catch (e) {
+      console.log("SERVER ERROR:", e);
+      return res.status(500).json({ error: e.message });
+    }
+  }
 
-    // 🔥 EZ A LÉNYEG  
-    items: items  
-  };  
-
-  const { data, error } = await supabase  
-    .from("orders")  
-    .insert([order])  
-    .select();  
-
-  if (error) {  
-    console.log("SUPABASE ERROR:", error);  
-    return res.status(500).json({ error: error.message });  
-  }  
-
-  return res.status(200).json({  
-    ok: true,  
-    inserted: data  
-  });  
-}  
-
-return res.status(405).json({ error: "Only GET/POST allowed" });
-
-} catch (e) {
-
-console.log("SERVER ERROR:", e);  
-
-return res.status(500).json({ error: e.message });
-
-}
+  return res.status(405).json({ error: "Only GET/POST allowed" });
 };
