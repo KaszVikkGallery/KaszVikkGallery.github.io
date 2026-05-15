@@ -133,31 +133,17 @@ alert("Kosár hiba - nincs összeg");
 return;
 }
 
-const cartRaw = JSON.parse(localStorage.getItem("cart")) || [];
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* 🔥 FIX: egységes items struktúra */
-const items = cartRaw.map(item => ({
-  title: item.title || item.name || "Ismeretlen festmény",
-  price: Number(item.price) || 0
-}));
-
-document.getElementById("step1").style.display = "none";
-document.getElementById("step2").style.display = "block";
-
-document.getElementById("summary").innerText =
-"Fizetendő: " + total + " Ft";
-
-localStorage.setItem("lastOrder", JSON.stringify({
-  amount: total,
+const order = {
   name,
   email,
   phone,
   pickup,
-  items
-}));
-
-}
-
+  amount: total,
+  items: cart
+};
+       
 /* PAY */
 function pay(){
 
