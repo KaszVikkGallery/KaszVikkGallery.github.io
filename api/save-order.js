@@ -49,8 +49,9 @@ module.exports = async function handler(req, res) {
           phone: body.phone || "",
           pickup: body.pickup || "",
           amount: Number(body.amount) || 0,
-          created_at: new Date().toISOString()
-        }]);
+          items: body.items || [],
+      title: body.items?.[0]?.title || ""
+    }]);
 
       if (error) {
         console.log("SUPABASE ERROR:", error);
