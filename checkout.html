@@ -57,7 +57,7 @@ margin-top:5px;
 }  
 </style>  </head>  <body>  <h1>Szállítási adatok</h1>  <div id="step1">  <input id="name" placeholder="Teljes név">  
 <input id="email" type="email" placeholder="Email cím">  
-<input id="phone" placeholder="Telefonszám">  <input id="pickup"  
+<input id="phone" placeholder="Telefonszám">  <!-- 🔥 Packeta fix -->  <input id="pickup"  
 placeholder="Packeta átvételi pont"  
 readonly  
 onclick="openPacketa()">
@@ -88,88 +88,89 @@ function openPacketa(){
 /* STEP 1 */  
 function nextStep(){  
   
-  const name = document.getElementById("name").value.trim();  
-  const email = document.getElementById("email").value.trim();  
-  const phone = document.getElementById("phone").value.trim();  
-  const pickup = document.getElementById("pickup").value.trim();  
+const name = document.getElementById("name").value.trim();  
+const email = document.getElementById("email").value.trim();  
+const phone = document.getElementById("phone").value.trim();  
+const pickup = document.getElementById("pickup").value.trim();  
   
-  if(!name || !email || !phone || !pickup){  
-    alert("Minden mezőt ki kell tölteni");  
-    return;  
-  }  
+if(!name || !email || !phone || !pickup){  
+alert("Minden mezőt ki kell tölteni");  
+return;  
+}  
   
-  const total = Number(localStorage.getItem("cartTotal"));  
+const totalRaw = localStorage.getItem("cartTotal");  
+const total = Number(totalRaw);  
   
-  if(!total || total <= 0){  
-    alert("Kosár hiba - nincs összeg");  
-    return;  
-  }  
+if(!total || total <= 0){  
+alert("Kosár hiba - nincs összeg");  
+return;  
+}  
   
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];  
+document.getElementById("step1").style.display = "none";  
+document.getElementById("step2").style.display = "block";  
   
-  // 🔥 FONTOS: rendelés összeállítása  
-  const order = {  
-    name,  
-    email,  
-    phone,  
-    pickup,  
-    amount: total,  
-    items: cart  
-  };  
+document.getElementById("summary").innerText =  
+"Fizetendő: " + total + " Ft";  
   
-  localStorage.setItem("lastOrder", JSON.stringify(order));  
+const cart = JSON.parse(localStorage.getItem("cart")) || [];  
   
-  document.getElementById("step1").style.display = "none";  
-  document.getElementById("step2").style.display = "block";  
+localStorage.setItem("lastOrder", JSON.stringify({  
+  amount: total,  
+  name,  
+  email,  
+  phone,  
+  pickup,  
+  items: cart  
+}));  
   
-  document.getElementById("summary").innerText =  
-    "Fizetendő: " + total + " Ft";  
 }  
   
 /* PAY */  
 function pay(){  
   
-  const order = JSON.parse(localStorage.getItem("lastOrder"));  
+const order = JSON.parse(localStorage.getItem("lastOrder"));  
   
-  if(!order){  
-    alert("Hiba: nincs rendelési adat");  
-    return;  
-  }  
+if(!order){  
+alert("Hiba: nincs rendelési adat");  
+return;  
+}  
   
-  console.log("SENDING ORDER:", order);  
+console.log("SENDING ORDER:", order);  
   
-  fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {  
+// 🔥 1. mentés  
+fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {  
+  method: "POST",  
+  headers: { "Content-Type": "application/json" },  
+  body: JSON.stringify(order)  
+})  
+.then(res => res.json())  
+.then(data => {  
+  
+  console.log("SAVED:", data);  
+  
+  // 🔥 2. stripe csak UTÁNA  
+  return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {  
     method: "POST",  
     headers: { "Content-Type": "application/json" },  
     body: JSON.stringify(order)  
-  })  
-  .then(res => res.json())  
-  .then(data => {  
-  
-    console.log("SAVED:", data);  
-  
-    return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {  
-      method: "POST",  
-      headers: { "Content-Type": "application/json" },  
-      body: JSON.stringify(order)  
-    });  
-  
-  })  
-  .then(res => res.json())  
-  .then(data => {  
-  
-    console.log("STRIPE:", data);  
-  
-    if(data.url){  
-      window.location.href = data.url;  
-    } else {  
-      alert(JSON.stringify(data));  
-    }  
-  
-  })  
-  .catch(err => {  
-    console.log("ERROR:", err);  
   });  
+  
+})  
+.then(res => res.json())  
+.then(data => {  
+  
+  console.log("STRIPE:", data);  
+  
+  if(data.url){  
+    window.location.href = data.url;  
+  } else {  
+    alert(JSON.stringify(data));  
+  }  
+  
+})  
+.catch(err => {  
+  console.log("ERROR:", err);  
+});  
   
 }  
   
