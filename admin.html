@@ -1,82 +1,109 @@
-<!DOCTYPE html>  <html lang="hu">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Admin - Rendelések</title>  <style>  
-body{  
-font-family:Arial;  
-margin:0;  
-padding:20px;  
-background:#111;  
-color:#fff;  
-}  
-  
-h1{  
-text-align:center;  
-margin-bottom:20px;  
-}  
-  
-.order{  
-background:#222;  
-padding:15px;  
-margin-bottom:10px;  
-border-radius:10px;  
-}  
-  
-small{  
-color:#aaa;  
-display:block;  
-margin-top:5px;  
-}  
-  
-button{  
-padding:10px;  
-margin-bottom:20px;  
-border:none;  
-border-radius:8px;  
-cursor:pointer;  
-}  
-</style>  </head>  <body>  <h1>📦 Rendelések</h1>  <button onclick="loadOrders()">Frissítés</button>
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Rendelések</title>
 
-<div id="list"></div>  <script>  
-  
-async function loadOrders(){  
-  
-document.getElementById("list").innerHTML = "Betöltés...";  
-  
-// 🔥 innen jönnek az adatok  
-const res = await fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order");  
-const data = await res.json();  
-  
-if(!data || !Array.isArray(data)){  
-document.getElementById("list").innerHTML = "Nincs adat";  
-return;  
-}  
-  
-document.getElementById("list").innerHTML = "";  
-  
-data.reverse().forEach(order => {  
-  
-const div = document.createElement("div");  
-div.className = "order";  
-  
-div.innerHTML = `  
-<b>Név:</b> ${order.name}<br>  
-<b>Email:</b> ${order.email}<br>  
-<b>Telefon:</b> ${order.phone}<br>  
-<b>Packeta:</b> ${order.pickup}<br>  
-<b>A festmények címe:</b>${order.Title of painting(s)}<br>  
-<b>Összeg:</b> ${order.amount} Ft<br>  
-<small>${order.time || ""}</small>  
-`;  
-  
-document.getElementById("list").appendChild(div);  
-  
-});  
-  
-}  
-  
-loadOrders();  
-  
-</script>  </body>  
-</html> 
+<style>
+body{
+  font-family: Arial;
+  margin: 0;
+  padding: 20px;
+  background: #111;
+  color: #fff;
+}
+
+h1{
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.order{
+  background: #222;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+small{
+  color: #aaa;
+  display: block;
+  margin-top: 5px;
+}
+
+button{
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>📦 Rendelések</h1>
+
+<button onclick="loadOrders()">Frissítés</button>
+
+<div id="list"></div>
+
+<script>
+
+async function loadOrders(){
+
+  const list = document.getElementById("list");
+  list.innerHTML = "Betöltés...";
+
+  try {
+
+    const res = await fetch(
+      "https://kasz-vikk-gallery-github-io.vercel.app/api/save-order"
+    );
+
+    const data = await res.json();
+
+    if(!Array.isArray(data)){
+      list.innerHTML = "Nincs adat";
+      return;
+    }
+
+    list.innerHTML = "";
+
+    data.reverse().forEach(order => {
+
+      const div = document.createElement("div");
+      div.className = "order";
+
+      const paintings = Array.isArray(order.painting)
+        ? order.painting.map(p => p.name || p.title || "Névtelen").join(", ")
+        : "Nincs adat";
+
+      div.innerHTML = `
+        <b>Név:</b> ${order.name || ""}<br>
+        <b>Email:</b> ${order.email || ""}<br>
+        <b>Telefon:</b> ${order.phone || ""}<br>
+        <b>Packeta:</b> ${order.pickup || ""}<br>
+        <b>Festmények:</b> ${paintings}<br>
+        <b>Összeg:</b> ${order.amount || 0} Ft<br>
+        <small>${order.created_at || ""}</small>
+      `;
+
+      list.appendChild(div);
+    });
+
+  } catch (err) {
+    console.log(err);
+    list.innerHTML = "Hiba a betöltésnél";
+  }
+}
+
+loadOrders();
+
+</script>
+
+</body>
+</html>
