@@ -18,20 +18,22 @@ process.env.SUPABASE_SERVICE_KEY
 try {
 
 // ---------------- GET ----------------  
-if (req.method === "GET") {  
+const { data, error } = await supabase
+  .from("orders")
+  .insert([order])
+  .select();
 
-  const { data, error } = await supabase  
-    .from("orders")  
-    .select("*")  
-    .order("created_at", { ascending: false });  
+if (error) {
+  console.log("❌ INSERT ERROR:", error);
+  return res.status(500).json({ error: error.message });
+}
 
-  if (error) {  
-    console.log("GET ERROR:", error);  
-    return res.status(500).json({ error: error.message });  
-  }  
+console.log("✅ INSERT SUCCESS:", data);
 
-  return res.status(200).json(data || []);  
-}  
+return res.status(200).json({
+  ok: true,
+  inserted: data
+});
 
 // ---------------- POST ----------------  
 if (req.method === "POST") {  
