@@ -49,6 +49,7 @@ module.exports = async function handler(req, res) {
           phone: body.phone || "",
           pickup: body.pickup || "",
           amount: Number(body.amount) || 0,
+          <b>Festmények:</b> ${JSON.stringify(order.items || [])}
           created_at: new Date().toISOString()
         }]);
 
