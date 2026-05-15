@@ -71,6 +71,7 @@ margin-top:5px;
 <input id="name" placeholder="Teljes név">
 <input id="email" type="email" placeholder="Email cím">
 <input id="phone" placeholder="Telefonszám">
+<input id="items" placeholder="Festmény(ek) címe">
 
 <input id="pickup"
        placeholder="Packeta átvételi pont"
@@ -119,6 +120,7 @@ function nextStep(){
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
   const pickup = document.getElementById("pickup").value.trim();
+  const items = document.getElementById("items").value.trim();
 
   if(!name || !email || !phone || !pickup){
     alert("Minden mezőt ki kell tölteni");
