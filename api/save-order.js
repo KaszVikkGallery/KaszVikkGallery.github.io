@@ -2,124 +2,84 @@ const { createClient } = require("@supabase/supabase-js");
 
 module.exports = async function handler(req, res) {
 
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+res.setHeader("Access-Control-Allow-Origin", "*");
+res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+if (req.method === "OPTIONS") {
+return res.status(200).end();
+}
 
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
-  );
+const supabase = createClient(
+process.env.SUPABASE_URL,
+process.env.SUPABASE_SERVICE_KEY
+);
 
-  try {
+try {
 
-    // ---------------- GET ----------------
-    if (req.method === "GET") {
+// ---------------- GET ----------------  
+if (req.method === "GET") {  
 
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
+  const { data, error } = await supabase  
+    .from("orders")  
+    .select("*")  
+    .order("created_at", { ascending: false });  
 
-      if (error) {
-        console.log("GET ERROR:", error);
+  if (error) {  
+    console.log("GET ERROR:", error);  
+    return res.status(500).json({ error: error.message });  
+  }  
 
-        return res.status(500).json({
-          error: error.message
-        });
-      }
+  return res.status(200).json(data || []);  
+}  
 
-      return res.status(200).json(data || []);
-    }
+// ---------------- POST ----------------  
+if (req.method === "POST") {  
 
-    // ---------------- POST ----------------
-    if (req.method === "POST") {
+  const body =  
+    typeof req.body === "string"  
+      ? JSON.parse(req.body)  
+      : req.body || {};  
 
-      const body =
-        typeof req.body === "string"
-          ? JSON.parse(req.body)
-          : req.body || {};
+  console.log("POST BODY:", body);  
 
-      /* ITEMS */
-      const items =
-        Array.isArray(body.items)
-          ? body.items
-          : [];
+  // 🔥 FONTOS: items NEM nyúlunk át, csak elmentjük  
+  const items = Array.isArray(body.items) ? body.items : [];  
 
-      /* BASIC VALIDATION */
-      if (
-        !body.name ||
-        !body.email ||
-        !body.phone ||
-        !body.pickup
-      ) {
+  const order = {  
+    name: body.name || "",  
+    email: body.email || "",  
+    phone: body.phone || "",  
+    pickup: body.pickup || "",  
+    amount: Number(body.amount) || 0,  
 
-        return res.status(400).json({
-          error: "Missing required fields"
-        });
+    // 🔥 EZ A LÉNYEG  
+    items: items  
+  };  
 
-      }
+  const { data, error } = await supabase  
+    .from("orders")  
+    .insert([order])  
+    .select();  
 
-      /* ORDER */
-      const order = {
+  if (error) {  
+    console.log("SUPABASE ERROR:", error);  
+    return res.status(500).json({ error: error.message });  
+  }  
 
-        name: String(body.name).trim(),
+  return res.status(200).json({  
+    ok: true,  
+    inserted: data  
+  });  
+}  
 
-        email: String(body.email).trim(),
+return res.status(405).json({ error: "Only GET/POST allowed" });
 
-        phone: String(body.phone).trim(),
+} catch (e) {
 
-        pickup: String(body.pickup).trim(),
+console.log("SERVER ERROR:", e);  
 
-        /*
-          FONTOS:
-          Frontend amount nem megbízható.
-          Backend számolja majd újra.
-        */
-        amount: null,
+return res.status(500).json({ error: e.message });
 
-        items: items
-
-      };
-
-      const { data, error } = await supabase
-        .from("orders")
-        .insert([order])
-        .select();
-
-      if (error) {
-
-        console.log("SUPABASE ERROR:", error);
-
-        return res.status(500).json({
-          error: error.message
-        });
-
-      }
-
-      return res.status(200).json({
-        ok: true,
-        inserted: data
-      });
-
-    }
-
-    return res.status(405).json({
-      error: "Only GET/POST allowed"
-    });
-
-  } catch (e) {
-
-    console.log("SERVER ERROR:", e);
-
-    return res.status(500).json({
-      error: e.message
-    });
-
-  }
-
+}
 };
