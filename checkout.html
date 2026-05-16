@@ -141,26 +141,21 @@ function pay(){
 
   fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(order)
   })
-  .then(async res => {
-
-    const data = await res.json();
+  .then(res => res.json())
+  .then(data => {
 
     console.log("SAVE RESPONSE:", data);
 
-    if(!res.ok){
-      throw new Error(data.error || "Save failed");
-    }
-
-    return data;
-  })
-  .then(() => {
-
     return fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/create-checkout-session", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(order)
     });
 
@@ -171,18 +166,17 @@ function pay(){
     if(data.url){
       window.location.href = data.url;
     } else {
-      console.log("STRIPE ERROR:", data);
       alert("Stripe hiba");
     }
 
   })
   .catch(err => {
-    console.log("FULL ERROR:", err);
-    alert("Mentés megszakadt: " + err.message);
+    console.log("ERROR:", err);
+    alert("Hiba történt");
   });
 
 }
-  
+
 </script> 
 </body>  
 </html>
