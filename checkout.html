@@ -134,10 +134,12 @@ function nextStep(){
   
 /* PAY */  
 function pay(){
+  console.log("PAY CLICKED");
 
   const order = JSON.parse(localStorage.getItem("lastOrder"));
 
   console.log("ORDER SENT:", order);
+  console.log("ABOUT TO POST SAVE ORDER");
 
   fetch("https://kasz-vikk-gallery-github-io.vercel.app/api/save-order", {
     method: "POST",
