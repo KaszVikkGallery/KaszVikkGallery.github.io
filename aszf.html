@@ -2,23 +2,66 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<title>ÁSZF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ÁSZF – Kasz Vikk</title>
+
+<style>
+
+/* ugyanaz */
+body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#222;}
+.menu-button{position:fixed;top:16px;right:20px;font-size:52px;cursor:pointer;z-index:5000;}
+nav{position:fixed;top:0;right:-320px;width:300px;height:100%;background:#fff;border-left:1px solid #ddd;padding-top:100px;transition:0.3s;z-index:4000;}
+nav.open{right:0;}
+nav a{display:block;padding:24px;font-size:24px;text-decoration:none;color:#222;}
+nav a:hover{background:#f5f5f5;}
+.container{max-width:800px;margin:120px auto;padding:0 20px;}
+.card{background:#fff;border-radius:18px;padding:30px;box-shadow:0 6px 22px rgba(0,0,0,0.08);font-size:18px;line-height:1.8;}
+
+</style>
 </head>
+
 <body>
 
-<h1>ÁSZF</h1>
+<div class="menu-button" onclick="toggleMenu()">☰</div>
 
-<p>A weboldalon leadott rendelés után e-mailben visszaigazolást küldök.</p>
+<nav id="menu">
+  <a href="index.html">Galéria</a>
+  <a href="bemutatkozas.html">Bemutatkozás</a>
+  <a href="szallitas.html">Szállítás</a>
+  <a href="kapcsolat.html">Kapcsolat</a>
+  <a href="impresszum.html">Impresszum</a>
+  <a href="adatkezeles.html">Adatkezelés</a>
+  <a href="aszf.html">ÁSZF</a>
+</nav>
 
-<p>A fizetés Stripe rendszeren keresztül történik, amely automatikusan visszaigazolja a sikeres tranzakciót.</p>
+<div class="container">
 
-<p>A rendelések feldolgozása kézzel történik, ezt külön e-mailben is megerősítem a vásárló számára.</p>
+  <div class="card">
 
-<p>Szállítás: Packeta csomagküldéssel.</p>
+    <h1>ÁSZF</h1>
 
-<p>Termékek: egyedi, kézzel festett alkotások.</p>
+    <p>A rendelés leadása után e-mailben visszaigazolást küldök.</p>
 
-<p>Kapcsolat:kaszvikkfestmeny@gmail.com </p>
+    <p>A fizetés Stripe rendszeren keresztül történik.</p>
+
+    <p>A rendelések kézi feldolgozással kerülnek teljesítésre.</p>
+
+    <p>Szállítás: Packeta csomagküldéssel.</p>
+
+    <p>Termékek: egyedi, kézzel festett alkotások.</p>
+
+    <p>Kapcsolat: kaszvikkfestmeny@gmail.com </p>
+
+  </div>
+
+</div>
+
+<script>
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
+}
+</script>
 
 </body>
 </html>
