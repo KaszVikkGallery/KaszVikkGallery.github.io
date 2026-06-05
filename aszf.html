@@ -8,15 +8,114 @@
 
 <style>
 
-/* ugyanaz */
-body{margin:0;font-family:Arial,sans-serif;background:#fff;color:#222;}
-.menu-button{position:fixed;top:16px;right:20px;font-size:52px;cursor:pointer;z-index:5000;}
-nav{position:fixed;top:0;right:-320px;width:300px;height:100%;background:#fff;border-left:1px solid #ddd;padding-top:100px;transition:0.3s;z-index:4000;}
-nav.open{right:0;}
-nav a{display:block;padding:24px;font-size:24px;text-decoration:none;color:#222;}
-nav a:hover{background:#f5f5f5;}
-.container{max-width:800px;margin:120px auto;padding:0 20px;}
-.card{background:#fff;border-radius:18px;padding:30px;box-shadow:0 6px 22px rgba(0,0,0,0.08);font-size:18px;line-height:1.8;}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#fff;
+  color:#222;
+}
+
+.menu-button{
+  position:fixed;
+  top:16px;
+  right:20px;
+  font-size:52px;
+  cursor:pointer;
+  z-index:5000;
+  user-select:none;
+}
+
+nav{
+  position:fixed;
+  top:0;
+  right:-320px;
+  width:300px;
+  height:100%;
+  background:#fff;
+  border-left:1px solid #ddd;
+  padding-top:100px;
+  transition:0.3s;
+  z-index:4000;
+  box-shadow:-5px 0 20px rgba(0,0,0,0.08);
+}
+
+nav.open{
+  right:0;
+}
+
+nav a{
+  display:block;
+  padding:24px;
+  font-size:24px;
+  text-decoration:none;
+  color:#222;
+}
+
+nav a:hover{
+  background:#f5f5f5;
+}
+
+header{
+  text-align:center;
+  padding:90px 20px 20px;
+}
+
+header h1{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.container{
+  max-width:800px;
+  margin:20px auto 60px;
+  padding:0 20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:30px;
+  box-shadow:0 6px 22px rgba(0,0,0,0.08);
+  font-size:18px;
+  line-height:1.8;
+}
+
+.card h2{
+  margin-top:30px;
+  font-size:24px;
+}
+
+.card p{
+  font-size:18px;
+  line-height:1.8;
+  color:#333;
+}
+
+footer{
+  text-align:center;
+  margin:70px 0 30px;
+  font-size:16px;
+  color:#777;
+}
+
+footer a{
+  color:#666;
+  text-decoration:none;
+}
+
+footer a:hover{
+  text-decoration:underline;
+}
+
+@media(max-width:700px){
+  header h1{
+    font-size:28px;
+  }
+
+  .card{
+    padding:22px;
+  }
+}
 
 </style>
 </head>
@@ -30,32 +129,73 @@ nav a:hover{background:#f5f5f5;}
   <a href="bemutatkozas.html">Bemutatkozás</a>
   <a href="szallitas.html">Szállítás</a>
   <a href="kapcsolat.html">Kapcsolat</a>
-  <a href="impresszum.html">Impresszum</a>
-  <a href="adatkezeles.html">Adatkezelés</a>
-  <a href="aszf.html">ÁSZF</a>
 </nav>
+
+<header>
+  <h1>Általános Szerződési Feltételek</h1>
+</header>
 
 <div class="container">
 
   <div class="card">
 
-    <h1>ÁSZF</h1>
+    <h2>Eladó adatai</h2>
+    <p>Az Eladó adatai megegyeznek az Impresszumban megadott adatokkal.</p>
 
-    <p>A rendelés leadása után e-mailben visszaigazolást küldök.</p>
+    <h2>Termékek</h2>
+    <p>
+      A weboldalon egyedi, kézzel festett alkotások kerülnek értékesítésre.
+      A képeken látható színek a különböző kijelzők beállításai miatt minimálisan eltérhetnek a valóságtól.
+    </p>
 
-    <p>A fizetés Stripe rendszeren keresztül történik.</p>
+    <h2>A vásárlás menete</h2>
+    <p>
+      A kiválasztott termék kifizetése a Stripe biztonságos rendszerén keresztül történik.
+      A sikeres fizetés után a rendszer és az Eladó e-mailben visszaigazolást küld.
+      A szerződés a visszaigazolás megérkezésével jön létre.
+    </p>
 
-    <p>A rendelések kézi feldolgozással kerülnek teljesítésre.</p>
+    <h2>Szállítás</h2>
+    <p>
+      A rendelések feldolgozása kézzel történik.
+      A szállítást a Packeta csomagküldő szolgálat végzi.
+      A szállítás várható ideje a feladástól számított 2–5 munkanap.
+    </p>
 
-    <p>Szállítás: Packeta csomagküldéssel.</p>
+    <h2>14 napos elállási jog</h2>
+    <p>
+      A vásárlót a termék átvételétől számított 14 napon belül indokolás nélküli elállási jog illeti meg.
+      Elállás esetén a terméket a vásárló saját költségén küldi vissza az Eladó részére.
+      A vételár visszatérítése a sértetlen termék visszaérkezését követően történik.
+    </p>
 
-    <p>Termékek: egyedi, kézzel festett alkotások.</p>
+    <h2>Kellékszavatosság</h2>
+    <p>
+      Amennyiben a termék bizonyítottan hibásan vagy sérülten érkezik meg,
+      a vásárló javítást, cserét vagy a vásárlástól való elállást kérhet.
+    </p>
 
-    <p>Kapcsolat: kaszvikkfestmeny@gmail.com </p>
+    <h2>Panaszkezelés</h2>
+    <p>
+      Panasz esetén kérjük, írj a kaszvikkfestmeny@gmail.com címre.
+      Minden esetben törekszem a gyors és békés rendezésre.
+    </p>
 
   </div>
 
 </div>
+
+<footer>
+
+<a href="impresszum.html">Impresszum</a> |
+<a href="adatkezeles.html">Adatkezelés</a> |
+<a href="aszf.html">ÁSZF</a>
+
+<br><br>
+
+© Kasz Vikk
+
+</footer>
 
 <script>
 function toggleMenu(){
