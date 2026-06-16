@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viki Festményei</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#111;
+    color:#fff;
+    line-height:1.6;
+}
+
+header{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    background:
+        linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+        url("https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=1600");
+    background-size:cover;
+    background-position:center;
+}
+
+.hero h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(3rem,8vw,6rem);
+    margin-bottom:15px;
+}
+
+.hero p{
+    font-size:1.1rem;
+    max-width:600px;
+    margin:auto;
+    color:#ddd;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:30px;
+    padding:14px 30px;
+    text-decoration:none;
+    color:#fff;
+    border:1px solid #fff;
+    transition:.3s;
+}
+
+.btn:hover{
+    background:#fff;
+    color:#111;
+}
+
+section{
+    padding:100px 8%;
+}
+
+.section-title{
+    text-align:center;
+    font-size:2.5rem;
+    margin-bottom:60px;
+    font-family:'Playfair Display',serif;
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.artwork{
+    overflow:hidden;
+    border-radius:18px;
+    position:relative;
+    cursor:pointer;
+}
+
+.artwork img{
+    width:100%;
+    height:400px;
+    object-fit:cover;
+    transition:.5s;
+}
+
+.artwork:hover img{
+    transform:scale(1.08);
+}
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(transparent,rgba(0,0,0,.85));
+    display:flex;
+    align-items:flex-end;
+    padding:25px;
+}
+
+.overlay h3{
+    font-size:1.2rem;
+}
+
+.about{
+    max-width:800px;
+    margin:auto;
+    text-align:center;
+}
+
+.about p{
+    color:#ccc;
+    font-size:1.05rem;
+}
+
+footer{
+    text-align:center;
+    padding:40px 20px;
+    border-top:1px solid rgba(255,255,255,.1);
+    color:#aaa;
+}
+
+.lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.95);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+.lightbox img{
+    max-width:90%;
+    max-height:90%;
+    border-radius:10px;
+}
+
+.close{
+    position:absolute;
+    top:20px;
+    right:30px;
+    font-size:40px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="hero">
+        <h1>Viki Festményei</h1>
+        <p>
+            Egyedi alkotások, érzelmek és történetek vásznon.
+        </p>
+        <a href="#galeria" class="btn">Galéria</a>
+    </div>
+</header>
+
+<section id="galeria">
+    <h2 class="section-title">Galéria</h2>
+
+    <div class="gallery">
+
+        <div class="artwork">
+            <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1200" alt="">
+            <div class="overlay">
+                <h3>Arany Csend</h3>
+            </div>
+        </div>
+
+        <div class="artwork">
+            <img src="https://images.unsplash.com/photo-1578301979108-0eebc7f4c3b1?q=80&w=1200" alt="">
+            <div class="overlay">
+                <h3>Fények Játéka</h3>
+            </div>
+        </div>
+
+        <div class="artwork">
+            <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=1200" alt="">
+            <div class="overlay">
+                <h3>Éjféli Álom</h3>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">Rólam</h2>
+
+    <div class="about">
+        <p>
+            Üdvözöllek a festményeim világában! A munkáimban a hangulatok,
+            az emlékek és a képzelet találkoznak. Minden alkotás egy külön
+            történetet mesél el.
+        </p>
+    </div>
+</section>
+
+<footer>
+    © 2026 Viki Festményei
+</footer>
+
+<div class="lightbox" id="lightbox">
+    <span class="close">&times;</span>
+    <img id="lightbox-img" src="">
+</div>
+
+<script>
+const artworks = document.querySelectorAll('.artwork img');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+
+artworks.forEach(img => {
+    img.addEventListener('click', () => {
+        lightbox.style.display = 'flex';
+        lightboxImg.src = img.src;
+    });
+});
+
+lightbox.addEventListener('click', () => {
+    lightbox.style.display = 'none';
+});
+</script>
+
+</body>
+</html>
