@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6KZWC3LLE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-T6KZWC3LLE');
+  </script>
+  
+<title>Jazz night – Kasz Vikk</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  background:#fff;
+  color:#222;
+}
+
+/* ===== KÉP ===== */
+
+h1{
+  font-size:34px;
+  margin-top:90px;
+}
+
+.main-image{
+  max-width:80%;
+  margin-top:20px;
+  cursor:zoom-in;
+}
+
+/* ===== SZÖVEG ===== */
+
+p{
+  font-size:22px;
+  margin:10px auto;
+  max-width:800px;
+}
+
+/* ===== GOMB ===== */
+
+button{
+  font-size:18px;
+  padding:12px 18px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  margin-top:15px;
+}
+
+/* ===== VISSZA ===== */
+
+.back-btn{
+  margin-top:20px;
+  font-size:18px;
+  padding:12px 18px;
+  background:#f2f2f2;
+  color:#222;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* ===== LIGHTBOX ===== */
+
+#lightbox{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:5000;
+}
+
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+}
+
+/* ===== NYILAK ===== */
+
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:40px;
+  color:white;
+  cursor:pointer;
+  user-select:none;
+}
+
+#prev{ left:30px; }
+#next{ right:30px; }
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== TERMÉK ===== -->
+
+<h1>Emlék</h1>
+
+<img class="main-image" src="jazznight.jpg" onclick="openLightbox()">
+
+<div>
+  <button onclick="prev()">◀</button>
+  <button onclick="next()">▶</button>
+</div>
+
+<p>Technika: Akril</p>
+<p>Vászon típus: Feszített vászon</p>
+<p>Méret: 20 × 20 cm</p>
+<p>Nem elérhető</p>
+
+<button class="back-btn" onclick="window.location.href='index.html'">
+← Vissza
+</button>
+
+<!-- ===== LIGHTBOX ===== -->
+
+<div id="lightbox" onclick="closeLightbox()">
+
+  <div id="prev" class="arrow" onclick="event.stopPropagation(); prev()">◀</div>
+
+  <img id="lightboxImg">
+
+  <div id="next" class="arrow" onclick="event.stopPropagation(); next()">▶</div>
+
+</div>
+
+<script>
+
+/* ===== KÉPEK ===== */
+
+const images = [
+  "jazznight.jpg"
+
+let current = 0;
+
+/* ===== LIGHTBOX ===== */
+
+function openLightbox(){
+  document.getElementById("lightbox").style.display="flex";
+  document.getElementById("lightboxImg").src = images[current];
+}
+
+function closeLightbox(){
+  document.getElementById("lightbox").style.display="none";
+}
+
+function next(){
+  current = (current + 1) % images.length;
+  document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
+}
+
+function prev(){
+  current = (current - 1 + images.length) % images.length;
+  document.querySelector(".main-image").src = images[current];
+  document.getElementById("lightboxImg").src = images[current];
+}
+
+</script>
+
+</body>
+</html>
