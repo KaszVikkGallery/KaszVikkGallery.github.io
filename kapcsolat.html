@@ -14,7 +14,6 @@
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-
 gtag('config', 'G-T6KZWC3LLE');
 </script>
 
@@ -115,6 +114,57 @@ header p{
   margin-bottom:30px;
 }
 
+/* ===== VÁSÁRLÁSI RÉSZ ===== */
+
+.purchase-box{
+  background:#f8f8f8;
+  border-radius:16px;
+  padding:26px;
+  margin-top:25px;
+  box-shadow:inset 0 0 0 1px #ececec;
+}
+
+.purchase-title{
+  font-size:24px;
+  font-weight:bold;
+  margin:0 0 14px;
+}
+
+.purchase-text{
+  font-size:18px;
+  line-height:1.7;
+  color:#444;
+  margin-bottom:24px;
+}
+
+.purchase-link{
+  display:block;
+  max-width:320px;
+  margin:12px auto;
+  padding:16px 20px;
+  background:#222;
+  color:#fff;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  text-decoration:none;
+  transition:0.2s;
+  box-sizing:border-box;
+}
+
+.purchase-link:hover{
+  background:#444;
+  transform:translateY(-2px);
+}
+
+/* ===== ELVÁLASZTÓ ===== */
+
+.section-divider{
+  border:0;
+  border-top:1px solid #e5e5e5;
+  margin:35px 0;
+}
+
 /* ===== EMAIL BOX ===== */
 
 .email-box{
@@ -139,17 +189,6 @@ header p{
 .email-link:hover{
   color:#000;
   opacity:0.75;
-}
-
-/* ===== INFO BOX ===== */
-
-.info-box{
-  margin-top:35px;
-  background:#f8f8f8;
-  border-radius:14px;
-  padding:18px;
-  font-size:18px;
-  color:#444;
 }
 
 /* ===== LÁBLÉC ===== */
@@ -177,6 +216,18 @@ footer{
     font-size:18px;
   }
 
+  .purchase-title{
+    font-size:22px;
+  }
+
+  .purchase-text{
+    font-size:16px;
+  }
+
+  .purchase-link{
+    font-size:17px;
+  }
+
   .email-link{
     font-size:21px;
   }
@@ -190,7 +241,11 @@ footer{
 
 <!-- ===== MENÜ GOMB ===== -->
 
-<div class="menu-button" onclick="toggleMenu()">☰</div>
+<div class="menu-button"
+     onclick="toggleMenu()"
+     aria-label="Menü megnyitása"
+     role="button"
+     tabindex="0">☰</div>
 
 <!-- ===== MENÜ ===== -->
 
@@ -225,13 +280,52 @@ footer{
 
     </div>
 
+    <!-- ===== FESTMÉNYEK VÁSÁRLÁSA ===== -->
+
+    <div class="purchase-box">
+
+      <h2 class="purchase-title">
+        Festmény vásárlása
+      </h2>
+
+      <p class="purchase-text">
+        Festményeim a Galéria Savaria és a Meska
+        oldalán keresztül vásárolhatók meg.
+        Kattints az általad választott oldalra!
+      </p>
+
+      <a
+        href="https://galeriasavaria.hu/felhasznalo/KaszVikk/termekek/"
+        class="purchase-link"
+        target="_blank"
+        rel="noopener noreferrer">
+        Galéria Savaria →
+      </a>
+
+      <a
+        href="https://www.meska.hu/shop/KaszVikk"
+        class="purchase-link"
+        target="_blank"
+        rel="noopener noreferrer">
+        Meska →
+      </a>
+
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ===== EMAIL ===== -->
+
     <div class="email-box">
 
-      <a href="mailto:kaszvikkfestmeny@gmail.com"
-      class="email-link">
+      <p style="font-size:20px; margin-top:0;">
+        Kérdésed van?
+      </p>
 
-      kaszvikkfestmeny@gmail.com
-
+      <a
+        href="mailto:kaszvikkfestmeny@gmail.com"
+        class="email-link">
+        kaszvikkfestmeny@gmail.com
       </a>
 
     </div>
